@@ -1,9 +1,12 @@
 import express from "express";
+import healthCheckRouter from "./routes/healthcheck.routes.js";
 
-let app=express();
+let app = express();
 
-app.get("/",(req,res)=>{
-    res.send("wlecome to Komplie")
-})
+app.use("/api/v1/healthcheck", healthCheckRouter);
+
+app.get("/", (req, res) => {
+  res.send("wlecome to Komplie");
+});
 
 export default app;
