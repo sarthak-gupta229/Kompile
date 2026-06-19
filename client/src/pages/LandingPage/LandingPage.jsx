@@ -147,7 +147,7 @@ export default function LandingPage() {
             </h2>
             <p className="text-gray-400 text-lg">
               Streamlined in{" "}
-              <span className="text-orange-500 font-semibold">Codolio</span> to
+              <span className="text-orange-500 font-semibold">Kompile</span> to
               simplify your coding journey
             </p>
           </div>
