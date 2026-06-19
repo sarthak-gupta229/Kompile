@@ -2,6 +2,7 @@ import Navbar from "../../components/Navbar";
 import GridComponent from "../../components/GridComponent";
 import { Footer } from "../../components/CompanyWiseKit/Footer";
 import { Link } from "react-router-dom";
+import { MacbookScroll } from "@/components/ui/macbook-scroll";
 import dashboardImg from "../../../Assets/landingPage/Kompile (5) 1.png";
 import codolioCardImg from "../../../Assets/landingPage/codolio card.png";
 import codolioPlatformsImg from "../../../Assets/landingPage/codolio-platforms.png";
@@ -159,7 +160,7 @@ export default function LandingPage() {
               className="w-full max-w-2xl drop-shadow-[0_0_30px_rgba(249,115,22,0.1)]"
             />
           </div>
-
+            
           <div className="flex flex-col md:flex-row items-start gap-12 mb-16 max-w-7xl mx-auto px-6">
             <div className="md:w-1/2">
               <h3 className="text-4xl md:text-5xl font-bold mb-5 tracking-tight leading-tight">
@@ -228,11 +229,11 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="flex justify-center mb-20 px-6">
-            <img
+          <div className="w-full overflow-hidden bg-transparent">
+            <MacbookScroll
+              title={<span></span>}
               src={workspaceGridImg}
-              alt="workspace grid"
-              className="w-full max-w-5xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] opacity-90 border border-white/5"
+              showGradient={false}
             />
           </div>
         </div>
