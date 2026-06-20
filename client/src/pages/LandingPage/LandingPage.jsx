@@ -22,8 +22,11 @@ import rankingsImg from "../../../Assets/landingPage/feature1 (6).png";
 import githubStatsHubImg from "../../../Assets/landingPage/feature1 (7).png";
 import visibilityImg from "../../../Assets/landingPage/visibility.png";
 import { CompanySheets } from "../../components/CompanyWiseKit/CompanySheets";
+import { useNavigate } from "react-router-dom";
+import ScrollVelocity from "../../components/ScrollVelocity/ScrollVelocity.jsx";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   const companies = [
     {
       name: "Google",
@@ -67,10 +70,16 @@ export default function LandingPage() {
           </p>
 
           <div className="flex justify-center gap-4 mb-16">
-            <button className="border border-gray-700 px-6 py-2 rounded-md hover:bg-gray-800 transition">
+            <button
+              className="border border-gray-700 px-6 py-2 rounded-md hover:bg-gray-800 transition"
+              onClick={() => navigate("/profile")}
+            >
               Profile Tracker
             </button>
-            <button className="bg-orange-500 px-6 py-2 rounded-md hover:bg-orange-600 transition font-semibold">
+            <button
+              className="bg-orange-500 px-6 py-2 rounded-md hover:bg-orange-600 transition font-semibold"
+              onClick={() => navigate("/company")}
+            >
               Company-Wise Kit →
             </button>
           </div>
@@ -81,7 +90,7 @@ export default function LandingPage() {
                 <img
                   src={dashboardImg}
                   alt="dashboard"
-                  className="hidden md:block w-full max-w-[950px] opacity-95"
+                  className="hidden md:block w-full max-w-[750px] opacity-95"
                 />
                 <img
                   src={dashboardImg}
@@ -95,7 +104,7 @@ export default function LandingPage() {
                   <img
                     src={codolioCardImg}
                     alt="mobile"
-                    className="w-[210px] h-auto object-cover scale-105 -translate-x-2.5"
+                    className="w-[170px] h-auto object-cover scale-105 -translate-x-2.5"
                   />
                 </div>
               </div>
@@ -138,16 +147,20 @@ export default function LandingPage() {
                   </button>
                 </div>
               ))} */}
-              <CompanySheets show={false}/>
+              <CompanySheets show={false} />
             </div>
           </div>
         </div>
-
-        <div className="py-24 px-6 max-w-7xl mx-auto">
+        <ScrollVelocity
+          texts={["Your Favourite Platforms", "Your Favourite Platforms"]}
+          velocity={100}
+          className="text-8xl font-bold text-white"
+        />
+        <div className="py-24 px-6 max-w-7xl mx-auto relative -top-15">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            {/* <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Your Favourite Platforms
-            </h2>
+            </h2> */}
             <p className="text-gray-400 text-lg">
               Streamlined in{" "}
               <span className="text-orange-500 font-semibold">Kompile</span> to
@@ -242,6 +255,7 @@ export default function LandingPage() {
                 Your <span className="text-orange-500">All-in-One</span> Coding
                 Portfolio
               </h2>
+
               <a
                 href="#"
                 className="text-blue-500 hover:underline font-semibold flex items-center gap-1"
@@ -397,6 +411,7 @@ export default function LandingPage() {
               <a
                 href="#"
                 className="text-blue-500 hover:underline font-bold text-lg flex items-center gap-2"
+                onClick={() => navigate("/events")}
               >
                 Try Event Tracker →
               </a>
@@ -413,8 +428,8 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+        <Footer />
       </GridComponent>
-      <Footer />
     </div>
   );
 }
