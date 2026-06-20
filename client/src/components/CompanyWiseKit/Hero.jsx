@@ -3,26 +3,30 @@ import sheetsImg from "../../../Assets/Sheets.png";
 
 export function Hero() {
   return (
-    <div className="flex flex-col items-center text-center space-y-12">
-      <div className="flex flex-col items-center space-y-6 max-w-4xl mx-auto">
+    <div className="flex flex-col items-center text-center space-y-8 relative -top-8">
+      <div className="flex flex-col items-center space-y-4 max-w-4xl mx-auto">
         <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-sm font-semibold shadow-sm">
           100K+ Engineers Trust Kompile
         </div>
 
-        <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-white">
+        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
           10x your <span className="text-orange-500">selection</span> chances{" "}
           <br />
           Kom<span className="text-orange-500">pile</span> Company wise Kit
         </h1>
 
-        <p className="text-xl text-gray-400 max-w-2xl">
+        <p className="text-lg text-gray-400 max-w-2xl">
           Unlock recently asked interview questions at top product companies.
           Practice what actually matters and land your dream job
         </p>
 
         <div className="flex items-center gap-4 pt-4">
           <button
-            onClick={() => document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() =>
+              document
+                .getElementById("explore")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
             className="px-8 py-3 rounded-md border border-gray-600 bg-[#0f0f0f] text-gray-300 font-bold hover:bg-[#2a2a2a] transition-colors shadow-sm"
           >
             Explore Companies

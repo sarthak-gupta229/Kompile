@@ -6,7 +6,7 @@ function GridComponent({ children }) {
     <div className="relative flex min-h-screen w-full items-center justify-center bg-black">
       <div
         className={cn(
-          "absolute inset-0",
+          "absolute inset-0 pointer-events-none",
           "bg-[size:20px_20px]",
           "bg-[linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
         )}
