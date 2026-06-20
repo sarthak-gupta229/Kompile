@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { ChevronLeft, ChevronRight, Lock, List } from "lucide-react";
+import { ChevronLeft, ChevronRight, Lock, List, Unlock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { companies } from "../../config/companyConfig";
 
@@ -76,7 +76,7 @@ export function CompanySheets({ show, className }) {
                     <List className="w-4 h-4" />
                     <span className="text-xs font-medium">100+ Questions</span>
                   </div>
-                  <Lock className="w-4 h-4 text-orange-500/50" />
+                  <Unlock className="w-4 h-4 text-orange-500/50" />
                 </div>
               </div>
             </div>
