@@ -21,6 +21,7 @@ import awardsImg from "../../../Assets/landingPage/feature1 (5).png";
 import rankingsImg from "../../../Assets/landingPage/feature1 (6).png";
 import githubStatsHubImg from "../../../Assets/landingPage/feature1 (7).png";
 import visibilityImg from "../../../Assets/landingPage/visibility.png";
+import { CompanySheets } from "../../components/CompanyWiseKit/CompanySheets";
 
 export default function LandingPage() {
   const companies = [
@@ -94,7 +95,7 @@ export default function LandingPage() {
                   <img
                     src={codolioCardImg}
                     alt="mobile"
-                    className="w-[210px] h-auto object-cover scale-105"
+                    className="w-[210px] h-auto object-cover scale-105 -translate-x-2.5"
                   />
                 </div>
               </div>
@@ -117,8 +118,8 @@ export default function LandingPage() {
             <div className="absolute top-0 left-0 bottom-0 w-32 bg-gradient-to-r from-black via-black/50 to-transparent z-10"></div>
             <div className="absolute top-0 right-0 bottom-0 w-32 bg-gradient-to-l from-black via-black/50 to-transparent z-10"></div>
 
-            <div className="animate-marquee flex gap-6 py-8">
-              {[...companies, ...companies].map((item, index) => (
+            <div className="flex w-full justify-center">
+              {/* {[...companies, ...companies].map((item, index) => (
                 <div
                   key={index}
                   className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-2xl min-w-[320px] hover:border-orange-500 transition-all hover:translate-y-[-5px] shadow-lg"
@@ -136,7 +137,8 @@ export default function LandingPage() {
                     <Link to="/company">View Sheet</Link>
                   </button>
                 </div>
-              ))}
+              ))} */}
+              <CompanySheets show={false}/>
             </div>
           </div>
         </div>
@@ -160,7 +162,7 @@ export default function LandingPage() {
               className="w-full max-w-2xl drop-shadow-[0_0_30px_rgba(249,115,22,0.1)]"
             />
           </div>
-            
+
           <div className="flex flex-col md:flex-row items-start gap-12 mb-16 max-w-7xl mx-auto px-6">
             <div className="md:w-1/2">
               <h3 className="text-4xl md:text-5xl font-bold mb-5 tracking-tight leading-tight">
@@ -213,11 +215,7 @@ export default function LandingPage() {
 
               <div className="text-center w-[160px]">
                 <div className="w-12 h-12 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <img
-                    src={notesIcon}
-                    alt="icon"
-                    className="w-6 h-6 invert"
-                  />
+                  <img src={notesIcon} alt="icon" className="w-6 h-6 invert" />
                 </div>
                 <h4 className="text-white font-bold text-base mb-1">
                   Enhanced Notes

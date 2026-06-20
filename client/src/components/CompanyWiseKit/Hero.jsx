@@ -21,11 +21,11 @@ export function Hero() {
         </p>
 
         <div className="flex items-center gap-4 pt-4">
-          <button className="px-8 py-3 rounded-md border border-gray-600 bg-[#0f0f0f] text-gray-300 font-bold hover:bg-[#2a2a2a] transition-colors shadow-sm">
+          <button
+            onClick={() => document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" })}
+            className="px-8 py-3 rounded-md border border-gray-600 bg-[#0f0f0f] text-gray-300 font-bold hover:bg-[#2a2a2a] transition-colors shadow-sm"
+          >
             Explore Companies
-          </button>
-          <button className="px-8 py-3 rounded-md bg-orange-500 text-white font-bold hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/30">
-            Buy Now
           </button>
         </div>
       </div>

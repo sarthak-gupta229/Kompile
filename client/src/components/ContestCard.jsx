@@ -1,10 +1,11 @@
 import React from "react";
 
 function ContestCard({ start, end, duration, host, event, href }) {
-  const dateObj = new Date(start);
+  const ensureUTC = (iso) => (iso && !iso.endsWith("Z") ? iso + "Z" : iso);
+  const dateObj = new Date(ensureUTC(start));
 
   const formatTimeIST = (iso) => {
-    return new Date(iso).toLocaleTimeString("en-IN", {
+    return new Date(ensureUTC(iso)).toLocaleTimeString("en-IN", {
       timeZone: "Asia/Kolkata",
       hour: "numeric",
       minute: "2-digit",
@@ -37,7 +38,7 @@ function ContestCard({ start, end, duration, host, event, href }) {
     );
   };
 
-  const endDateObj = new Date(end);
+  const endDateObj = new Date(ensureUTC(end));
   const formattedEndDate = endDateObj
     .toLocaleDateString("en-IN", {
       day: "2-digit",
@@ -61,7 +62,9 @@ function ContestCard({ start, end, duration, host, event, href }) {
         <div className="flex items-center gap-3">
           <div className="w-2.5 h-2.5 rounded-full bg-[#f97316] flex-shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.6)]"></div>
           {isToday(dateObj) ? (
-            <span className="text-[#10b981] font-bold tracking-wide">Today</span>
+            <span className="text-[#10b981] font-bold tracking-wide">
+              Today
+            </span>
           ) : (
             <span>{formattedDate}</span>
           )}
