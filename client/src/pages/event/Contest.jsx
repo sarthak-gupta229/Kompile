@@ -124,7 +124,13 @@ export default function Contest() {
                 </div>
               ) : (
                 contests
-                  .filter((contest) => new Date(contest.end) >= new Date())
+                  .filter((contest) => {
+                    const toUTC = (t) => (t && !t.endsWith("Z") ? t + "Z" : t);
+                    const now = new Date();
+                    const endTime = new Date(toUTC(contest.end));
+                    const startTime = new Date(toUTC(contest.start));
+                    return endTime > now || startTime > now;
+                  })
                   .slice(0, 10)
                   .map((contest, index) => (
                     <ContestCard
