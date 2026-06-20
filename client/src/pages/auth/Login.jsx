@@ -172,13 +172,12 @@ function Login() {
 
         {/* ── BODY ── */}
         <div className="flex flex-1">
-          {/* LEFT PANEL */}
-          <div className="flex flex-col justify-center w-full md:w-[48%] px-6 sm:px-10 md:px-16 lg:px-20 py-10">
+          <div className="flex flex-col justify-start md:justify-center w-full md:w-[48%] px-6 sm:px-10 md:px-16 lg:px-20 py-6 md:py-8">
             <div>
-              <h1 className="text-white text-4xl md:text-[44px] font-extrabold mb-2.5 tracking-tight">
+              <h1 className="text-white text-3xl md:text-[38px] font-extrabold mb-1.5 tracking-tight">
                 Sign in
               </h1>
-              <p className="text-gray-400 text-sm mb-9">
+              <p className="text-gray-400 text-sm mb-5">
                 Don't have an account yet?{" "}
                 <Link
                   to="/register"
@@ -188,9 +187,9 @@ function Login() {
                 </Link>
               </p>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
                 {/* Email */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1.5">
                   <label htmlFor="email" className="text-gray-300 text-sm">
                     Email address
                   </label>
@@ -202,12 +201,12 @@ function Login() {
                     placeholder="Enter email address"
                     value={form.email}
                     onChange={handleChange}
-                    className="w-full bg-[#1c1c1c] border border-[#2e2e2e] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 outline-none focus:border-orange-500 transition-colors"
+                    className="w-full bg-[#1c1c1c] border border-[#2e2e2e] rounded-xl px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-orange-500 transition-colors"
                   />
                 </div>
 
                 {/* Password */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between">
                     <label htmlFor="password" className="text-gray-300 text-sm">
                       Password
@@ -228,7 +227,7 @@ function Login() {
                       placeholder="Enter password"
                       value={form.password}
                       onChange={handleChange}
-                      className="w-full bg-[#1c1c1c] border border-[#2e2e2e] rounded-xl px-4 py-3 pr-12 text-white text-sm placeholder-gray-600 outline-none focus:border-orange-500 transition-colors"
+                      className="w-full bg-[#1c1c1c] border border-[#2e2e2e] rounded-xl px-4 py-2.5 pr-12 text-white text-sm placeholder-gray-600 outline-none focus:border-orange-500 transition-colors"
                     />
                     <button
                       type="button"
@@ -244,7 +243,7 @@ function Login() {
                 <button
                   id="login-submit"
                   type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 active:scale-[0.98] text-white font-semibold text-base rounded-xl py-3.5 mt-1 cursor-pointer border-none transition-all duration-200 shadow-lg shadow-orange-500/20"
+                  className="w-full bg-orange-500 hover:bg-orange-600 active:scale-[0.98] text-white font-semibold text-base rounded-xl py-2.5 mt-1 cursor-pointer border-none transition-all duration-200 shadow-lg shadow-orange-500/20"
                 >
                   Sign in
                 </button>
@@ -252,7 +251,7 @@ function Login() {
             </div>
 
             {/* Footer */}
-            <div className="mt-12 text-center">
+            <div className="mt-6 text-center">
               <p className="text-gray-500 text-xs leading-relaxed mb-1.5">
                 By signing in or creating an account, you are agreeing to our{" "}
                 <Link to="/terms" className="text-blue-500 no-underline">
@@ -274,7 +273,7 @@ function Login() {
           </div>
 
           {/* RIGHT PANEL — hidden on mobile */}
-          <div className="hidden md:flex flex-1 flex-col items-center justify-center px-10 lg:px-16 py-12 relative overflow-hidden">
+          <div className="hidden md:flex flex-1 flex-col items-center justify-center px-10 lg:px-16 py-8 relative overflow-hidden">
             {/* warm radial glow */}
             <div
               className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[420px] h-[420px] rounded-full pointer-events-none"
@@ -287,23 +286,23 @@ function Login() {
             <img
               src="/assets/logos/hi_logo.png"
               alt="Kompile mascot"
-              className="w-52 h-auto relative z-10 mb-5"
+              className="w-36 h-auto relative z-10 mb-3"
             />
 
-            <h2 className="text-white text-2xl font-bold text-center mb-2.5 relative z-10">
+            <h2 className="text-white text-xl font-bold text-center mb-2 relative z-10">
               Welcome to Kompile
             </h2>
-            <p className="text-gray-400 text-sm text-center leading-relaxed max-w-[340px] mb-9 relative z-10">
+            <p className="text-gray-400 text-xs text-center leading-relaxed max-w-[300px] mb-6 relative z-10">
               Your high-performance utility for technical excellence and
               precision retrieval.
             </p>
 
             {/* Feature cards */}
-            <div className="flex flex-col gap-3.5 w-full max-w-[400px] relative z-10">
+            <div className="flex flex-col gap-2.5 w-full max-w-[400px] relative z-10">
               {features.map((f, i) => (
                 <div
                   key={i}
-                  className="bg-[#1a1a1a] border border-white/[0.07] rounded-xl p-4 flex items-start gap-4"
+                  className="bg-[#1a1a1a] border border-white/[0.07] rounded-xl py-2.5 px-3.5 flex items-start gap-3.5"
                 >
                   <div className="bg-orange-500/10 rounded-lg w-10 h-10 shrink-0 flex items-center justify-center">
                     {f.icon}
