@@ -151,16 +151,16 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-        <ScrollVelocity
+        {/* <ScrollVelocity
           texts={["Your Favourite Platforms", "Your Favourite Platforms"]}
           velocity={100}
           className="text-8xl font-bold text-white"
-        />
+        /> */}
         <div className="py-24 px-6 max-w-7xl mx-auto relative -top-15">
           <div className="text-center mb-16">
-            {/* <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Your Favourite Platforms
-            </h2> */}
+            </h2>
             <p className="text-gray-400 text-lg">
               Streamlined in{" "}
               <span className="text-orange-500 font-semibold">Kompile</span> to

@@ -15,5 +15,3 @@ import nodemailer from "nodemailer";
 
 // };
 
-
-con
