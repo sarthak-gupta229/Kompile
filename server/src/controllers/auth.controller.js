@@ -1,5 +1,6 @@
 import { asyncHandler } from "../utils/async-handler.js";
 import { ApiResponse } from "../utils/api-response.js";
+import { ApiError } from "../utils/api-error.js";
 import { User } from "../models/user.models.js";
 import {
   emailVerificationMailgenContent,
@@ -15,7 +16,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
     const accessToken = await user.generateAccessToken();
     const refreshToken = await user.generateRefreshToken();
     user.refreshToken = refreshToken;
-    user.save({ validateBeforeSave: false });
+    await user.save({ validateBeforeSave: false });
     return { accessToken, refreshToken };
   } catch {
     throw new ApiError(
@@ -26,18 +27,32 @@ const generateAccessAndRefreshTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, username, password } = req.body;
+  const { email, username, password, confirmPassword, leetcodeUsername, githubUsername } = req.body;
+
+  if (password !== confirmPassword) {
+    throw new ApiError(400, "Passwords do not match");
+  }
 
   const existedUser = await User.findOne({ $or: [{ username }, { email }] });
 
   if (existedUser) {
     throw new ApiError(409, "User with email or username already exists", []);
   }
+
+  const connectedPlatforms = [];
+  if (leetcodeUsername) {
+    connectedPlatforms.push({ platform: "leetcode", username: leetcodeUsername });
+  }
+  if (githubUsername) {
+    connectedPlatforms.push({ platform: "github", username: githubUsername });
+  }
+
   const user = await User.create({
     email,
     password,
     username,
     isEmailVerified: false,
+    connectedPlatforms,
   });
 
   const { unHashedToken, hashedToken, tokenExpiry } =
@@ -88,11 +103,9 @@ const login = asyncHandler(async (req, res) => {
     user._id,
   );
 
-  const loggedInUser = await user
-    .findById(user._id)
-    .select(
-      "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
-    );
+  const loggedInUser = await User.findById(user._id).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
+  );
   const options = {
     httpOnly: true,
     secure: true,
@@ -234,8 +247,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     await user.save();
     return res
       .status(200)
-      .cokkie("accessToken", accessToken, options)
-      .cokkie("refreshToken", newRefreshToken, options)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", newRefreshToken, options)
       .json(
         new ApiResponse(
           200,
@@ -256,7 +269,7 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
   }
 
   const { hashedToken, unHashedToken, tokenExpiry } =
-    await generateTemporaryToken();
+    await user.generateTemporaryToken();
   user.forgotPasswordToken = hashedToken;
   user.forgotPasswordExpiry = tokenExpiry;
 
@@ -281,7 +294,7 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
 
 const resetForgotPassword = asyncHandler(async (req, res) => {
   const { resetToken } = req.params;
-  const { newPassword } = req.params;
+  const { newPassword } = req.body;
 
   let hashedToken = crypto
     .createHash("sha256")
@@ -303,9 +316,9 @@ const resetForgotPassword = asyncHandler(async (req, res) => {
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
-  const user = await User.findOne(req._id);
+  const user = await User.findById(req.user._id);
 
-  const isPasswordvalid = await user.isPasswordCorrect(oldPassword);
+  const isPasswordValid = await user.isPasswordCorrect(oldPassword);
 
   if (!isPasswordValid) {
     throw new ApiError(400, "Invalid old Password");
