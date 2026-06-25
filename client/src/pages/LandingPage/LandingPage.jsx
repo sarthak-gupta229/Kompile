@@ -24,6 +24,7 @@ import visibilityImg from "../../../Assets/landingPage/visibility.png";
 import { CompanySheets } from "../../components/CompanyWiseKit/CompanySheets";
 import { useNavigate } from "react-router-dom";
 import ScrollVelocity from "../../components/ScrollVelocity/ScrollVelocity.jsx";
+import PoweredByChip from "../../components/chipanimation/PoweredByChip.jsx";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -111,6 +112,7 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
+        <PoweredByChip className="w-full" />
 
         <div className="py-24 overflow-hidden bg-transparent">
           <div className="text-center px-6 mb-12">
@@ -240,7 +242,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="w-full overflow-hidden bg-transparent">
+          <div className="w-full overflow-hidden pt-48 bg-transparent">
             <MacbookScroll
               title={<span></span>}
               src={workspaceGridImg}

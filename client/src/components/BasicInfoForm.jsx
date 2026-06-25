@@ -50,7 +50,7 @@ function BasicInfoForm() {
 
               <div className="flex-1">
                 <p className="text-sm text-zinc-400 mb-2">
-                  Codolio Id:{" "}
+                  Komplie Id:{" "}
                   <span className="text-blue-500 font-medium ml-2">
                     {user?.firstName || "Not set"}
                   </span>

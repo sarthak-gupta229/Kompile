@@ -51,10 +51,32 @@ const userResetForgotPasswordValidator = () => {
   return [body("newPassword").notEmpty().withMessage("Password is required")];
 };
 
+const userUpdateBasicInfoValidator = () => {
+  return [
+    body("firstName").optional().trim(),
+    body("lastName").optional().trim(),
+    body("bio")
+      .optional()
+      .trim()
+      .isLength({ max: 200 })
+      .withMessage("Bio cannot exceed 200 characters"),
+    body("country").optional().trim(),
+    body("techStack").optional().trim(),
+    body("college").optional().trim(),
+    body("degree").optional().trim(),
+    body("branch").optional().trim(),
+    body("graduationYear")
+      .optional()
+      .isInt({ min: 2000, max: 2040 })
+      .withMessage("Invalid graduation year"),
+  ];
+};
+
 export {
   userRegisterValidator,
   userLoginValidator,
   userChangeCurrentPasswordValidator,
   userForgotPasswordValidator,
   userResetForgotPasswordValidator,
+  userUpdateBasicInfoValidator,
 };
