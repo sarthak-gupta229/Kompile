@@ -266,7 +266,16 @@ export default function LandingPage() {
               </a>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+          <div className="w-4/5 mx-auto rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+            <img
+              src="/assets/landingPage/dashboard.png"
+              alt="Dashboard Preview"
+              className="w-full h-auto object-cover"
+            />
+          </div>
+
+
+            {/* <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
               <div className="md:col-span-4 bg-[#111] border border-white/8 rounded-3xl p-5 flex flex-col">
                 <p className="text-sm text-gray-300 font-semibold mb-4 text-center tracking-wide">
                   See cumulative questions solved
@@ -374,7 +383,7 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
         <section className="bg-transparent text-white px-6 py-24">
