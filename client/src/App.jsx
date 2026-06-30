@@ -9,8 +9,12 @@ import Profile from "./pages/profile/Profile.jsx";
 import CompanyWiseKit from "./pages/CompanyWiseKit/CompanyWiseKit.jsx";
 import CompanyDashboard from "./pages/CompanyWiseKit/CompanyDashboard.jsx";
 import Contest from "./pages/event/Contest.jsx";
+import Workspace from "./pages/Workspace/Workspace.jsx";
+import WorkspaceHome from "./pages/Workspace/WorkspaceHome.jsx";
+import { CompanySheets } from "./components/CompanyWiseKit/CompanySheets.jsx";
 import UserData from "./components/UserData.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import Mysheets from "./components/workspace/mysheets/Mysheets.jsx";
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(UserContext);
   if (!user || !user.email) {
@@ -47,6 +51,13 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/workspace" element={<Workspace />}>
+          <Route index element={<WorkspaceHome />} />
+          <Route path="sheets"      element={<Mysheets/>} />
+          <Route path="community"   element={<div className="text-white text-2xl font-bold">Community</div>} />
+          <Route path="company-kit" element={<CompanySheets show={true} />} />
+          <Route path="bookmarks"   element={<div className="text-white text-2xl font-bold">Bookmarks</div>} />
+        </Route>
       </Routes>
     </>
   );

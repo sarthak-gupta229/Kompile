@@ -247,6 +247,17 @@ function Login() {
                 >
                   Sign in
                 </button>
+
+                {/* Sign up link */}
+                <p className="text-center text-gray-400 text-sm mt-1">
+                  Don't have an account?{" "}
+                  <Link
+                    to="/register"
+                    className="text-orange-500 font-semibold no-underline hover:text-orange-400 transition-colors"
+                  >
+                    Sign up
+                  </Link>
+                </p>
               </form>
             </div>
 

@@ -1,6 +1,13 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { UserContext } from "../context/UserContext.jsx";
+import {
+  User,
+  Settings,
+  LayoutDashboard,
+  LogOut,
+  ChevronDown,
+} from "lucide-react";
 
 const navLinkCls = ({ isActive }) =>
   isActive
@@ -10,13 +17,40 @@ const navLinkCls = ({ isActive }) =>
 function Navbar() {
   const { user, logout } = useContext(UserContext);
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleLogout = () => {
+    setDropdownOpen(false);
     logout();
     navigate("/login");
   };
 
   const isLoggedIn = user && user.email;
+
+  const initials = (() => {
+    if (user?.firstName && user?.lastName)
+      return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+    if (user?.name) return user.name.slice(0, 2).toUpperCase();
+    if (user?.email) return user.email[0].toUpperCase();
+    return "U";
+  })();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const menuItems = [
+    { icon: User, label: "Profile", to: "/profile" },
+    { icon: Settings, label: "Settings", to: "/user_data" },
+    { icon: LayoutDashboard, label: "Workspace", to: "/workspace" },
+  ];
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-[#0f0f0f] border-b border-gray-800 px-6 py-3 flex items-center justify-between h-18 z-50">
@@ -44,20 +78,65 @@ function Navbar() {
         <NavLink to="/profile" className={navLinkCls}>
           Profile Tracker
         </NavLink>
-        {/* <button className="bg-[#ffffff] rounded-full hover:bg-[#2a2a2a] transition">
-          <img
-            src="/assets/Dark mode toggle.svg"
-            alt="dark mode toggle button"
-            className="h-10"
-          />
-        </button> */}
+        <NavLink to="/workspace" className={navLinkCls}>
+          Workspace
+        </NavLink>
+
         {isLoggedIn ? (
-          <button
-            onClick={handleLogout}
-            className="px-5 py-2 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-orange-500/30 cursor-pointer"
-          >
-            Log Out
-          </button>
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen((prev) => !prev)}
+              className="flex items-center gap-2 px-2 py-1 rounded-full border border-gray-700 hover:border-orange-500/60 bg-[#1a1a1a] hover:bg-[#222] transition-all duration-200 group cursor-pointer"
+            >
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold shadow-md">
+                {initials}
+              </div>
+              <ChevronDown
+                className={`w-4 h-4 text-gray-400 group-hover:text-white transition-all duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-52 bg-[#111111] border border-gray-800 rounded-xl shadow-2xl shadow-black/60 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="px-4 py-3 border-b border-gray-800">
+                  <p className="text-white text-sm font-semibold truncate">
+                    {user.firstName
+                      ? `${user.firstName} ${user.lastName}`
+                      : user.name || "User"}
+                  </p>
+                  <p className="text-gray-500 text-xs truncate mt-0.5">
+                    {user.email}
+                  </p>
+                </div>
+
+                <div className="py-1">
+                  {menuItems.map(({ icon: Icon, label, to }) => (
+                    <button
+                      key={to}
+                      onClick={() => {
+                        setDropdownOpen(false);
+                        navigate(to);
+                      }}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-150 group"
+                    >
+                      <Icon className="w-4 h-4 text-gray-500 group-hover:text-orange-400 transition-colors duration-150" />
+                      {label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="border-t border-gray-800 py-1">
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/5 transition-all duration-150 group"
+                  >
+                    <LogOut className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-150" />
+                    Log Out
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         ) : (
           <Link
             to="/login"

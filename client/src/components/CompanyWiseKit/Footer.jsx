@@ -1,18 +1,26 @@
 import React from "react";
-import { IconBrandGithub, IconBrandLinkedin, IconBrandTwitter, IconMail, IconArrowUpRight } from "@tabler/icons-react";
+import {
+  IconBrandGithub,
+  IconBrandLinkedin,
+  IconBrandTwitter,
+  IconMail,
+  IconArrowUpRight,
+} from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 import logoImg from "../../../Assets/face-removebg-preview 1.png";
 
 export function Footer() {
   return (
     <footer className="w-full border-t border-neutral-900 bg-black/60 backdrop-blur-md py-16">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Main flex container containing columns and vertical dividers */}
         <div className="flex flex-col md:flex-row md:justify-between items-stretch gap-8 md:gap-4">
-          
-          {/* Column 1: Branding */}
           <div className="flex flex-col items-start space-y-4 w-full md:w-[25%]">
             <div className="flex items-center gap-3">
-              <img src={logoImg} alt="Kompile Logo" className="h-8 w-8 object-contain" />
+              <img
+                src={logoImg}
+                alt="Kompile Logo"
+                className="h-8 w-8 object-contain"
+              />
               <span className="text-xl font-bold text-white tracking-tight">
                 Kom<span className="text-orange-500">pile</span>
               </span>
@@ -22,52 +30,64 @@ export function Footer() {
               <span className="text-orange-500">& Share.</span>
             </h3>
             <p className="text-gray-400 text-sm max-w-xs leading-relaxed">
-              Kompile helps you navigate and track your coding journey to success with powerful analytics and insights.
+              Kompile helps you navigate and track your coding journey to
+              success with powerful analytics and insights.
             </p>
             <div className="flex gap-3 pt-2">
-              <div
-                className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50"
-              >
+              <div className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50">
                 <IconBrandGithub className="w-5 h-5" />
               </div>
-              <div
-                className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50"
-              >
+              <div className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50">
                 <IconBrandLinkedin className="w-5 h-5" />
               </div>
-              <div
-                className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50"
-              >
+              <div className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50">
                 <IconBrandTwitter className="w-5 h-5" />
               </div>
-              <div
-                className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50"
-              >
+              <div className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50">
                 <IconMail className="w-5 h-5" />
               </div>
             </div>
           </div>
 
-          {/* Divider 1 */}
           <div className="hidden md:block w-px bg-neutral-800/60 self-stretch my-2"></div>
 
           {/* Column 2: Platform */}
           <div className="flex flex-col items-start w-full md:w-[12%]">
-            <h4 className="text-xs font-bold text-orange-500 tracking-wider uppercase">Platform</h4>
+            <h4 className="text-xs font-bold text-orange-500 tracking-wider uppercase">
+              Platform
+            </h4>
             <div className="w-6 h-[2px] bg-orange-500 mt-2 mb-6"></div>
             <div className="flex flex-col space-y-4">
-              <span className="text-gray-400 text-sm font-medium">Event Tracker</span>
-              <span className="text-gray-400 text-sm font-medium">Profile Tracker</span>
-              <span className="text-gray-400 text-sm font-medium">Company Wise Kit</span>
-              <span className="text-gray-400 text-sm font-medium">Leaderboards</span>
-              <span className="text-gray-400 text-sm font-medium">Pricing</span>
+              <Link
+                to="/events"
+                className="text-gray-400 text-sm font-medium hover:text-orange-400 transition-colors"
+              >
+                Event Tracker
+              </Link>
+              <Link
+                to="/profile"
+                className="text-gray-400 text-sm font-medium hover:text-orange-400 transition-colors"
+              >
+                Profile Tracker
+              </Link>
+              <Link
+                to="/company"
+                className="text-gray-400 text-sm font-medium hover:text-orange-400 transition-colors"
+              >
+                Company Wise Kit
+              </Link>
+              <Link
+                to="/workspace"
+                className="text-gray-400 text-sm font-medium hover:text-orange-400 transition-colors"
+              >
+                Workspace
+              </Link>
             </div>
           </div>
 
-          {/* Divider 2 */}
-          <div className="hidden md:block w-px bg-neutral-800/60 self-stretch my-2"></div>
+          {/* <div className="hidden md:block w-px bg-neutral-800/60 self-stretch my-2"></div>
 
-          {/* Column 3: Resources */}
+          
           <div className="flex flex-col items-start w-full md:w-[12%]">
             <h4 className="text-xs font-bold text-orange-500 tracking-wider uppercase">Resources</h4>
             <div className="w-6 h-[2px] bg-orange-500 mt-2 mb-6"></div>
@@ -78,21 +98,42 @@ export function Footer() {
               <span className="text-gray-400 text-sm font-medium">Help Center</span>
               <span className="text-gray-400 text-sm font-medium">FAQs</span>
             </div>
-          </div>
+          </div> */}
 
           {/* Divider 3 */}
           <div className="hidden md:block w-px bg-neutral-800/60 self-stretch my-2"></div>
 
           {/* Column 4: Company */}
           <div className="flex flex-col items-start w-full md:w-[12%]">
-            <h4 className="text-xs font-bold text-orange-500 tracking-wider uppercase">Company</h4>
+            <h4 className="text-xs font-bold text-orange-500 tracking-wider uppercase">
+              Company
+            </h4>
             <div className="w-6 h-[2px] bg-orange-500 mt-2 mb-6"></div>
             <div className="flex flex-col space-y-4">
-              <span className="text-gray-400 text-sm font-medium">About Us</span>
-              <span className="text-gray-400 text-sm font-medium">Careers</span>
-              <span className="text-gray-400 text-sm font-medium">Contact Us</span>
-              <span className="text-gray-400 text-sm font-medium">Privacy Policy</span>
-              <span className="text-gray-400 text-sm font-medium">Terms of Service</span>
+              <Link
+                to="/"
+                className="text-gray-400 text-sm font-medium hover:text-orange-400 transition-colors"
+              >
+                About Us
+              </Link>
+              <Link
+                to="/"
+                className="text-gray-400 text-sm font-medium hover:text-orange-400 transition-colors"
+              >
+                Contact Us
+              </Link>
+              <Link
+                to="/"
+                className="text-gray-400 text-sm font-medium hover:text-orange-400 transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                to="/"
+                className="text-gray-400 text-sm font-medium hover:text-orange-400 transition-colors"
+              >
+                Terms of Service
+              </Link>
             </div>
           </div>
 
@@ -101,12 +142,18 @@ export function Footer() {
 
           {/* Column 5: Stay in the Loop */}
           <div className="flex flex-col items-start w-full md:w-[25%]">
-            <h4 className="text-xs font-bold text-orange-500 tracking-wider uppercase">Stay in the Loop</h4>
+            <h4 className="text-xs font-bold text-orange-500 tracking-wider uppercase">
+              Stay in the Loop
+            </h4>
             <div className="w-6 h-[2px] bg-orange-500 mt-2 mb-6"></div>
             <p className="text-gray-400 text-sm leading-relaxed mb-4 max-w-[280px]">
-              Get the latest updates, coding tips, and insights delivered to your inbox.
+              Get the latest updates, coding tips, and insights delivered to
+              your inbox.
             </p>
-            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3 w-full max-w-[280px]">
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="flex flex-col gap-3 w-full max-w-[280px]"
+            >
               <input
                 type="email"
                 placeholder="Enter your email"
@@ -121,7 +168,6 @@ export function Footer() {
               </button>
             </form>
           </div>
-
         </div>
 
         {/* Horizontal Line divider */}
@@ -139,11 +185,26 @@ export function Footer() {
           </div>
 
           <div className="flex items-center gap-3 text-xs">
-            <span className="text-gray-500">Terms of Service</span>
+            <Link
+              to="/"
+              className="text-gray-500 hover:text-orange-400 transition-colors"
+            >
+              Terms of Service
+            </Link>
             <span className="text-orange-500/60">/</span>
-            <span className="text-gray-500">Privacy Policy</span>
+            <Link
+              to="/"
+              className="text-gray-500 hover:text-orange-400 transition-colors"
+            >
+              Privacy Policy
+            </Link>
             <span className="text-orange-500/60">/</span>
-            <span className="text-gray-500">Cookie Policy</span>
+            <Link
+              to="/"
+              className="text-gray-500 hover:text-orange-400 transition-colors"
+            >
+              Cookie Policy
+            </Link>
           </div>
         </div>
       </div>
