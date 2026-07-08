@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function LoveBabbarTopicCard({ topic, totalQuestions, route }) {
   const navigate = useNavigate();
-  const [stats, setStats] = usestate(null);
+  const [stats, setStats] = useState(null);
 
   const handleClick = () => {
     if (route) navigate(`/workspace/sheets/love-babbar/${route}`);
