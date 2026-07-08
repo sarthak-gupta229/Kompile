@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function LoveBabbarTopicCard({ topic, totalQuestions, route }) {
   const navigate = useNavigate();
+  const [stats, setStats] = usestate(null);
 
   const handleClick = () => {
     if (route) navigate(`/workspace/sheets/love-babbar/${route}`);
@@ -25,3 +26,4 @@ export default function LoveBabbarTopicCard({ topic, totalQuestions, route }) {
     </div>
   );
 }
+//ending
