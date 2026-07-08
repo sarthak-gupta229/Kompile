@@ -1,5 +1,6 @@
 import React from "react";
 import { Users, CircleCheck, ListChecks } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function MysheetsCard({
   heading,
@@ -8,9 +9,12 @@ function MysheetsCard({
   totalQuestions,
   solved,
   progress,
+  route,
 }) {
+  const navigate = useNavigate();
   return (
     <div
+      onClick={() => route && navigate(route)}
       className={`relative bg-[#111111] border border-gray-800  hover:border-t-orange-500 rounded-xl p-2 cursor-pointer group transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden w-120 `}
     >
 

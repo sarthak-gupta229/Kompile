@@ -15,6 +15,10 @@ import { CompanySheets } from "./components/CompanyWiseKit/CompanySheets.jsx";
 import UserData from "./components/UserData.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Mysheets from "./components/workspace/mysheets/Mysheets.jsx";
+import LoveBabbarSheet from "./components/workspace/sheetsDash/LoveBabbarSheet.jsx";
+import StriversA2ZSheet from "./components/workspace/sheetsDash/StriversA2ZSheet.jsx";
+import LoveBabbartopic from "./components/workspace/sheetsDash/LoveBabbartopic.jsx";
+
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(UserContext);
   if (!user || !user.email) {
@@ -53,10 +57,13 @@ function App() {
         />
         <Route path="/workspace" element={<Workspace />}>
           <Route index element={<WorkspaceHome />} />
-          <Route path="sheets"      element={<Mysheets/>} />
-          <Route path="community"   element={<div className="text-white text-2xl font-bold">Community</div>} />
-          <Route path="company-kit" element={<CompanySheets show={true} />} />
-          <Route path="bookmarks"   element={<div className="text-white text-2xl font-bold">Bookmarks</div>} />
+          <Route path="sheets"                    element={<Mysheets />} />
+          <Route path="sheets/love-babbar"              element={<LoveBabbarSheet />} />
+          <Route path="sheets/love-babbar/:topicSlug"   element={<LoveBabbartopic />} />
+          <Route path="sheets/strivers-a2z"             element={<StriversA2ZSheet />} />
+          <Route path="community"                 element={<div className="text-white text-2xl font-bold">Community</div>} />
+          <Route path="company-kit"               element={<CompanySheets show={true} />} />
+          <Route path="bookmarks"                 element={<div className="text-white text-2xl font-bold">Bookmarks</div>} />
         </Route>
       </Routes>
     </>

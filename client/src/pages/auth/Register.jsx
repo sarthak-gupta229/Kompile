@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import { flushSync } from "react-dom";
 import { UserContext } from "../../context/UserContext";
 import GridComponent from "../../components/GridComponent";
+import { registerUser } from "../../api/auth.api";
+import toast, { Toaster } from 'react-hot-toast';
 
 // icons
 const ArrowLeft = () => (
@@ -105,8 +108,10 @@ const TrophyIcon = () => (
 function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
     confirm: "",
@@ -118,18 +123,43 @@ function Register() {
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login({
-      name: form.name,
-      email: form.email,
-      password: form.password,
-      platform_data: {
-        github: { username: form.github },
-        leetcode: { username: form.leetcode },
-      },
-    });
-    navigate("/user_data");
+    setError("");
+
+    if (form.password !== form.confirm) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const data = await registerUser({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        confirmPassword: form.confirm,
+        leetcodeUsername: form.leetcode,
+        githubUsername: form.github,
+      });
+      const registeredUser = data?.data?.user;
+      if (!registeredUser) {
+        throw new Error("Registration succeeded, but no user was returned.");
+      }
+      toast.success("Registration successful");
+      flushSync(() => login(registeredUser));
+      navigate("/user_data");
+    } catch (err) {
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Registration failed. Please try again.";
+      toast.error(message);
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const features = [
@@ -156,7 +186,7 @@ function Register() {
   return (
     <GridComponent>
       <div className="min-h-screen flex flex-col font-sans">
-        {/* nav*/}
+   
         <nav className="flex items-center justify-between px-6 md:px-8 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
             <button
@@ -184,6 +214,7 @@ function Register() {
             </Link>
           </div>
         </nav>
+        <Toaster position="top-right" reverseOrder={false} />
 
         <div className="flex flex-1">
           <div className="flex flex-col justify-start md:justify-center w-full md:w-[48%] px-6 sm:px-10 md:px-16 lg:px-20 py-6 md:py-8">
@@ -202,24 +233,24 @@ function Register() {
               </p>
 
               <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
-                {/* name*/}
+         
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="name" className="text-gray-300 text-sm">
-                    Full name
+                    Username
                   </label>
                   <input
                     id="name"
-                    name="name"
+                    name="username"
                     type="text"
-                    autoComplete="name"
-                    placeholder="Enter your full name"
-                    value={form.name}
+                    autoComplete="username"
+                    placeholder="Enter your username"
+                    value={form.username}
                     onChange={handleChange}
                     className={inputCls}
                   />
                 </div>
 
-                {/* email */}
+            
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="reg-email" className="text-gray-300 text-sm">
                     Email address
@@ -236,7 +267,7 @@ function Register() {
                   />
                 </div>
 
-                {/* password */}
+          
                 <div className="flex flex-col gap-1.5">
                   <label
                     htmlFor="reg-password"
@@ -265,7 +296,7 @@ function Register() {
                   </div>
                 </div>
 
-                {/* confirm password */}
+             
                 <div className="flex flex-col gap-1.5">
                   <label
                     htmlFor="reg-confirm"
@@ -327,18 +358,22 @@ function Register() {
                   />
                 </div>
 
-                {/* submit */}
+      
+                {error && (
+                  <p className="text-red-500 text-sm text-center">{error}</p>
+                )}
                 <button
                   id="register-submit"
                   type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 active:scale-[0.98] text-white font-semibold text-base rounded-xl py-2.5 mt-1 cursor-pointer border-none transition-all duration-200 shadow-lg shadow-orange-500/20"
+                  disabled={loading}
+                  className="w-full bg-orange-500 hover:bg-orange-600 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-base rounded-xl py-2.5 mt-1 cursor-pointer border-none transition-all duration-200 shadow-lg shadow-orange-500/20"
                 >
-                  Create account
+                  {loading ? "Creating account..." : "Create account"}
                 </button>
               </form>
             </div>
 
-            {/* footer */}
+   
             <div className="mt-6 text-center">
               <p className="text-gray-500 text-xs leading-relaxed mb-1.5">
                 By signing in or creating an account, you are agreeing to our{" "}
@@ -360,9 +395,9 @@ function Register() {
             </div>
           </div>
 
-          {/* right panel hidden on mobile */}
+ 
           <div className="hidden md:flex flex-1 flex-col items-center justify-center px-10 lg:px-16 py-8 relative overflow-hidden">
-            {/*  glow */}
+        
             <div
               className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[420px] h-[420px] rounded-full pointer-events-none"
               style={{
@@ -385,7 +420,7 @@ function Register() {
               precision retrieval.
             </p>
 
-            {/* features */}
+
             <div className="flex flex-col gap-2.5 w-full max-w-[400px] relative z-10">
               {features.map((f, i) => (
                 <div

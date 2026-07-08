@@ -23,7 +23,7 @@ const sendEmail = async (options) => {
   const mail = {
     from: "mail.kompile@example.com",
     to: options.email,
-    subject: options.subjects,
+    subject: options.subject,
     text: emailBody,
     html: emailHtml,
   };
