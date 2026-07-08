@@ -1,5 +1,5 @@
 import React from "react";
-import LoveBabbarTopicCard from "./LoveBabbartopicCard.jsx";
+import LoveBabbarTopicCard from "./loveBabbartopicCard.jsx";
 
 export default function LoveBabbarSheet() {
   const dsaTopics = [
