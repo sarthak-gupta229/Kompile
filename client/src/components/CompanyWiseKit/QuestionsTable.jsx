@@ -8,7 +8,7 @@ import {
   Flame,
   Clock,
   ArrowUpRight,
-  TrendingUp,
+  CheckCircle2,
   MoreVertical,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
@@ -29,6 +29,16 @@ export function QuestionsTable({ data = [] }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("All");
   const [activeTab, setActiveTab] = useState("All Time Favourite");
+  const [completedIds, setCompletedIds] = useState(new Set());
+
+  const toggleCompleted = (id) => {
+    setCompletedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const filteredData = useMemo(() => {
     return data
@@ -73,24 +83,6 @@ export function QuestionsTable({ data = [] }) {
 
   return (
     <div className="space-y-6">
-      {/* Tab Switcher */}
-      <div className="flex items-center gap-2 p-1.5 bg-[#0f0f0f] border border-gray-800 rounded-2xl w-fit">
-        {["All Time Favourite", "45 Days", "6 Months"].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={cn(
-              "px-6 py-2 rounded-xl text-sm font-bold transition-all duration-200",
-              activeTab === tab
-                ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20"
-                : "text-gray-500 hover:text-gray-300",
-            )}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
       <div className="flex flex-wrap items-center justify-between gap-4 bg-[#0f0f0f] border border-gray-800 p-4 rounded-2xl">
         <div className="flex items-center gap-3">
           <div className="relative group">
@@ -235,14 +227,20 @@ export function QuestionsTable({ data = [] }) {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button className="p-1.5 rounded-lg text-gray-500 hover:text-white hover:bg-white/5 transition-all">
-                          <Clock className="w-4 h-4" />
-                        </button>
-                        <button className="p-1.5 rounded-lg text-gray-500 hover:text-white hover:bg-white/5 transition-all">
-                          <TrendingUp className="w-4 h-4" />
-                        </button>
-                        <button className="p-1.5 rounded-lg text-gray-500 hover:text-white hover:bg-white/5 transition-all">
-                          <MoreVertical className="w-4 h-4" />
+                        <button
+                          onClick={() => toggleCompleted(q.id)}
+                          className={`p-1.5 rounded-lg transition-all ${
+                            completedIds.has(q.id)
+                              ? "text-green-500 bg-green-500/10 hover:bg-green-500/20"
+                              : "text-gray-500 hover:text-green-400 hover:bg-green-500/10"
+                          }`}
+                          title={
+                            completedIds.has(q.id)
+                              ? "Mark as incomplete"
+                              : "Mark as complete"
+                          }
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
                         </button>
                       </div>
                     </td>

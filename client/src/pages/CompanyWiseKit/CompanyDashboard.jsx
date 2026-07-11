@@ -63,7 +63,7 @@ export default function CompanyDashboard() {
           <main className="flex-1 w-full max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 space-y-12">
             <CompanyHero company={company} />
 
-            <AnalyticsSection data={companyData} companyName={company.name} />
+            {/* <AnalyticsSection data={companyData} companyName={company.name} /> */}
 
             <div className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -92,8 +92,6 @@ export default function CompanyDashboard() {
                 </div>
               )}
             </div>
-
-            <PremiumLocked companyName={company.name} />
           </main>
 
           <div className="mt-20">
