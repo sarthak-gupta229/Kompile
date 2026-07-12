@@ -5,7 +5,7 @@ import { flushSync } from "react-dom";
 import { UserContext } from "../../context/UserContext";
 import GridComponent from "../../components/GridComponent";
 import { registerUser } from "../../api/auth.api";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 // icons
 const ArrowLeft = () => (
@@ -148,8 +148,8 @@ function Register() {
         throw new Error("Registration succeeded, but no user was returned.");
       }
       toast.success("Registration successful");
-      flushSync(() => login(registeredUser));
-      navigate("/user_data");
+  
+      navigate("/login");
     } catch (err) {
       const message =
         err?.response?.data?.message ||
@@ -186,7 +186,6 @@ function Register() {
   return (
     <GridComponent>
       <div className="min-h-screen flex flex-col font-sans">
-   
         <nav className="flex items-center justify-between px-6 md:px-8 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
             <button
@@ -233,7 +232,6 @@ function Register() {
               </p>
 
               <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
-         
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="name" className="text-gray-300 text-sm">
                     Username
@@ -250,7 +248,6 @@ function Register() {
                   />
                 </div>
 
-            
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="reg-email" className="text-gray-300 text-sm">
                     Email address
@@ -267,7 +264,6 @@ function Register() {
                   />
                 </div>
 
-          
                 <div className="flex flex-col gap-1.5">
                   <label
                     htmlFor="reg-password"
@@ -296,7 +292,6 @@ function Register() {
                   </div>
                 </div>
 
-             
                 <div className="flex flex-col gap-1.5">
                   <label
                     htmlFor="reg-confirm"
@@ -358,7 +353,6 @@ function Register() {
                   />
                 </div>
 
-      
                 {error && (
                   <p className="text-red-500 text-sm text-center">{error}</p>
                 )}
@@ -373,7 +367,6 @@ function Register() {
               </form>
             </div>
 
-   
             <div className="mt-6 text-center">
               <p className="text-gray-500 text-xs leading-relaxed mb-1.5">
                 By signing in or creating an account, you are agreeing to our{" "}
@@ -395,9 +388,7 @@ function Register() {
             </div>
           </div>
 
- 
           <div className="hidden md:flex flex-1 flex-col items-center justify-center px-10 lg:px-16 py-8 relative overflow-hidden">
-        
             <div
               className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[420px] h-[420px] rounded-full pointer-events-none"
               style={{
@@ -419,7 +410,6 @@ function Register() {
               Your high-performance utility for technical excellence and
               precision retrieval.
             </p>
-
 
             <div className="flex flex-col gap-2.5 w-full max-w-[400px] relative z-10">
               {features.map((f, i) => (

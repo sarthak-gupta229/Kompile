@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import { getCurrentUser } from "../api/auth.api";
 
 export const UserContext = createContext();
 
@@ -44,6 +45,22 @@ const normalizePlatformData = (data, previousPlatformData = {}) => {
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(defaultUser);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  // Restore session on page reload using the httpOnly cookie
+  useEffect(() => {
+    getCurrentUser()
+      .then((res) => {
+        const data = res?.data || res;
+        if (data) login(data);
+      })
+      .catch(() => {
+        // Not authenticated — stay as default user
+      })
+      .finally(() => {
+        setIsAuthLoading(false);
+      });
+  }, []);
 
   const login = (data) => {
     if (!data) return;
@@ -80,6 +97,7 @@ export const UserProvider = ({ children }) => {
         login,
         logout,
         updateBasicInfo,
+        isAuthLoading,
       }}
     >
       {children}

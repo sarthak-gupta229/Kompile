@@ -1,4 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { logoutUser } from "../api/auth.api";
 import { useContext, useState, useEffect, useRef } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 import {
@@ -20,10 +21,16 @@ function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setDropdownOpen(false);
-    logout();
-    navigate("/login");
+    try {
+      await logoutUser(); // clears the httpOnly cookie on the server
+    } catch (err) {
+      console.error("Logout API error:", err);
+    } finally {
+      logout(); // clear local user state regardless
+      navigate("/login");
+    }
   };
 
   const isLoggedIn = user && user.email;

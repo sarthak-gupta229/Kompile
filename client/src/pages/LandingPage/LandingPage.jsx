@@ -178,65 +178,53 @@ export default function LandingPage() {
             />
           </div>
 
-          <div className="flex flex-col md:flex-row items-start gap-12 mb-16 max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-start gap-16 mb-16 max-w-7xl mx-auto px-6">
             <div className="md:w-1/2">
-              <h3 className="text-4xl md:text-5xl font-bold mb-5 tracking-tight leading-tight">
+              <h3 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight leading-tight">
                 Simplify Your <span className="text-orange-500">Prep</span>
               </h3>
-              <p className="text-gray-400 text-lg leading-relaxed mb-8 max-w-md">
+              <p className="text-gray-400 text-xl leading-relaxed mb-10 max-w-lg">
                 Say goodbye to last-minute stress. Track all your questions and
                 notes in one place for easy review and revision.
               </p>
               <a
                 href="#"
-                className="inline-flex items-center gap-2 text-blue-500 hover:text-blue-400 font-bold text-lg transition-colors"
+                className="inline-flex items-center gap-2 text-blue-500 hover:text-blue-400 font-bold text-xl transition-colors"
               >
                 Try Question Tracker <span>→</span>
               </a>
             </div>
 
-            <div className="md:w-1/2 flex flex-wrap justify-center md:justify-end gap-10 pt-2">
-              <div className="text-center w-[160px]">
-                <div className="w-12 h-12 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center mx-auto mb-3">
+            <div className="md:w-1/2 flex flex-wrap justify-center md:justify-end gap-12 pt-2">
+              <div className="text-center w-[200px]">
+                <div className="w-16 h-16 bg-gray-900 border border-gray-700 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <img
                     src={workspaceIcon}
                     alt="icon"
-                    className="w-6 h-6 invert"
+                    className="w-8 h-8 invert"
                   />
                 </div>
-                <h4 className="text-white font-bold text-base mb-1">
+                <h4 className="text-white font-bold text-lg mb-2">
                   My Workspace
                 </h4>
-                <p className="text-gray-400 text-sm leading-snug">
+                <p className="text-gray-400 text-base leading-snug">
                   Tag & filter questions for easy organization
                 </p>
               </div>
 
-              <div className="text-center w-[160px]">
-                <div className="w-12 h-12 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <div className="text-center w-[200px]">
+                <div className="w-16 h-16 bg-gray-900 border border-gray-700 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <img
                     src={trackerIcon}
                     alt="icon"
-                    className="w-6 h-6 invert"
+                    className="w-8 h-8 invert"
                   />
                 </div>
-                <h4 className="text-white font-bold text-base mb-1">
+                <h4 className="text-white font-bold text-lg mb-2">
                   Sheet Tracker
                 </h4>
-                <p className="text-gray-400 text-sm leading-snug">
+                <p className="text-gray-400 text-base leading-snug">
                   Track all coding sheets in one place
-                </p>
-              </div>
-
-              <div className="text-center w-[160px]">
-                <div className="w-12 h-12 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <img src={notesIcon} alt="icon" className="w-6 h-6 invert" />
-                </div>
-                <h4 className="text-white font-bold text-base mb-1">
-                  Enhanced Notes
-                </h4>
-                <p className="text-gray-400 text-sm leading-snug">
-                  Add detailed notes to questions easily.
                 </p>
               </div>
             </div>
@@ -266,124 +254,15 @@ export default function LandingPage() {
               </a>
             </div>
 
-          <div className="w-4/5 mx-auto rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-            <img
-              src="/assets/landingPage/dashboard.png"
-              alt="Dashboard Preview"
-              className="w-full h-auto object-cover"
-            />
-          </div>
+            <div className="w-4/5 mx-auto rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+              <img
+                src="/assets/landingPage/dashboard.png"
+                alt="Dashboard Preview"
+                className="w-full h-auto object-cover"
+              />
+            </div>
 
-
-            {/* <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-              <div className="md:col-span-4 bg-[#111] border border-white/8 rounded-3xl p-5 flex flex-col">
-                <p className="text-sm text-gray-300 font-semibold mb-4 text-center tracking-wide">
-                  See cumulative questions solved
-                </p>
-                <div className="flex-1 flex items-center justify-center min-h-[160px]">
-                  <img
-                    src={cumulativeQuestionsImg}
-                    alt="cumulative questions"
-                    className="h-[160px] w-auto object-contain"
-                  />
-                </div>
-              </div>
-
-              <div className="md:col-span-8 bg-[#111] border border-white/8 rounded-3xl p-5 flex flex-col">
-                <p className="text-sm text-gray-300 font-semibold mb-4 text-center tracking-wide">
-                  Track your streak, across multiple platforms
-                </p>
-                <div className="flex-1 flex flex-row items-center gap-5 min-h-[160px]">
-                  <div className="flex-none flex items-center justify-center h-[160px]">
-                    <img
-                      src={activeDaysImg}
-                      alt="active days"
-                      className="h-[160px] w-auto object-contain"
-                    />
-                  </div>
-
-                  <div className="flex-1 h-[160px] flex items-center justify-center rounded-2xl overflow-hidden bg-white/[0.03] border border-white/5 p-3">
-                    <img
-                      src={heatmapImg}
-                      alt="heatmap"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="md:col-span-6 bg-[#111] border border-white/8 rounded-3xl p-5 flex flex-col">
-                <p className="text-sm text-gray-300 font-semibold mb-4 text-center tracking-wide">
-                  Identify your strengths and areas of improvement
-                </p>
-                <div className="flex-1 flex items-center justify-center min-h-[320px]">
-                  <img
-                    src={dsaAnalysisImg}
-                    alt="dsa analysis"
-                    className="w-full h-[320px] object-contain"
-                  />
-                </div>
-              </div>
-
-              <div className="md:col-span-6 bg-[#111] border border-white/8 rounded-3xl p-5 flex flex-col">
-                <p className="text-sm text-gray-300 font-semibold mb-4 text-center tracking-wide">
-                  Get classification of Problems solved
-                </p>
-                <div className="flex-1 flex items-center justify-center min-h-[320px]">
-                  <img
-                    src={classificationImg}
-                    alt="classification"
-                    className="w-full h-[320px] object-contain"
-                  />
-                </div>
-              </div>
-
-              <div className="md:col-span-6 bg-[#111] border border-white/8 rounded-3xl p-5 flex flex-col">
-                <p className="text-sm text-gray-300 font-semibold mb-4 text-center tracking-wide">
-                  Monitor your ratings in contests over time
-                </p>
-                <div className="flex-1 flex flex-col gap-4">
-                  <div className="flex items-center justify-center h-[120px]">
-                    <img
-                      src={contestStatsImg}
-                      alt="contest stats"
-                      className="h-full w-auto object-contain"
-                    />
-                  </div>
-
-                  <div className="flex-1 flex items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 p-3 min-h-[190px]">
-                    <img
-                      src={contestGraphImg}
-                      alt="contest graph"
-                      className="w-full h-[190px] object-contain"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="md:col-span-6 bg-[#111] border border-white/8 rounded-3xl p-5 flex flex-col">
-                <p className="text-sm text-gray-300 font-semibold mb-4 text-center tracking-wide">
-                  Showcase your Achievements
-                </p>
-                <div className="flex-1 flex flex-col gap-4">
-                  <div className="flex items-center justify-center h-[120px] rounded-2xl bg-white/[0.03] border border-white/5 p-3">
-                    <img
-                      src={awardsImg}
-                      alt="awards"
-                      className="h-full w-auto object-contain"
-                    />
-                  </div>
-
-                  <div className="flex-1 flex items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 p-3 min-h-[190px]">
-                    <img
-                      src={rankingsImg}
-                      alt="rankings"
-                      className="w-full h-[190px] object-contain"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div> */}
+            
           </div>
         </section>
         <section className="bg-transparent text-white px-6 py-24">

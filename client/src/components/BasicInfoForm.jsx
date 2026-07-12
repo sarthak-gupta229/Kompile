@@ -1,18 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { X, Edit2 } from "lucide-react";
+import { useContext } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 
-function BasicInfoForm() {
-  const { user, updateBasicInfo } = useContext(UserContext);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    updateBasicInfo({ [name]: value });
-  };
-
-  const handleSave = () => {
-    console.log("[UserContext] Basic Info saved:", user);
-  };
+function BasicInfoForm({ formData, onChange, onSave }) {
+  const { user } = useContext(UserContext);
 
   return (
     <div className="w-full text-white">
@@ -40,19 +32,13 @@ function BasicInfoForm() {
                 <button className="absolute bottom-0 right-0 p-1.5 bg-[#2e2e2e] rounded-full border border-black hover:bg-[#3e3e3e]">
                   <Edit2 size={14} className="text-zinc-400" />
                 </button>
-                <button
-                  className="absolute bottom-0 left-0 p-1.5 bg-[#2e2e2e] rounded-full border border-black hover:bg-[#3e3e3e]"
-                  onClick={() => updateBasicInfo({ avatar: null })}
-                >
-                  <X size={14} className="text-zinc-400" />
-                </button>
               </div>
 
               <div className="flex-1">
                 <p className="text-sm text-zinc-400 mb-2">
                   Komplie Id:{" "}
                   <span className="text-blue-500 font-medium ml-2">
-                    {user?.firstName || "Not set"}
+                    {user?.username || "Not set"}
                   </span>
                 </p>
                 <div className="flex gap-4">
@@ -63,8 +49,8 @@ function BasicInfoForm() {
                     <input
                       type="text"
                       name="firstName"
-                      value={user?.firstName || ""}
-                      onChange={handleChange}
+                      value={formData.firstName}
+                      onChange={onChange}
                       className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 focus:outline-none focus:border-[#f89f1b]"
                       placeholder="John"
                     />
@@ -76,8 +62,8 @@ function BasicInfoForm() {
                     <input
                       type="text"
                       name="lastName"
-                      value={user?.lastName || ""}
-                      onChange={handleChange}
+                      value={formData.lastName}
+                      onChange={onChange}
                       className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 focus:outline-none focus:border-[#f89f1b]"
                       placeholder="Doe"
                     />
@@ -103,8 +89,8 @@ function BasicInfoForm() {
               </label>
               <textarea
                 name="bio"
-                value={user?.bio || ""}
-                onChange={handleChange}
+                value={formData.bio}
+                onChange={onChange}
                 maxLength={200}
                 className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 h-24 resize-none focus:outline-none focus:border-[#f89f1b]"
                 placeholder="Tell us about yourself..."
@@ -118,8 +104,8 @@ function BasicInfoForm() {
               <div className="relative">
                 <select
                   name="country"
-                  value={user?.country || ""}
-                  onChange={handleChange}
+                  value={formData.country}
+                  onChange={onChange}
                   className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 appearance-none focus:outline-none focus:border-[#f89f1b]"
                 >
                   <option value="">Select country</option>
@@ -150,8 +136,8 @@ function BasicInfoForm() {
               <input
                 type="text"
                 name="techStack"
-                value={user?.techStack || ""}
-                onChange={handleChange}
+                value={formData.techStack}
+                onChange={onChange}
                 className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 focus:outline-none focus:border-[#f89f1b]"
                 placeholder="e.g. React, Node.js, C++ (comma separated)"
               />
@@ -172,8 +158,8 @@ function BasicInfoForm() {
               <input
                 type="text"
                 name="college"
-                value={user?.college || ""}
-                onChange={handleChange}
+                value={formData.college}
+                onChange={onChange}
                 className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 focus:outline-none focus:border-[#f89f1b]"
                 placeholder="e.g. Rishihood University"
               />
@@ -186,8 +172,8 @@ function BasicInfoForm() {
               <div className="relative">
                 <select
                   name="degree"
-                  value={user?.degree || ""}
-                  onChange={handleChange}
+                  value={formData.degree}
+                  onChange={onChange}
                   className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 appearance-none focus:outline-none focus:border-[#f89f1b]"
                 >
                   <option value="">Select degree</option>
@@ -226,8 +212,8 @@ function BasicInfoForm() {
               <div className="relative">
                 <select
                   name="branch"
-                  value={user?.branch || ""}
-                  onChange={handleChange}
+                  value={formData.branch}
+                  onChange={onChange}
                   className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 appearance-none focus:outline-none focus:border-[#f89f1b]"
                 >
                   <option value="">Select branch</option>
@@ -236,7 +222,7 @@ function BasicInfoForm() {
                     Information Technology
                   </option>
                   <option value="Electronics & Communication">
-                    Electronics & Communication
+                    Electronics &amp; Communication
                   </option>
                   <option value="Mechanical Engineering">
                     Mechanical Engineering
@@ -263,8 +249,8 @@ function BasicInfoForm() {
               <div className="relative">
                 <select
                   name="graduationYear"
-                  value={user?.graduationYear || ""}
-                  onChange={handleChange}
+                  value={formData.graduationYear}
+                  onChange={onChange}
                   className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 appearance-none focus:outline-none focus:border-[#f89f1b]"
                 >
                   <option value="">Select year</option>
@@ -290,7 +276,7 @@ function BasicInfoForm() {
 
         <div className="flex justify-end">
           <button
-            onClick={handleSave}
+            onClick={onSave}
             className="px-6 py-2.5 bg-[#f89f1b] hover:bg-[#e08e10] text-black font-semibold rounded-lg transition-colors"
           >
             Save Changes

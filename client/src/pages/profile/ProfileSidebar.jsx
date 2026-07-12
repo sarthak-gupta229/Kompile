@@ -16,20 +16,30 @@ function ProfileSidebar({ userData }) {
         <button className="absolute top-4 right-4 p-2 hover:bg-[#2e2e2e] rounded-md transition-colors">
           <Edit size={20} className="text-zinc-500" />
         </button>
-        <div className="w-48 h-48 rounded-full overflow-hidden mb-4">
-          <img
-            src={userData.profileImage}
-            alt={userData.name}
-            className="w-full h-full object-cover"
-          />
+        <div className="w-48 h-48 rounded-full overflow-hidden mb-4 flex-shrink-0">
+          {userData.profileImage &&
+          !userData.profileImage.includes("placehold") ? (
+            <img
+              src={userData.profileImage}
+              alt={userData.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div
+              className="w-full h-full flex items-center justify-center text-white font-extrabold text-5xl select-none"
+              style={{
+                background: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
+              }}
+            >
+              {(userData.name || userData.username || "?")
+                .split(" ")
+                .slice(0, 2)
+                .map((w) => w[0]?.toUpperCase())
+                .join("")}
+            </div>
+          )}
         </div>
         <h1 className="text-4xl font-bold mb-1">{userData.name}</h1>
-        <a
-          href={`https://leetcode.com/${userData.username}`}
-          className="text-blue-500 font-medium mb-6 hover:underline"
-        >
-          @{userData.username}
-        </a>
 
         <button className="w-full flex items-center justify-center gap-2 bg-[#1f1f1f] border border-[#2e2e2e] hover:bg-[#2e2e2e] text-[#f89f1b] font-semibold py-3 rounded-lg transition-colors">
           Kompile Card

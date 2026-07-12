@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import GridComponent from "../../components/GridComponent";
+import { loginUser } from "../../api/auth.api";
+import { Toaster, toast } from "react-hot-toast";
 
 // icons
 const ArrowLeft = () => (
@@ -111,13 +113,27 @@ function Login() {
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login({
-      email: form.email,
-      password: form.password,
-    });
-    navigate("/user_data");
+    try {
+      const response = await loginUser({
+        email: form.email,
+        password: form.password,
+      });
+      if (response.statusCode === 200) {
+        toast.success(response.message || "Logged in successfully!");
+        login(response.data.user);
+        navigate("/profile");
+      }
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Login failed. Please try again.";
+      toast.error(message);
+      console.log(error);
+    }
   };
 
   const features = [
@@ -141,7 +157,7 @@ function Login() {
   return (
     <GridComponent>
       <div className="min-h-screen flex flex-col font-sans">
-        {/* ── TOP NAV ── */}
+        <Toaster position="top-right" reverseOrder={false} />
         <nav className="flex items-center justify-between px-6 md:px-8 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
             <button
@@ -170,7 +186,6 @@ function Login() {
           </div>
         </nav>
 
-        {/* ── BODY ── */}
         <div className="flex flex-1">
           <div className="flex flex-col justify-start md:justify-center w-full md:w-[48%] px-6 sm:px-10 md:px-16 lg:px-20 py-6 md:py-8">
             <div>
@@ -188,7 +203,6 @@ function Login() {
               </p>
 
               <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
-                {/* Email */}
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="email" className="text-gray-300 text-sm">
                     Email address
@@ -205,7 +219,6 @@ function Login() {
                   />
                 </div>
 
-                {/* Password */}
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between">
                     <label htmlFor="password" className="text-gray-300 text-sm">
@@ -239,7 +252,6 @@ function Login() {
                   </div>
                 </div>
 
-                {/* Submit */}
                 <button
                   id="login-submit"
                   type="submit"
@@ -248,7 +260,6 @@ function Login() {
                   Sign in
                 </button>
 
-                {/* Sign up link */}
                 <p className="text-center text-gray-400 text-sm mt-1">
                   Don't have an account?{" "}
                   <Link
@@ -261,7 +272,6 @@ function Login() {
               </form>
             </div>
 
-            {/* Footer */}
             <div className="mt-6 text-center">
               <p className="text-gray-500 text-xs leading-relaxed mb-1.5">
                 By signing in or creating an account, you are agreeing to our{" "}
@@ -283,9 +293,7 @@ function Login() {
             </div>
           </div>
 
-          {/* RIGHT PANEL — hidden on mobile */}
           <div className="hidden md:flex flex-1 flex-col items-center justify-center px-10 lg:px-16 py-8 relative overflow-hidden">
-            {/* warm radial glow */}
             <div
               className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[420px] h-[420px] rounded-full pointer-events-none"
               style={{
@@ -308,7 +316,6 @@ function Login() {
               precision retrieval.
             </p>
 
-            {/* Feature cards */}
             <div className="flex flex-col gap-2.5 w-full max-w-[400px] relative z-10">
               {features.map((f, i) => (
                 <div
