@@ -14,6 +14,9 @@ const updateBasicInfo = asyncHandler(async (req, res) => {
     degree,
     branch,
     graduationYear,
+    leetcodeUsername,
+    codeforcesUsername,
+    githubUsername,
   } = req.body;
 
   const user = await User.findById(req.user._id);
@@ -37,6 +40,24 @@ const updateBasicInfo = asyncHandler(async (req, res) => {
   if (branch !== undefined) user.education.branch = branch;
   if (graduationYear !== undefined)
     user.education.graduationYear = Number(graduationYear);
+
+  // Upsert connected platforms
+  const platformUpdates = [
+    { key: "leetcode", username: leetcodeUsername },
+    { key: "codeforces", username: codeforcesUsername },
+    { key: "github", username: githubUsername },
+  ];
+
+  for (const { key, username } of platformUpdates) {
+    if (username !== undefined) {
+      const existing = user.connectedPlatforms.find((p) => p.platform === key);
+      if (existing) {
+        existing.username = username;
+      } else if (username) {
+        user.connectedPlatforms.push({ platform: key, username });
+      }
+    }
+  }
 
   await user.save({ validateBeforeSave: false });
 

@@ -18,7 +18,7 @@ function DataInputCard({ logo, name, placeholder, link, value, onChange, onSubmi
           {showInput && (
             <input
               type="text"
-              name={name.toLowerCase() + "_username"}
+              name={name.toLowerCase() + "username"}
               value={value}
               onChange={onChange}
               placeholder={placeholder}

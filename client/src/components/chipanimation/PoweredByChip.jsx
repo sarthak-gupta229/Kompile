@@ -23,7 +23,6 @@ const VIA_DOTS = [
   [560, 197],
 ];
 
-
 const TRACES = [
   {
     id: "blue-pulse-1",
@@ -91,7 +90,6 @@ export default function PoweredByChip() {
 
     const LOOKAHEAD = 0.16;
 
-
     const toPathT = (p, reversed) => (reversed ? 1 - p : p);
 
     const frame = (now) => {
@@ -104,7 +102,7 @@ export default function PoweredByChip() {
 
         const total = rail.getTotalLength();
         const local = (elapsed + trace.delay) % trace.duration;
-        const p = local / trace.duration; 
+        const p = local / trace.duration;
 
         const tCurrent = toPathT(p, trace.reverse);
         const tAhead = toPathT(Math.min(1, p + LOOKAHEAD), trace.reverse);
@@ -197,8 +195,9 @@ export default function PoweredByChip() {
                   gradientRefs.current[t.id] = el;
                 }}
               >
-                <stop stopColor={t.from} stopOpacity="0" />
-                <stop offset="0.06" stopColor={t.from} />
+                <stop offset="0" stopColor={t.from} stopOpacity="0" />
+                <stop offset="0.7" stopColor={t.to} stopOpacity="1" />
+                <stop offset="0.94" stopColor={t.to} stopOpacity="1" />
                 <stop offset="1" stopColor={t.to} stopOpacity="0" />
               </linearGradient>
             ))}
@@ -263,7 +262,7 @@ export default function PoweredByChip() {
             height: 90,
             borderRadius: 14,
             background: "linear-gradient(180deg,#1a1a1f,#0e0e12)",
-            border: "1px solid #2c2c34",
+            border: "1px solid rgba(192,192,192,0.6)",
             boxShadow:
               "0 0 50px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04)",
             display: "flex",
@@ -280,7 +279,7 @@ export default function PoweredByChip() {
                 left: x,
                 width: 4,
                 height: 6,
-                background: "#3a3a44",
+                background: "#c0c0c0",
               }}
             />
           ))}
@@ -293,7 +292,7 @@ export default function PoweredByChip() {
                 left: x,
                 width: 4,
                 height: 6,
-                background: "#3a3a44",
+                background: "#c0c0c0",
               }}
             />
           ))}
@@ -306,7 +305,7 @@ export default function PoweredByChip() {
                 top: y,
                 width: 6,
                 height: 4,
-                background: "#3a3a44",
+                background: "#c0c0c0",
               }}
             />
           ))}
@@ -319,7 +318,7 @@ export default function PoweredByChip() {
                 top: y,
                 width: 6,
                 height: 4,
-                background: "#3a3a44",
+                background: "#c0c0c0",
               }}
             />
           ))}
@@ -345,7 +344,7 @@ export default function PoweredByChip() {
         <div
           style={{
             background: "#111",
-            border: "1px solid rgba(255,255,255,0.08)",
+            border: "1px solid rgba(192,192,192,0.5)",
             borderRadius: 16,
             padding: "32px 28px 36px",
           }}
@@ -426,7 +425,7 @@ export default function PoweredByChip() {
         <div
           style={{
             background: "#111",
-            border: "1px solid rgba(255,255,255,0.08)",
+            border: "1px solid rgba(192,192,192,0.5)",
             borderRadius: 16,
             padding: "32px 28px 36px",
           }}
@@ -509,7 +508,7 @@ export default function PoweredByChip() {
         <div
           style={{
             background: "#111",
-            border: "1px solid rgba(255,255,255,0.08)",
+            border: "1px solid rgba(192,192,192,0.5)",
             borderRadius: 16,
             padding: "32px 28px 36px",
           }}

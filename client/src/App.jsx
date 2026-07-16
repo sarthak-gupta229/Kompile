@@ -80,6 +80,7 @@ function App() {
             element={<LoveBabbartopic />}
           />
           <Route path="sheets/strivers-a2z" element={<StriversA2ZSheet />} />
+          <Route path="profile-tracker" element={<Profile />} />
           <Route
             path="community"
             element={
@@ -89,9 +90,7 @@ function App() {
           <Route path="company-kit" element={<CompanySheets show={true} />} />
           <Route
             path="bookmarks"
-            element={
-              <div className="text-white text-2xl font-bold">Bookmarks</div>
-            }
+            element={<div className="text-white text-2xl font-bold"></div>}
           />
         </Route>
       </Routes>

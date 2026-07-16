@@ -17,7 +17,9 @@ const INITIAL_VISIBLE = 10;
 
 function DSATopicChart({ allTopicData }) {
   const [showAll, setShowAll] = useState(false);
-  const visibleData = showAll ? allTopicData : allTopicData.slice(0, INITIAL_VISIBLE);
+  const visibleData = showAll
+    ? allTopicData
+    : allTopicData.slice(0, INITIAL_VISIBLE);
 
   return (
     <div className="w-full mt-5 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white">
@@ -65,7 +67,9 @@ function DSATopicChart({ allTopicData }) {
           onClick={() => setShowAll((prev) => !prev)}
           className="mt-4 w-full text-center text-blue-400 hover:text-blue-300 text-sm font-semibold underline underline-offset-2 transition-colors"
         >
-          {showAll ? "Show less ↑" : `Show more (${allTopicData.length - INITIAL_VISIBLE} more) ↓`}
+          {showAll
+            ? "Show less ↑"
+            : `Show more (${allTopicData.length - INITIAL_VISIBLE} more) ↓`}
         </button>
       )}
     </div>
@@ -73,14 +77,15 @@ function DSATopicChart({ allTopicData }) {
 }
 
 function LeetcodeData() {
-
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [heatMap, setHeatMap] = useState({});
 
   const { user } = useContext(UserContext);
-  const username = user?.platform_data?.leetcode?.username;
+  const username = user?.connectedPlatforms?.find(
+    (p) => p.platform === "leetcode",
+  )?.username;
 
   useEffect(() => {
     const loadData = async () => {
@@ -127,129 +132,125 @@ function LeetcodeData() {
 
   return (
     <>
-      <div className="w-full min-h-screen px-4 md:px-8 max-w-300 mx-auto">
-        <div className="flex gap-5 justify-between w-full items-stretch mb-5">
-          <div className="w-1/4 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center">
-            <h1 className="text-xl font-semibold text-zinc-400">
-              Total Questions
-            </h1>
-            <h1 className="text-4xl font-bold mt-2">
-              {data?.submitStats?.acSubmissionNum?.[0]?.count ?? "—"}
-            </h1>
-          </div>
-          <div className="w-1/4 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center">
-            <h1 className="text-xl font-semibold text-zinc-400">
-              Total Active Days
-            </h1>
-            <h1 className="text-4xl font-bold mt-2">
-              {data?.userCalendar?.totalActiveDays ?? "—"}
-            </h1>
-          </div>
-
-          <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 flex flex-col justify-center text-zinc-600 text-sm">
-            <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-4">
-              Submission Heatmap
-            </h2>
-            <div className="flex-1 w-full flex items-center justify-center">
-              {heatMap.length > 0 && (
-                <HeatmapComponent
-                  startDate={
-                    new Date(
-                      new Date().setFullYear(new Date().getFullYear() - 1),
-                    )
-                  }
-                  endDate={new Date()}
-                  values={heatMap}
-                />
-              )}
-            </div>
-          </div>
+      <div className="flex gap-5 justify-between w-full items-stretch mb-5">
+        <div className="w-1/4 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center">
+          <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide text-center">
+            Total Questions
+          </h1>
+          <h1 className="text-4xl font-bold mt-2">
+            {data?.submitStats?.acSubmissionNum?.[0]?.count ?? "—"}
+          </h1>
         </div>
-        <div className="flex gap-5 justify-between w-full mt-5">
-          <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex justify-around items-center">
-            <div className="flex flex-col items-center">
-              <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">
-                Contest Rating
-              </h1>
-              <h1 className="text-4xl font-bold mt-2 text-[#f89f1b]">
-                {data?.contestRanking?.rating
-                  ? Math.round(data.contestRanking.rating)
-                  : "—"}
-              </h1>
-            </div>
-            <div className="w-px h-12 bg-[#2e2e2e]" />
-            <div className="flex flex-col items-center">
-              <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">
-                Contests Attended
-              </h1>
-              <h1 className="text-4xl font-bold mt-2">
-                {data?.contestRanking?.attendedContestsCount ?? "—"}
-              </h1>
-            </div>
-          </div>
-          <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col">
-            <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-4">
-              DSA Problems Solved
-            </h2>
-            <div className="flex items-center gap-6 flex-1">
-              <DonutChart
-                easy={data?.submitStats?.acSubmissionNum?.[1]?.count ?? 0}
-                medium={data?.submitStats?.acSubmissionNum?.[2]?.count ?? 0}
-                hard={data?.submitStats?.acSubmissionNum?.[3]?.count ?? 0}
+        <div className="w-1/4 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center">
+          <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide text-center">
+            Total Active Days
+          </h1>
+          <h1 className="text-4xl font-bold mt-2">
+            {data?.userCalendar?.totalActiveDays ?? "—"}
+          </h1>
+        </div>
+
+        <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 flex flex-col justify-center text-zinc-600 text-sm">
+          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-4">
+            Submission Heatmap
+          </h2>
+          <div className="flex-1 w-full flex items-center justify-center">
+            {heatMap.length > 0 && (
+              <HeatmapComponent
+                startDate={
+                  new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+                }
+                endDate={new Date()}
+                values={heatMap}
               />
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-5 justify-between w-full mt-5">
+        <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex justify-around items-center">
+          <div className="flex flex-col items-center">
+            <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">
+              Contest Rating
+            </h1>
+            <h1 className="text-4xl font-bold mt-2 text-[#f89f1b]">
+              {data?.contestRanking?.rating
+                ? Math.round(data.contestRanking.rating)
+                : "—"}
+            </h1>
+          </div>
+          <div className="w-px h-12 bg-[#2e2e2e]" />
+          <div className="flex flex-col items-center">
+            <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">
+              Contests Attended
+            </h1>
+            <h1 className="text-4xl font-bold mt-2">
+              {data?.contestRanking?.attendedContestsCount ?? "—"}
+            </h1>
+          </div>
+        </div>
+        <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col">
+          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-4">
+            DSA Problems Solved
+          </h2>
+          <div className="flex items-center gap-6 flex-1">
+            <DonutChart
+              easy={data?.submitStats?.acSubmissionNum?.[1]?.count ?? 0}
+              medium={data?.submitStats?.acSubmissionNum?.[2]?.count ?? 0}
+              hard={data?.submitStats?.acSubmissionNum?.[3]?.count ?? 0}
+            />
 
-              <div className="flex flex-col gap-3 flex-1">
-                {[
-                  {
-                    label: "Easy",
-                    key: 1,
-                    color: "text-green-500",
-                    bg: "bg-green-500/10",
-                  },
-                  {
-                    label: "Medium",
-                    key: 2,
-                    color: "text-[#f89f1b]",
-                    bg: "bg-[#f89f1b]/10",
-                  },
-                  {
-                    label: "Hard",
-                    key: 3,
-                    color: "text-red-500",
-                    bg: "bg-red-500/10",
-                  },
-                ].map(({ label, key, color, bg }) => (
-                  <div
-                    key={label}
-                    className={`flex items-center justify-between px-3 py-2 rounded-lg ${bg}`}
-                  >
-                    <span className={`text-sm font-semibold ${color}`}>
-                      {label}
-                    </span>
-                    <span className="text-sm font-bold text-white">
-                      {data?.submitStats?.acSubmissionNum[key]?.count ?? 0}
-                    </span>
-                  </div>
-                ))}
-              </div>
+            <div className="flex flex-col gap-3 flex-1">
+              {[
+                {
+                  label: "Easy",
+                  key: 1,
+                  color: "text-green-500",
+                  bg: "bg-green-500/10",
+                },
+                {
+                  label: "Medium",
+                  key: 2,
+                  color: "text-[#f89f1b]",
+                  bg: "bg-[#f89f1b]/10",
+                },
+                {
+                  label: "Hard",
+                  key: 3,
+                  color: "text-red-500",
+                  bg: "bg-red-500/10",
+                },
+              ].map(({ label, key, color, bg }) => (
+                <div
+                  key={label}
+                  className={`flex items-center justify-between px-3 py-2 rounded-lg ${bg}`}
+                >
+                  <span className={`text-sm font-semibold ${color}`}>
+                    {label}
+                  </span>
+                  <span className="text-sm font-bold text-white">
+                    {data?.submitStats?.acSubmissionNum[key]?.count ?? 0}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-
-        {data?.tagProblemCounts &&
-          (() => {
-            const allTopicData = [
-              ...data.tagProblemCounts.fundamental,
-              ...data.tagProblemCounts.intermediate,
-              ...data.tagProblemCounts.advanced,
-            ]
-              .filter((t) => t.problemsSolved > 0)
-              .sort((a, b) => b.problemsSolved - a.problemsSolved)
-              .map((t) => ({ topic: t.tagName, count: t.problemsSolved }));
-
-            return <DSATopicChart allTopicData={allTopicData} />;
-          })()}
       </div>
+
+      {data?.tagProblemCounts &&
+        (() => {
+          const allTopicData = [
+            ...data.tagProblemCounts.fundamental,
+            ...data.tagProblemCounts.intermediate,
+            ...data.tagProblemCounts.advanced,
+          ]
+            .filter((t) => t.problemsSolved > 0)
+            .sort((a, b) => b.problemsSolved - a.problemsSolved)
+            .map((t) => ({ topic: t.tagName, count: t.problemsSolved }));
+
+          return <DSATopicChart allTopicData={allTopicData} />;
+        })()}
     </>
   );
 }

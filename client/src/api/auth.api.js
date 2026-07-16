@@ -90,6 +90,9 @@ export const updateBasicInfo = async ({
   degree,
   branch,
   graduationYear,
+  leetcodeusername,
+  codeforcesusername,
+  githubusername,
 }) => {
   const { data } = await axiosInstance.put("/users/update-basic-info", {
     firstName,
@@ -101,6 +104,9 @@ export const updateBasicInfo = async ({
     degree,
     branch,
     graduationYear,
+    leetcodeUsername: leetcodeusername,
+    codeforcesUsername: codeforcesusername,
+    githubUsername: githubusername,
   });
   return data;
 };

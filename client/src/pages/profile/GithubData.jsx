@@ -11,7 +11,7 @@ function GithubData() {
   const [error, setError] = useState(null);
 
   const { user } = useContext(UserContext);
-  const username = user?.platform_data?.github?.username;
+  const username = user?.connectedPlatforms?.find(p => p.platform === "github")?.username;
   useEffect(() => {
     if (!username) {
       setLoading(false);

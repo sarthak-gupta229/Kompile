@@ -57,59 +57,45 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    <div className="bg-black text-white min-h-screen overflow-x-hidden">
       <Navbar />
 
       <GridComponent>
-        <div className="pt-36 pb-16 px-6 text-center">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 uppercase tracking-tight">
-            Track, Analyze <span className="text-orange-500">&</span> Share
-          </h1>
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
-            <span className="text-orange-500 font-bold">Kompile</span> helps you
-            navigate and track your coding journey to success
-          </p>
+        <div className="pt-28 pb-4 px-6 md:px-16 flex flex-col md:flex-row items-center justify-between gap-6 min-h-[100vh]">
+          {/* Left column */}
+          <div className="md:w-[48%] flex flex-col items-start text-left">
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-[1.05]">
+              Track, Analyze <span className="text-orange-500">&</span> Share
+            </h1>
+            <p className="text-white text-xl md:text-2xl font-bold mb-10 max-w-md leading-snug text-left">
+              <span className="text-orange-500">Kompile</span> helps you
+              navigate and track your coding journey to success
+            </p>
 
-          <div className="flex justify-center gap-4 mb-16">
-            <button
-              className="border border-gray-700 px-6 py-2 rounded-md hover:bg-gray-800 transition"
-              onClick={() => navigate("/profile")}
-            >
-              Profile Tracker
-            </button>
-            <button
-              className="bg-orange-500 px-6 py-2 rounded-md hover:bg-orange-600 transition font-semibold"
-              onClick={() => navigate("/company")}
-            >
-              Company-Wise Kit →
-            </button>
+            <div className="flex gap-4 flex-wrap">
+              <button
+                className="border border-gray-500 px-7 py-3 rounded-md hover:bg-gray-800 transition text-white font-medium text-base"
+                onClick={() => navigate("/profile")}
+              >
+                Profile Tracker
+              </button>
+              <button
+                className="bg-orange-500 px-7 py-3 rounded-md hover:bg-orange-600 transition font-semibold text-white text-base"
+                onClick={() => navigate("/company")}
+              >
+                Company-Wise Kit →
+              </button>
+            </div>
           </div>
 
-          <div className="flex justify-center mt-12 mb-20 px-4">
-            <div className="relative">
-              <div className="rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(249,115,22,0.1)] bg-gray-900/50 backdrop-blur-sm">
-                <img
-                  src={dashboardImg}
-                  alt="dashboard"
-                  className="hidden md:block w-full max-w-[750px] opacity-95"
-                />
-                <img
-                  src={dashboardImg}
-                  alt="dashboard-mobile"
-                  className="block md:hidden w-full max-w-sm rounded-xl"
-                />
-              </div>
-
-              <div className="md:absolute md:-bottom-12 md:-right-12 flex justify-center mt-10 md:mt-0">
-                <div className="border-[6px] border-[#1a1a1a] rounded-[2.8rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] bg-black ring-1 ring-white/10">
-                  <img
-                    src={codolioCardImg}
-                    alt="mobile"
-                    className="w-[170px] h-auto object-cover scale-105 -translate-x-2.5"
-                  />
-                </div>
-              </div>
-            </div>
+          {/* Right column — Kompile card showcase */}
+          <div className="md:w-[55%] flex justify-start items-center mt-8 md:mt-0 md:-mb-24 overflow-visible">
+            <img
+              src="/assets/landingPage/new_landing.png"
+              alt="Kompile Card Showcase"
+              style={{ width: "1000px", maxWidth: "none" }}
+              className="h-auto object-contain drop-shadow-[0_30px_80px_rgba(0,200,0,0.18)]"
+            />
           </div>
         </div>
         <PoweredByChip className="w-full" />
@@ -158,8 +144,9 @@ export default function LandingPage() {
           velocity={100}
           className="text-8xl font-bold text-white"
         /> */}
-        <div className="py-24 px-6 max-w-7xl mx-auto relative -top-15">
-          <div className="text-center mb-16">
+
+        <div className="bg-black w-full py-6 px-6 mb-4 relative">
+          <div className="text-center mb-8">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Your Favourite Platforms
             </h2>
@@ -170,7 +157,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="flex justify-center mb-24">
+          <div className="flex justify-center">
             <img
               src={codolioPlatformsImg}
               alt="platforms"
@@ -178,7 +165,11 @@ export default function LandingPage() {
             />
           </div>
 
-          <div className="flex flex-col md:flex-row items-start gap-16 mb-16 max-w-7xl mx-auto px-6">
+          <div className="absolute bottom-0 left-0 right-0 h-24 from-transparent to-black pointer-events-none" />
+        </div>
+
+        <div className="py-24 px-6 max-w-7xl mx-auto w-full">
+          <div className="flex flex-col md:flex-row items-start gap-16 mb-16 max-w-7xl mx-auto px-6 ">
             <div className="md:w-1/2">
               <h3 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight leading-tight">
                 Simplify Your <span className="text-orange-500">Prep</span>
@@ -229,14 +220,13 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-
-          <div className="w-full overflow-hidden pt-48 bg-transparent">
-            <MacbookScroll
-              title={<span></span>}
-              src={workspaceGridImg}
-              showGradient={false}
-            />
-          </div>
+        </div>
+        <div className="w-full overflow-hidden pt-48 bg-black">
+          <MacbookScroll
+            title={<span></span>}
+            src={workspaceGridImg}
+            showGradient={false}
+          />
         </div>
         <section className="bg-transparent text-white px-6 py-24">
           <div className="max-w-7xl mx-auto">
@@ -261,11 +251,9 @@ export default function LandingPage() {
                 className="w-full h-auto object-cover"
               />
             </div>
-
-            
           </div>
         </section>
-        <section className="bg-transparent text-white px-6 py-24">
+        <section className=" text-white px-6 py-24 w-full bg-black">
           <div className="max-w-7xl mx-auto">
             <div className="mb-12">
               <h2 className="text-4xl md:text-5xl font-bold mb-3 tracking-tight">

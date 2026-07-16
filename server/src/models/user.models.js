@@ -2,9 +2,10 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { platform, type } from "os";
+import { Languages } from "lucide-react";
 const userSchema = new Schema(
   {
-    //auth part
     avatar: {
       type: {
         url: String,
@@ -150,5 +151,71 @@ userSchema.methods.generateTemporaryToken = async function () {
   const tokenExpiry = Date.now() + 20 * 60 * 1000;
   return { unHashedToken, hashedToken, tokenExpiry };
 };
+
+const platformProfileSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    handle: { type: String, required: true, trim: true },
+    platform: {
+      type: String,
+      enum: ["leetcode", "codeforces", "github"],
+      required: true,
+    },
+    profileUrl: {
+      type: String,
+      trim: true,
+    },
+    avatarUrl: {
+      type: String,
+      trim: true,
+    },
+    stats: {
+      // leetcode / codeforces
+      totalQuestions: { type: Number, default: 0 },
+      contestRating: { type: Number, default: 0 },
+      contestsAttended: { type: Number, default: 0 },
+      easySolved: { type: Number, default: 0 },
+      mediumSolved: { type: Number, default: 0 },
+      hardSolved: { type: Number, default: 0 },
+
+      activeDays: { type: Number, default: 0 },
+
+      // github
+      totalContributions: { type: Number, default: 0 },
+      maxStreak: { type: Number, default: 0 },
+      currentStreak: { type: Number, default: 0 },
+      stars: { type: Number, default: 0 },
+      commits: { type: Number, default: 0 },
+      prs: { type: Number, default: 0 },
+      issues: { type: Number, default: 0 },
+    },
+    languages: [
+      {
+        name: String,
+        percentage: Number,
+      },
+    ],
+    topicAnalysis: [{ topic: String, count: Number }],
+    heatmap: [{ date: Date, count: Number }],
+    lastSyncedAt: Date,
+    syncStatus: {
+      type: String,
+      enum: ["success", "failed", "pending"],
+      default: "pending",
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+platformProfileSchema.index({ userId: 1, platform: 1 }, { unique: true });
+export const PlatformProfile = mongoose.model(
+  "PlatformProfile",
+  platformProfileSchema,
+);
 
 export const User = mongoose.model("User", userSchema);

@@ -54,7 +54,7 @@ function Navbar() {
   }, []);
 
   const menuItems = [
-    { icon: User, label: "Profile", to: "/profile" },
+    { icon: User, label: "Profile", to: "/workspace/profile-tracker" },
     { icon: Settings, label: "Settings", to: "/user_data" },
     { icon: LayoutDashboard, label: "Workspace", to: "/workspace" },
   ];
@@ -82,7 +82,7 @@ function Navbar() {
         <NavLink to="/company" className={navLinkCls}>
           Company Wise Kit
         </NavLink>
-        <NavLink to="/profile" className={navLinkCls}>
+        <NavLink to="/workspace/profile-tracker" className={navLinkCls}>
           Profile Tracker
         </NavLink>
         <NavLink to="/workspace" className={navLinkCls}>

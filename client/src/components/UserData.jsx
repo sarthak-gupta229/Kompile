@@ -91,6 +91,18 @@ function UserData() {
       const user = response.data.user;
       const names = (user.fullname || "").split(" ");
 
+      const leetcodeUsername =
+        user.connectedPlatforms?.find((item) => item.platform === "leetcode")
+          ?.username || "";
+
+      const codeforcesUsername =
+        user.connectedPlatforms?.find((item) => item.platform === "codeforces")
+          ?.username || "";
+
+      const githubUsername =
+        user.connectedPlatforms?.find((item) => item.platform === "github")
+          ?.username || "";
+
       setFormData({
         firstName: names[0] || "",
         lastName: names.slice(1).join(" "),
@@ -101,6 +113,9 @@ function UserData() {
         degree: user.education?.degree || "",
         branch: user.education?.branch || "",
         graduationYear: user.education?.graduationYear || "",
+        leetcodeusername: leetcodeUsername,
+        codeforcesusername: codeforcesUsername,
+        githubusername: githubUsername,
       });
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch user data");
@@ -108,15 +123,12 @@ function UserData() {
     }
   };
 
-  const handleInputChange = (e, platform) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (platform) => {
     try {
       const response = await updateBasicInfo(formData);
 
@@ -129,14 +141,17 @@ function UserData() {
           ? response.data.user.techStack.join(", ")
           : response.data.user.techStack || "",
         education: response.data.user.education,
+        connectedPlatforms: response.data.user.connectedPlatforms,
       }));
 
-      toast.success("Basic info updated successfully");
+      toast.success(
+        platform.name
+          ? `${platform.name} updated successfully`
+          : "Basic info updated successfully",
+      );
     } catch (error) {
       console.log("Error while updating basic info:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to update basic info",
-      );
+      toast.error(error.response?.data?.message || "Failed to update");
     }
   };
 
@@ -150,7 +165,7 @@ function UserData() {
         <div className="w-full min-h-screen pt-24 pb-10 px-4 md:px-8 max-w-[1400px] mx-auto text-white flex gap-10 items-start self-start">
           <Toaster position="top-center" />
           <div className="w-64 shrink-0 flex flex-col gap-2">
-            <NavLink to="/profile" className="mb-6 w-fit">
+            <NavLink to="/workspace/profile-tracker" className="mb-6 w-fit">
               <ArrowBigLeft className="h-10 w-10 text-orange-500 hover:bg-orange-500/20 rounded-full p-1 transition" />
             </NavLink>
 
@@ -200,8 +215,9 @@ function UserData() {
                           link={platform.link}
                           placeholder={platform.placeholder}
                           value={
-                            user?.platform_data?.[getPlatformKey(platform.name)]
-                              ?.username || ""
+                            formData[
+                              getPlatformKey(platform.name) + "username"
+                            ] || ""
                           }
                           onChange={(e) => handleInputChange(e, platform)}
                           onSubmit={() => handleSubmit(platform)}
@@ -227,8 +243,9 @@ function UserData() {
                           link={platform.link}
                           placeholder={platform.placeholder}
                           value={
-                            user?.platform_data?.[getPlatformKey(platform.name)]
-                              ?.username || ""
+                            formData[
+                              getPlatformKey(platform.name) + "username"
+                            ] || ""
                           }
                           onChange={(e) => handleInputChange(e, platform)}
                           onSubmit={() => handleSubmit(platform)}
