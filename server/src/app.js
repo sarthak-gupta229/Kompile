@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import healthCheckRouter from "./routes/healthcheck.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
+import platformRouter from "./routes/platform.routes.js";
 
 dotenv.config({
   path: "./.env",
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use("/api/v1/healthcheck", healthCheckRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/platforms", platformRouter);
 
 app.get("/", (req, res) => {
   res.send("welcome to Kompile");

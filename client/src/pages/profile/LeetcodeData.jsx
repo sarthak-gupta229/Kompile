@@ -132,8 +132,25 @@ function LeetcodeData() {
 
   return (
     <>
+      <div className="w-full bg-black rounded-xl border border-[#2e2e2e] p-3 flex flex-col mb-5">
+        <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-2">
+          Submission Heatmap
+        </h2>
+        <div className="w-full flex items-center justify-center overflow-x-auto">
+          {heatMap.length > 0 && (
+            <HeatmapComponent
+              startDate={
+                new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+              }
+              endDate={new Date()}
+              values={heatMap}
+            />
+          )}
+        </div>
+      </div>
+
       <div className="flex gap-5 justify-between w-full items-stretch mb-5">
-        <div className="w-1/4 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center">
+        <div className="w-1/3 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center">
           <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide text-center">
             Total Questions
           </h1>
@@ -141,7 +158,8 @@ function LeetcodeData() {
             {data?.submitStats?.acSubmissionNum?.[0]?.count ?? "—"}
           </h1>
         </div>
-        <div className="w-1/4 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center">
+
+        <div className="w-1/3 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center">
           <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide text-center">
             Total Active Days
           </h1>
@@ -150,23 +168,30 @@ function LeetcodeData() {
           </h1>
         </div>
 
-        <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 flex flex-col justify-center text-zinc-600 text-sm">
-          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-4">
-            Submission Heatmap
+        <div className="w-1/3 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col">
+          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-3">
+            Languages
           </h2>
-          <div className="flex-1 w-full flex items-center justify-center">
-            {heatMap.length > 0 && (
-              <HeatmapComponent
-                startDate={
-                  new Date(new Date().setFullYear(new Date().getFullYear() - 1))
-                }
-                endDate={new Date()}
-                values={heatMap}
-              />
-            )}
+          <div className="flex flex-col gap-2 flex-1 justify-center">
+            {data?.languageStats?.matchedUser?.languageProblemCount
+              ?.slice(0, 5)
+              .map((lang) => (
+                <div
+                  key={lang.languageName}
+                  className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-white/5"
+                >
+                  <span className="text-sm font-medium text-zinc-300">
+                    {lang.languageName}
+                  </span>
+                  <span className="text-sm font-bold text-white">
+                    {lang.problemsSolved}
+                  </span>
+                </div>
+              )) ?? <span className="text-zinc-500 text-sm">No data</span>}
           </div>
         </div>
       </div>
+
       <div className="flex gap-5 justify-between w-full mt-5">
         <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex justify-around items-center">
           <div className="flex flex-col items-center">

@@ -102,6 +102,40 @@ const userSchema = new Schema(
     stats: {
       totalQuestions: { type: Number, default: 0 },
       totalActiveDays: { type: Number, default: 0 },
+
+      difficulty: {
+        easy: { type: Number, default: 0 },
+        medium: { type: Number, default: 0 },
+        hard: { type: Number, default: 0 },
+      },
+      contests: {
+        totalAttended: { type: Number, default: 0 },
+        byPlatform: [
+          {
+            platform: { type: String, enum: ["leetcode", "codeforces"] },
+            attended: { type: Number, default: 0 },
+            rating: { type: Number, default: null },
+          },
+        ],
+      },
+      topicAnalysis: [
+        {
+          topic: { type: String },
+          count: { type: Number, default: 0 },
+        },
+      ],
+      languages: [
+        {
+          name: { type: String },
+          percentage: { type: Number, default: 0 },
+        },
+      ],
+      heatmap: [
+        {
+          date: { type: Date },
+          count: { type: Number, default: 0 },
+        },
+      ],
       lastSyncedAt: { type: Date },
     },
   },
@@ -197,10 +231,19 @@ const platformProfileSchema = new Schema(
       {
         name: String,
         percentage: Number,
+        count: Number,
       },
     ],
     topicAnalysis: [{ topic: String, count: Number }],
     heatmap: [{ date: Date, count: Number }],
+    recentAcSubmissions: [
+      {
+        id: String,
+        title: String,
+        titleSlug: String,
+        solvedAt: Date,
+      },
+    ],
     lastSyncedAt: Date,
     syncStatus: {
       type: String,
