@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 import { NavLink } from "react-router-dom";
 import {
   Home,
@@ -14,19 +15,6 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
-const navItems = [
-  { icon: Home, label: "Home", to: "/workspace" },
-  {
-    icon: BarChart2,
-    label: "Profile Tracker",
-    to: "/workspace/profile-tracker",
-  },
-  { icon: FileText, label: "My Sheets", to: "/workspace/sheets" },
-  { icon: Users, label: "Community", to: "/workspace/community" },
-  { icon: Briefcase, label: "Company-Wise Kit", to: "/workspace/company-kit" },
-  { icon: Star, label: "Bookmarks", to: "/workspace/bookmarks" },
-];
-
 const linkCls = ({ isActive }) =>
   cn(
     "flex items-center gap-3.5 w-full px-3 py-2.5 rounded-xl transition-all duration-200 group text-sm font-medium",
@@ -36,6 +24,24 @@ const linkCls = ({ isActive }) =>
   );
 
 export default function WorkspaceSidebar({ collapsed, setCollapsed }) {
+  const { user } = useContext(UserContext);
+
+  const navItems = [
+    { icon: Home, label: "Home", to: "/workspace" },
+    {
+      icon: BarChart2,
+      label: "Profile Tracker",
+      to: `/workspace/profile/${user?.username ?? ""}`,
+    },
+    { icon: FileText, label: "My Sheets", to: "/workspace/sheets" },
+    { icon: Users, label: "Community", to: "/workspace/community" },
+    {
+      icon: Briefcase,
+      label: "Company-Wise Kit",
+      to: "/workspace/company-kit",
+    },
+    { icon: Star, label: "Bookmarks", to: "/workspace/bookmarks" },
+  ];
   return (
     <aside
       className={cn(

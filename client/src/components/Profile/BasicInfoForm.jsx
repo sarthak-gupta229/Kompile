@@ -1,10 +1,47 @@
-import React from "react";
-import { X, Edit2 } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { X, Edit2, Search } from "lucide-react";
 import { useContext } from "react";
-import { UserContext } from "../context/UserContext.jsx";
+import { UserContext } from "../../context/UserContext.jsx";
+import { skills as ALL_SKILLS } from "../../data/skills.js";
 
 function BasicInfoForm({ formData, onChange, onSave }) {
   const { user } = useContext(UserContext);
+
+  const [skillSearch, setSkillSearch] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const pickerRef = useRef(null);
+
+  const selectedSkills = formData.techStack
+    ? formData.techStack
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
+
+  const filteredSkills = ALL_SKILLS.filter(
+    (s) =>
+      s.toLowerCase().includes(skillSearch.toLowerCase()) &&
+      !selectedSkills.includes(s),
+  );
+
+  const toggleSkill = (skill) => {
+    const next = selectedSkills.includes(skill)
+      ? selectedSkills.filter((s) => s !== skill)
+      : [...selectedSkills, skill];
+
+    onChange({ target: { name: "techStack", value: next.join(", ") } });
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e) => {
+      if (pickerRef.current && !pickerRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   return (
     <div className="w-full text-white">
@@ -133,14 +170,73 @@ function BasicInfoForm({ formData, onChange, onSave }) {
               <label className="block text-sm font-medium mb-2">
                 Tech Stack <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                name="techStack"
-                value={formData.techStack}
-                onChange={onChange}
-                className="w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 focus:outline-none focus:border-[#f89f1b]"
-                placeholder="e.g. React, Node.js, C++ (comma separated)"
-              />
+
+              <div ref={pickerRef} className="relative">
+                <div
+                  className="flex items-center gap-2 w-full bg-[#1f1f1f] border border-[#2e2e2e] rounded-lg px-4 py-2 focus-within:border-[#f89f1b] cursor-text"
+                  onClick={() => setDropdownOpen(true)}
+                >
+                  <Search size={14} className="text-zinc-500 shrink-0" />
+                  <input
+                    type="text"
+                    value={skillSearch}
+                    onChange={(e) => {
+                      setSkillSearch(e.target.value);
+                      setDropdownOpen(true);
+                    }}
+                    onFocus={() => setDropdownOpen(true)}
+                    className="flex-1 bg-transparent outline-none text-sm placeholder-zinc-500"
+                    placeholder="Search skills…"
+                  />
+                </div>
+
+                {/* Dropdown */}
+                {dropdownOpen && filteredSkills.length > 0 && (
+                  <div
+                    className="absolute z-50 mt-1 w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-lg shadow-xl max-h-52 overflow-y-auto"
+                    style={{
+                      scrollbarWidth: "thin",
+                      scrollbarColor: "#3f3f3f transparent",
+                    }}
+                  >
+                    {filteredSkills.map((skill) => (
+                      <button
+                        key={skill}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          toggleSkill(skill);
+                          setSkillSearch("");
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:bg-[#f89f1b]/10 hover:text-[#f89f1b] transition-colors"
+                      >
+                        {skill}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Selected skill chips */}
+              {selectedSkills.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {selectedSkills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#f89f1b]/15 text-[#f89f1b] border border-[#f89f1b]/30"
+                    >
+                      {skill}
+                      <button
+                        type="button"
+                        onClick={() => toggleSkill(skill)}
+                        className="hover:text-white transition-colors"
+                      >
+                        <X size={11} />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>

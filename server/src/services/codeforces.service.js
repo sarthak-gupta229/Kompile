@@ -18,15 +18,32 @@ export const fetchCodeforcesData = async function (username) {
     throw new ApiError(404, status.comment || "Invalid username");
 
   const profileData = info.result?.[0] ?? null;
-
   if (!profileData) throw new ApiError(404, "User not found");
 
+  const submissions = status.result;
+  const contestHistory = rating.result ?? [];
+  const profile = info.result[0];
+
+  const { totalQuestions, totalActiveDays, solvedProblems } =
+    getSolvedAndActiveDays(submissions);
+  const { calendar, maxStreak, currentStreak } =
+    buildSubmissionCalendar(submissions);
+  const contestSummary = getContestSummary(contestHistory);
+  const { topicWise, ratingWise } = getDistributions(solvedProblems);
+
   return {
-    submissions: status.result,
-    contestHistory: rating.result,
-    profile: info.result[0],
+    profile,
+    totalQuestions,
+    totalActiveDays,
+    calendar,
+    maxStreak,
+    currentStreak,
+    contestSummary,
+    topicWise,
+    ratingWise,
   };
 };
+
 
 function getSolvedAndActiveDays(submissions) {
   const solvedProblems = new Map();
@@ -161,26 +178,5 @@ function getDistributions(solvedProblems) {
   return { topicWise, ratingWise };
 }
 
-async function getFullCFStats(handle) {
-  const { submissions, contestHistory, profile } = await fetchCFData(handle);
-  const { totalQuestions, totalActiveDays, solvedProblems } =
-    getSolvedAndActiveDays(submissions);
-  const { calendar, maxStreak, currentStreak } =
-    buildSubmissionCalendar(submissions);
-  const contestSummary = getContestSummary(contestHistory);
-  const { topicWise, ratingWise } = getDistributions(solvedProblems);
 
-  return {
-    profile,
-    totalQuestions,
-    totalActiveDays,
-    calendar,
-    maxStreak,
-    currentStreak,
-    contestSummary,
-    topicWise,
-    ratingWise,
-  };
-}
 
-export { getFullCFStats };

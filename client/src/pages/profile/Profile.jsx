@@ -1,47 +1,154 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
 import { UserCog } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import GithubData from "./GithubData";
-import LeetcodeData from "./LeetcodeData";
+import GithubData from "../../components/Profile/subprofiles/GithubData.jsx";
+import LeetcodeData from "../../components/Profile/subprofiles/LeetcodeData.jsx";
+import CodeforcesData from "../../components/Profile/subprofiles/Codeforces.jsx";
+import UserStats from "../../components/Profile/subprofiles/UserStats.jsx";
 import ProfileSidebar from "./ProfileSidebar";
+import { getBasicInfo } from "../../api/auth.api.js";
+import { toast, Toaster } from "react-hot-toast";
+import {
+  getAllUserStats,
+  getUserLeetCodeStats,
+  getUserGitHubStats,
+  getUserCodeForcesStats,
+} from "../../api/platformApi.js";
 
 function Profile() {
-  const [activeTab, setActiveTab] = useState("leetcode");
+  const [activeTab, setActiveTab] = useState("userStats");
   const { user } = useContext(UserContext);
-
-  const userData = {
-    name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || user?.name || "User Name",
-    username: user?.firstName || "Username",
-    profileImage: user?.avatar || "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+  const [leetcodeData, setLeetCodeData] = useState();
+  const [codeforcesData, setCodeforcesData] = useState();
+  const [githubData, setGitHubData] = useState();
+  const [allStats, setAllStats] = useState();
+  const [isStatsLoading, setIsStatsLoading] = useState(true);
+  const [userData, setUserData] = useState({
+    name: "",
+    username: "",
+    profileImage: "",
+    bio: "",
+    location: "",
+    university: "",
+    skills: [],
     socialLinks: {
-      email: user?.email || "No email",
-      linkedin: "https://linkedin.com",
-      twitter: "https://x.com",
-      website: "https://example.com",
-      resume: "https://example.com/resume.pdf",
+      email: "",
+      linkedin: "",
+      twitter: "",
+      website: "",
+      resume: "",
     },
-    location: user?.country || "Not set",
-    university: user?.college || "Not set",
-    stats: {
-      leetcode: {
-        rating: 1820,
-        problemsSolved: 650,
-      },
-      codeforces: {
-        rating: 1450,
-        maxRating: 1520,
-      },
-      github: {
-        repositories: 34,
-        followers: 120,
-      },
-    },
-    skills: user?.techStack ? user.techStack.split(",").map(s => s.trim()) : ["React", "Node.js", "C++"],
+    firstName: "",
+    lastName: "",
+    country: "",
+    techStack: "",
+    college: "",
+    degree: "",
+    branch: "",
+    graduationYear: "",
+    leetcodeUsername: "",
+    codeforcesUsername: "",
+    githubUsername: "",
+  });
+
+  useEffect(() => {
+    fetchBasicInfo();
+  }, []);
+
+  useEffect(() => {
+    const fetchAllStats = async () => {
+      setIsStatsLoading(true);
+      try {
+        const [allStatsRes, leetcode, github, codeforces] =
+          await Promise.allSettled([
+            getAllUserStats(),
+            getUserLeetCodeStats(),
+            getUserGitHubStats(),
+            getUserCodeForcesStats(),
+          ]);
+        if (allStatsRes.status === "fulfilled")
+          setAllStats(allStatsRes.value.data.stats);
+        if (leetcode.status === "fulfilled")
+          setLeetCodeData(leetcode.value.data.profile);
+        if (github.status === "fulfilled")
+          setGitHubData(github.value.data.profile);
+        if (codeforces.status === "fulfilled")
+          setCodeforcesData(codeforces.value.data.profile);
+        console.log("allStats:", allStats);
+      } finally {
+        setIsStatsLoading(false);
+        toast.success("data fetched successfully");
+      }
+    };
+    fetchAllStats();
+  }, []);
+
+  const fetchBasicInfo = async () => {
+    try {
+      const response = await getBasicInfo();
+
+      const user = response.data.user;
+      const names = (user.fullname || "").split(" ");
+
+      const leetcodeUsername =
+        user.connectedPlatforms?.find((item) => item.platform === "leetcode")
+          ?.username || "";
+
+      const codeforcesUsername =
+        user.connectedPlatforms?.find((item) => item.platform === "codeforces")
+          ?.username || "";
+
+      const githubUsername =
+        user.connectedPlatforms?.find((item) => item.platform === "github")
+          ?.username || "";
+
+      const firstName = names[0] || "";
+      const lastName = names.slice(1).join(" ");
+      const skills = Array.isArray(user.techStack)
+        ? user.techStack
+        : user.techStack
+            ?.split(",")
+            .map((s) => s.trim())
+            .filter(Boolean) || [];
+
+      setUserData({
+        name: `${firstName} ${lastName}`.trim() || user.username || "User",
+        username: user.username || "",
+        profileImage: user.avatar?.url || "",
+        bio: user.bio || "",
+        location: user.country || "Not set",
+        university: user.education?.institution || "Not set",
+        skills,
+        socialLinks: {
+          email: user.email || "",
+          linkedin: user.socialLinks?.linkedin || "",
+          twitter: user.socialLinks?.twitter || "",
+          website: user.socialLinks?.website || "",
+          resume: user.socialLinks?.resume || "",
+        },
+        // raw fields
+        firstName,
+        lastName,
+        country: user.country || "",
+        techStack: skills.join(", "),
+        college: user.education?.institution || "",
+        degree: user.education?.degree || "",
+        branch: user.education?.branch || "",
+        graduationYear: user.education?.graduationYear || "",
+        leetcodeUsername,
+        codeforcesUsername,
+        githubUsername,
+      });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to fetch user data");
+      console.log("Error while fetching basic info:", error);
+    }
   };
 
   return (
     <div className="w-full pb-6 px-4 md:px-6 max-w-[1600px] mx-auto">
+      <Toaster position="top-right" containerStyle={{ top: 80 }} />
       <section className="flex justify-between items-start gap-6 min-h-[calc(100vh-120px)]">
         {/* left */}
         <ProfileSidebar userData={userData} />
@@ -61,6 +168,16 @@ function Profile() {
 
           <div className="flex gap-1 border-b border-[#2e2e2e] mb-6">
             <button
+              onClick={() => setActiveTab("userStats")}
+              className={`px-5 py-2 text-sm font-medium transition-all duration-200 border-b-2 -mb-px ${
+                activeTab === "userStats"
+                  ? "border-[#f89f1b] text-[#f89f1b]"
+                  : "border-transparent text-[#888] hover:text-white"
+              }`}
+            >
+              All Stats
+            </button>
+            <button
               onClick={() => setActiveTab("leetcode")}
               className={`px-5 py-2 text-sm font-medium transition-all duration-200 border-b-2 -mb-px ${
                 activeTab === "leetcode"
@@ -69,6 +186,16 @@ function Profile() {
               }`}
             >
               LeetCode
+            </button>
+            <button
+              onClick={() => setActiveTab("codeforces")}
+              className={`px-5 py-2 text-sm font-medium transition-all duration-200 border-b-2 -mb-px ${
+                activeTab === "codeforces"
+                  ? "border-[#f89f1b] text-[#f89f1b]"
+                  : "border-transparent text-[#888] hover:text-white"
+              }`}
+            >
+              Codeforces
             </button>
             <button
               onClick={() => setActiveTab("github")}
@@ -83,8 +210,35 @@ function Profile() {
           </div>
 
           <div className="flex-1">
-            {activeTab === "leetcode" && <LeetcodeData />}
-            {activeTab === "github" && <GithubData />}
+            {isStatsLoading ? (
+              <div className="flex items-center justify-center h-48">
+                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#f89f1b]" />
+              </div>
+            ) : (
+              <>
+                {activeTab === "userStats" && (
+                  <UserStats allStats={allStats} techStack={userData.skills} />
+                )}
+                {activeTab === "leetcode" && (
+                  <LeetcodeData
+                    LeetcodeData={leetcodeData}
+                    userName={userData.leetcodeUsername}
+                  />
+                )}
+                {activeTab === "codeforces" && (
+                  <CodeforcesData
+                    CodeforcesData={codeforcesData}
+                    userName={userData.codeforcesUsername}
+                  />
+                )}
+                {activeTab === "github" && (
+                  <GithubData
+                    githubData={githubData}
+                    userName={userData.githubUsername}
+                  />
+                )}
+              </>
+            )}
           </div>
         </div>
       </section>

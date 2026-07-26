@@ -124,7 +124,7 @@ function Login() {
       if (response.statusCode === 200) {
         toast.success(response.message || "Logged in successfully!");
         login(response.data.user);
-        navigate("/workspace/profile-tracker");
+        navigate(`/workspace/profile/${response.data.user.username}`);
       }
     } catch (error) {
       const message =

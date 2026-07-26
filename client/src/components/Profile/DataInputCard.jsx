@@ -4,7 +4,7 @@ function DataInputCard({ logo, name, placeholder, link, value, onChange, onSubmi
   return (
     <>
       <form 
-        onSubmit={(e) => { e.preventDefault(); onSubmit(name); }}
+        onSubmit={(e) => { e.preventDefault(); onSubmit(); }}
         className="bg-[#141414] text-white border border-gray-800 rounded-xl p-4 flex items-center justify-between gap-4 w-full"
       >
         <div className="flex items-center gap-3 min-w-[180px]">

@@ -1,12 +1,12 @@
-import GridComponent from "./GridComponent.jsx";
-import Navbar from "./Navbar.jsx";
+import GridComponent from "../GridComponent.jsx";
+import Navbar from "../Navbar.jsx";
 import { useContext, useState, useEffect } from "react";
 import DataInputCard from "./DataInputCard.jsx";
-import { UserContext } from "../context/UserContext.jsx";
+import { UserContext } from "../../context/UserContext.jsx";
 import { ArrowBigLeft, User, LayoutGrid } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import BasicInfoForm from "./BasicInfoForm.jsx";
-import { getBasicInfo, updateBasicInfo } from "../api/auth.api.js";
+import { getBasicInfo, updateBasicInfo } from "../../api/auth.api.js";
 import { toast, Toaster } from "react-hot-toast";
 
 const getPlatformKey = (platformName) => {
@@ -145,7 +145,7 @@ function UserData() {
       }));
 
       toast.success(
-        platform.name
+        platform?.name
           ? `${platform.name} updated successfully`
           : "Basic info updated successfully",
       );
@@ -163,9 +163,12 @@ function UserData() {
       <Navbar />
       <GridComponent>
         <div className="w-full min-h-screen pt-24 pb-10 px-4 md:px-8 max-w-[1400px] mx-auto text-white flex gap-10 items-start self-start">
-          <Toaster position="top-center" />
+          <Toaster position="top-center" containerStyle={{ top: 80 }} />
           <div className="w-64 shrink-0 flex flex-col gap-2">
-            <NavLink to="/workspace/profile-tracker" className="mb-6 w-fit">
+            <NavLink
+              to={`/workspace/profile/${user?.username ?? ""}`}
+              className="mb-6 w-fit"
+            >
               <ArrowBigLeft className="h-10 w-10 text-orange-500 hover:bg-orange-500/20 rounded-full p-1 transition" />
             </NavLink>
 
@@ -219,7 +222,7 @@ function UserData() {
                               getPlatformKey(platform.name) + "username"
                             ] || ""
                           }
-                          onChange={(e) => handleInputChange(e, platform)}
+                          onChange={handleInputChange}
                           onSubmit={() => handleSubmit(platform)}
                           showInput={true}
                           buttonText="Submit"
@@ -247,7 +250,7 @@ function UserData() {
                               getPlatformKey(platform.name) + "username"
                             ] || ""
                           }
-                          onChange={(e) => handleInputChange(e, platform)}
+                          onChange={handleInputChange}
                           onSubmit={() => handleSubmit(platform)}
                           showInput={true}
                           buttonText="Submit"

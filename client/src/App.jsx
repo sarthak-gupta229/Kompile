@@ -12,7 +12,7 @@ import Contest from "./pages/event/Contest.jsx";
 import Workspace from "./pages/Workspace/Workspace.jsx";
 import WorkspaceHome from "./pages/Workspace/WorkspaceHome.jsx";
 import { CompanySheets } from "./components/CompanyWiseKit/CompanySheets.jsx";
-import UserData from "./components/UserData.jsx";
+import UserData from "./components/Profile/UserData.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Mysheets from "./components/workspace/mysheets/Mysheets.jsx";
 import LoveBabbarSheet from "./components/workspace/sheetsDash/LoveBabbarSheet.jsx";
@@ -80,7 +80,7 @@ function App() {
             element={<LoveBabbartopic />}
           />
           <Route path="sheets/strivers-a2z" element={<StriversA2ZSheet />} />
-          <Route path="profile-tracker" element={<Profile />} />
+          <Route path="profile/:username" element={<Profile />} />
           <Route
             path="community"
             element={

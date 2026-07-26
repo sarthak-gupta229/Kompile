@@ -87,4 +87,17 @@ const getBasicInfo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { user }, "Basic info fetched successfully"));
 });
 
-export { updateBasicInfo, getBasicInfo };
+const getUserData = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  const user = await User.findOne({ username }).select(
+    "-password -refreshToken",
+  );
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "User data fetched successfully"));
+});
+
+export { updateBasicInfo, getBasicInfo, getUserData };
