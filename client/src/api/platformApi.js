@@ -34,3 +34,8 @@ export const getAllUserStats = async () => {
   const { data } = await axiosInstance.get("platforms/stats");
   return data;
 };
+
+export const syncAll = async () => {
+  const { data } = await axiosInstance.post("/platforms/sync/all");
+  return data;
+};

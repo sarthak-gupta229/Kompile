@@ -1,7 +1,7 @@
 import React from "react";
-import { Edit, MapPin, GraduationCap, Lock } from "lucide-react";
+import { Edit, MapPin, GraduationCap, Lock, Unlock } from "lucide-react";
 
-function ProfileSidebar({ userData }) {
+function ProfileSidebar({ userData, kompileCardActive, setKompileCardActive }) {
   return (
     <div className="w-1/3 sticky top-[100px] bg-[#141414] rounded-xl h-fit flex flex-col border border-[#2e2e2e] text-white">
       <div className="w-full p-6 border-b border-[#2e2e2e] flex flex-col items-center relative">
@@ -33,9 +33,16 @@ function ProfileSidebar({ userData }) {
         </div>
         <h1 className="text-4xl font-bold mb-1">{userData.name}</h1>
 
-        <button className="w-full flex items-center justify-center gap-2 bg-[#1f1f1f] border border-[#2e2e2e] hover:bg-[#2e2e2e] text-[#f89f1b] font-semibold py-3 rounded-lg transition-colors">
+        <button
+          onClick={() => setKompileCardActive((prev) => !prev)}
+          className={`w-full flex items-center justify-center gap-2 border border-[#2e2e2e] font-semibold py-3 rounded-lg transition-colors cursor-pointer ${
+            kompileCardActive
+              ? "bg-[#f89f1b] text-black hover:bg-[#e08e10]"
+              : "bg-[#1f1f1f] hover:bg-[#2e2e2e] text-[#f89f1b]"
+          }`}
+        >
           Kompile Card
-          <Lock size={18} />
+          {kompileCardActive ? <Unlock size={18} /> : <Lock size={18} />}
         </button>
       </div>
 
