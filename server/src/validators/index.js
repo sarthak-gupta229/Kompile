@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import { param } from "express-validator";
 
 const userRegisterValidator = () => {
   return [
@@ -53,24 +54,38 @@ const userResetForgotPasswordValidator = () => {
 
 const userUpdateBasicInfoValidator = () => {
   return [
-    body("firstName").optional().trim(),
-    body("lastName").optional().trim(),
+    body("firstName").optional({ checkFalsy: true }).trim(),
+    body("lastName").optional({ checkFalsy: true }).trim(),
     body("bio")
-      .optional()
+      .optional({ checkFalsy: true })
       .trim()
       .isLength({ max: 200 })
       .withMessage("Bio cannot exceed 200 characters"),
-    body("country").optional().trim(),
-    body("techStack").optional().trim(),
-    body("college").optional().trim(),
-    body("degree").optional().trim(),
-    body("branch").optional().trim(),
+    body("country").optional({ checkFalsy: true }).trim(),
+    body("techStack").optional({ checkFalsy: true }),
+    body("college").optional({ checkFalsy: true }).trim(),
+    body("degree").optional({ checkFalsy: true }).trim(),
+    body("branch").optional({ checkFalsy: true }).trim(),
     body("graduationYear")
-      .optional()
-      .isInt({ min: 2000, max: 2040 })
-      .withMessage("Invalid graduation year"),
+      .optional({ checkFalsy: true })
+      .custom((val) => {
+        if (val === "" || val === null || val === undefined) return true;
+        const num = Number(val);
+        if (isNaN(num) || num < 2000 || num > 2040) {
+          throw new Error("Invalid graduation year");
+        }
+        return true;
+      }),
   ];
 };
+
+const sheetIdParamValidator = () => [
+  param("slug").notEmpty().withMessage("Sheet slug is required"),
+];
+const questionProgressValidator = () => [
+  param("slug").notEmpty().withMessage("Sheet slug is required"),
+  param("questionId").isMongoId().withMessage("Invalid question ID"),
+];
 
 export {
   userRegisterValidator,
@@ -79,4 +94,6 @@ export {
   userForgotPasswordValidator,
   userResetForgotPasswordValidator,
   userUpdateBasicInfoValidator,
+  sheetIdParamValidator,
+  questionProgressValidator,
 };

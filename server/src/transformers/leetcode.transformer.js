@@ -25,14 +25,28 @@ export const transformLeetcodeResponse = ({
     .sort((a, b) => b.problemsSolved - a.problemsSolved)
     .map((t) => ({ topic: t.tagName, count: t.problemsSolved }));
 
-  // submissionCalendar is a JSON string: { "<unix_timestamp>": count, ... }
-  const rawCalendar = user.userCalendar?.submissionCalendar;
-  const heatmap = rawCalendar
-    ? Object.entries(JSON.parse(rawCalendar)).map(([ts, count]) => ({
-        date: new Date(Number(ts) * 1000),
-        count,
-      }))
-    : [];
+ 
+  const rawCalendar =
+    user.submissionCalendar || user.userCalendar?.submissionCalendar;
+
+  let calendarEntries = [];
+  if (rawCalendar) {
+    try {
+      const parsed =
+        typeof rawCalendar === "string" ? JSON.parse(rawCalendar) : rawCalendar;
+      calendarEntries = Object.entries(parsed);
+    } catch (e) {
+      console.error("Error parsing submissionCalendar:", e);
+    }
+  }
+
+  const heatmap = calendarEntries.map(([ts, count]) => ({
+    date: new Date(Number(ts) * 1000),
+    count: Number(count) || 0,
+  }));
+
+  const activeDays =
+    user.userCalendar?.totalActiveDays || calendarEntries.length || 0;
 
   const languages = (user.languageProblemCount || [])
     .filter((l) => l.problemsSolved > 0)
@@ -54,7 +68,7 @@ export const transformLeetcodeResponse = ({
       easySolved,
       mediumSolved,
       hardSolved,
-      activeDays: user.userCalendar?.totalActiveDays || 0,
+      activeDays,
       contestRating: contest?.rating ?? null,
       contestsAttended: contest?.attendedContestsCount || 0,
     },

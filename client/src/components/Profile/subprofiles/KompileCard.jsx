@@ -212,11 +212,38 @@ const KompileCard = React.forwardRef(function KompileCard(
     contentRef: cardRef,
     documentTitle: `${username}-kompile-profile`,
     pageStyle: `
-      @page { size: A4; margin: 15mm; }
+      @page {
+        size: A4;
+        margin: 0;
+      }
       @media print {
-        body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        .no-print { display: none !important; }
-        a { color: inherit; text-decoration: underline; }
+        html, body {
+          width: 100% !important;
+          height: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          background-color: #060807 !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+        .no-print {
+          display: none !important;
+        }
+        .print-fullpage {
+          width: 100vw !important;
+          height: 100vh !important;
+          min-height: 100vh !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          background-color: #060807 !important;
+          box-sizing: border-box !important;
+          overflow: hidden !important;
+        }
+        .print-fullpage > * {
+          transform: scale(1.45) !important;
+          transform-origin: center center !important;
+        }
       }
     `,
   });
@@ -231,7 +258,7 @@ const KompileCard = React.forwardRef(function KompileCard(
         Download PDF
       </button>
 
-      <div ref={cardRef} className="flex justify-center items-start w-full">
+      <div ref={cardRef} className="print-fullpage flex justify-center items-center w-full">
         <div className="p-2 bg-[#080808] border-[5px] border-black rounded-[32px] shadow-2xl">
           <div className="relative w-full max-w-[380px] bg-[#070a08] border-2 border-[#00e575] rounded-[24px] p-1.5 md:p-2 text-white font-sans shadow-[0_0_20px_rgba(0,229,117,0.18)] overflow-hidden">
             <div className="absolute inset-0 bg-[#060807] z-0" />

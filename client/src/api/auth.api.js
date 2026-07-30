@@ -75,8 +75,11 @@ export const changePassword = async ({ oldPassword, newPassword }) => {
   return data;
 };
 
-export const getBasicInfo = async () => {
-  const { data } = await axiosInstance.get("/users/get-basic-info");
+export const getBasicInfo = async (username) => {
+  const url = username
+    ? `/users/profile/${username}`
+    : "/users/get-basic-info";
+  const { data } = await axiosInstance.get(url);
   return data;
 };
 

@@ -12,10 +12,19 @@ import { transformCodeforcesResponse } from "../transformers/codeforces.transfor
 import { recomputeUserStats } from "../services/userStats.service.js";
 
 const getPlatformUsername = (user, platformName) => {
-  const entry = user.connectedPlatforms.find(
-    (p) => p.platform === platformName,
+  const entry = user.connectedPlatforms?.find(
+    (p) => p.platform?.toLowerCase() === platformName.toLowerCase(),
   );
-  return entry?.username || null;
+  if (entry?.username) return entry.username;
+
+  if (platformName === "leetcode" && user.leetcodeUsername)
+    return user.leetcodeUsername;
+  if (platformName === "codeforces" && user.codeforcesUsername)
+    return user.codeforcesUsername;
+  if (platformName === "github" && user.githubUsername)
+    return user.githubUsername;
+
+  return null;
 };
 
 const syncPlatform = async ({
@@ -175,8 +184,20 @@ export const syncAllProfiles = asyncHandler(async (req, res) => {
 });
 
 export const getUserStats = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).select("stats");
+  const username = req.params.username || req.query.username;
+  let user;
+  if (username) {
+    user = await User.findOne({ username });
+  } else if (req.user?._id) {
+    user = await User.findById(req.user._id);
+  }
   if (!user) throw new ApiError(404, "User not found");
+
+  if (!user.stats || !user.stats.lastSyncedAt) {
+    await recomputeUserStats(user._id);
+    user = await User.findById(user._id);
+  }
+
   return res
     .status(200)
     .json(new ApiResponse(200, { stats: user.stats }, "User stats fetched"));
@@ -184,6 +205,7 @@ export const getUserStats = asyncHandler(async (req, res) => {
 
 export const getSpecificPlatformData = asyncHandler(async (req, res) => {
   const { platform } = req.params;
+  const username = req.params.username || req.query.username;
 
   const VALID_PLATFORMS = ["leetcode", "codeforces", "github"];
   if (!VALID_PLATFORMS.includes(platform)) {
@@ -193,15 +215,79 @@ export const getSpecificPlatformData = asyncHandler(async (req, res) => {
     );
   }
 
-  const profile = await PlatformProfile.findOne({
-    userId: req.user._id,
+  
+  let user;
+  if (username) {
+    user = await User.findOne({ username });
+  } else if (req.user?._id) {
+    user = await User.findById(req.user._id);
+  }
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  
+  const platformUsername = getPlatformUsername(user, platform);
+
+  if (!platformUsername) {
+    throw new ApiError(
+      404,
+      `No ${platform} username connected for this user.`,
+    );
+  }
+
+  
+  let profile = await PlatformProfile.findOne({
+    userId: user._id,
     platform,
   });
 
-  if (!profile) {
+  if (
+    !profile ||
+    profile.syncStatus !== "success" ||
+    profile.handle !== platformUsername ||
+    !profile.stats?.activeDays
+  ) {
+    const platformConfig = {
+      leetcode: {
+        fetchRaw: fetchLeetcodeRawData,
+        transform: transformLeetcodeResponse,
+      },
+      codeforces: {
+        fetchRaw: fetchCodeforcesData,
+        transform: transformCodeforcesResponse,
+      },
+      github: {
+        fetchRaw: fetchGithubRawData,
+        transform: transformGithubResponse,
+      },
+    };
+
+    const config = platformConfig[platform];
+    if (config) {
+      try {
+        profile = await syncPlatform({
+          userId: user._id,
+          platform,
+          username: platformUsername,
+          fetchRaw: config.fetchRaw,
+          transform: config.transform,
+        });
+        await recomputeUserStats(user._id);
+      } catch (err) {
+        console.error(
+          `Auto-sync failed for ${platform} (${platformUsername}):`,
+          err?.message || err,
+        );
+      }
+    }
+  }
+
+  if (!profile || profile.syncStatus === "failed") {
     throw new ApiError(
       404,
-      `No ${platform} profile found. Please sync your ${platform} account first.`,
+      `Failed to fetch ${platform} profile stats for username '${platformUsername}'.`,
     );
   }
 

@@ -56,6 +56,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/profile/:username" element={<Profile />} />
         <Route
           path="/user_data"
           element={

@@ -4,12 +4,13 @@ import "react-calendar-heatmap/dist/styles.css";
 import "./HeatmapComponent.css";
 
 function HeatmapComponent({ values, startDate, endDate }) {
+  const safeValues = Array.isArray(values) ? values : [];
   return (
     <div className="w-full h-full p-2 hover:cursor-pointer">
       <CalendarHeatmap
         startDate={startDate}
         endDate={endDate}
-        values={values}
+        values={safeValues}
         classForValue={(value) => {
           if (!value || value.count === 0) return "color-empty";
           if (value.count < 2) return "color-scale-1";

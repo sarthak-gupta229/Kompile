@@ -30,10 +30,19 @@ function Codeforces({ CodeforcesData, userName }) {
   if (!userName) {
     return (
       <div className="flex justify-center items-center w-full h-48 bg-[#151515] rounded-xl border border-[#2e2e2e] mb-5 text-zinc-400">
-        No GitHub username set. Please add your GitHub username in Settings.
+        No Codeforces username set. Please add your Codeforces username in Settings.
       </div>
     );
   }
+
+  if (!CodeforcesData) {
+    return (
+      <div className="flex justify-center items-center w-full h-48 bg-[#151515] rounded-xl border border-[#2e2e2e] mb-5 text-zinc-400">
+        No Codeforces profile stats found for this user.
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -58,7 +67,7 @@ function Codeforces({ CodeforcesData, userName }) {
               Total Questions
             </h1>
             <h1 className="text-4xl font-bold mt-2">
-              {CodeforcesData?.stats.totalQuestions}
+              {CodeforcesData?.stats?.totalQuestions ?? "-"}
             </h1>
           </div>
 

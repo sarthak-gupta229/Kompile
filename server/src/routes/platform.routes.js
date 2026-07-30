@@ -17,6 +17,9 @@ router.route("/sync/codeforces").post(verifyJWT, syncCodeforcesProfile);
 router.route("/sync/all").post(verifyJWT, syncAllProfiles);
 
 router.route("/stats").get(verifyJWT, getUserStats);
+router.route("/stats/:username").get(getUserStats);
+
 router.route("/:platform").get(verifyJWT, getSpecificPlatformData);
+router.route("/:platform/:username").get(getSpecificPlatformData);
 
 export default router;

@@ -82,9 +82,6 @@ function Navbar() {
         <NavLink to="/company" className={navLinkCls}>
           Company Wise Kit
         </NavLink>
-        <NavLink to={`/workspace/profile/${user?.username ?? ""}`} className={navLinkCls}>
-          Profile Tracker
-        </NavLink>
         <NavLink to="/workspace" className={navLinkCls}>
           Workspace
         </NavLink>

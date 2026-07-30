@@ -17,10 +17,19 @@ function LeetcodeData({ LeetcodeData, userName }) {
   if (!userName) {
     return (
       <div className="flex justify-center items-center w-full h-48 bg-[#151515] rounded-xl border border-[#2e2e2e] mb-5 text-zinc-400">
-        No GitHub username set. Please add your GitHub username in Settings.
+        No LeetCode username set. Please add your LeetCode username in Settings.
       </div>
     );
   }
+
+  if (!LeetcodeData) {
+    return (
+      <div className="flex justify-center items-center w-full h-48 bg-[#151515] rounded-xl border border-[#2e2e2e] mb-5 text-zinc-400">
+        No LeetCode profile stats found for this user.
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div className="w-full bg-black rounded-xl border border-[#2e2e2e] p-3 flex flex-col">
@@ -33,7 +42,7 @@ function LeetcodeData({ LeetcodeData, userName }) {
               new Date(new Date().setFullYear(new Date().getFullYear() - 1))
             }
             endDate={new Date()}
-            values={LeetcodeData?.heatmap}
+            values={LeetcodeData?.heatmap || []}
           />
         </div>
       </div>
@@ -44,7 +53,7 @@ function LeetcodeData({ LeetcodeData, userName }) {
             Total Questions
           </h1>
           <h1 className="text-4xl font-bold mt-2">
-            {LeetcodeData?.stats.totalQuestions}
+            {LeetcodeData?.stats?.totalQuestions ?? "-"}
           </h1>
         </div>
 
@@ -53,7 +62,7 @@ function LeetcodeData({ LeetcodeData, userName }) {
             Total Active Days
           </h1>
           <h1 className="text-4xl font-bold mt-2">
-            {LeetcodeData?.stats.activeDays}
+            {LeetcodeData?.stats?.activeDays ?? "-"}
           </h1>
         </div>
 
@@ -86,7 +95,9 @@ function LeetcodeData({ LeetcodeData, userName }) {
               Contest Rating
             </h1>
             <h1 className="text-4xl font-bold mt-2 text-[#f89f1b]">
-              {Math.round(LeetcodeData?.stats.contestRating) ?? "-"}
+              {LeetcodeData?.stats?.contestRating
+                ? Math.round(LeetcodeData.stats.contestRating)
+                : "-"}
             </h1>
           </div>
           <div className="w-px h-12 bg-[#2e2e2e]" />
@@ -95,7 +106,7 @@ function LeetcodeData({ LeetcodeData, userName }) {
               Contests Attended
             </h1>
             <h1 className="text-4xl font-bold mt-2">
-              {LeetcodeData?.stats.contestsAttended ?? "—"}
+              {LeetcodeData?.stats?.contestsAttended ?? "—"}
             </h1>
           </div>
         </div>

@@ -15,23 +15,29 @@ export const syncGitHub = async () => {
   return data;
 };
 
-export const getUserLeetCodeStats = async () => {
-  const { data } = await axiosInstance.get("platforms/leetcode");
+export const getUserLeetCodeStats = async (username) => {
+  const url = username ? `platforms/leetcode/${username}` : "platforms/leetcode";
+  const { data } = await axiosInstance.get(url);
   return data;
 };
 
-export const getUserCodeForcesStats = async () => {
-  const { data } = await axiosInstance.get("platforms/codeforces");
+export const getUserCodeForcesStats = async (username) => {
+  const url = username
+    ? `platforms/codeforces/${username}`
+    : "platforms/codeforces";
+  const { data } = await axiosInstance.get(url);
   return data;
 };
 
-export const getUserGitHubStats = async () => {
-  const { data } = await axiosInstance.get("platforms/github");
+export const getUserGitHubStats = async (username) => {
+  const url = username ? `platforms/github/${username}` : "platforms/github";
+  const { data } = await axiosInstance.get(url);
   return data;
 };
 
-export const getAllUserStats = async () => {
-  const { data } = await axiosInstance.get("platforms/stats");
+export const getAllUserStats = async (username) => {
+  const url = username ? `platforms/stats/${username}` : "platforms/stats";
+  const { data } = await axiosInstance.get(url);
   return data;
 };
 

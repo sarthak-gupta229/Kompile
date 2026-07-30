@@ -9,19 +9,33 @@ import {
   Tooltip,
 } from "recharts";
 
-function DSATopicChart({ allTopicData }) {
+function DSATopicChart({ allTopicData = [] }) {
   const INITIAL_VISIBLE = 10;
   const [showAll, setShowAll] = useState(false);
+
+  if (!allTopicData || allTopicData.length === 0) {
+    return (
+      <div className="w-full bg-black rounded-xl border border-[#2e2e2e] p-5 text-white">
+        <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-2">
+          DSA Topic Analysis
+        </h2>
+        <p className="text-zinc-500 text-sm">No DSA topic data available</p>
+      </div>
+    );
+  }
+
   const visibleData = showAll
     ? allTopicData
     : allTopicData.slice(0, INITIAL_VISIBLE);
+
+  const chartHeight = Math.max(visibleData.length * 36, 120);
 
   return (
     <div className="w-full bg-black rounded-xl border border-[#2e2e2e] p-5 text-white">
       <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-5">
         DSA Topic Analysis
       </h2>
-      <ResponsiveContainer width="100%" height={visibleData.length * 36}>
+      <ResponsiveContainer width="100%" height={chartHeight}>
         <BarChart
           layout="vertical"
           data={visibleData}
