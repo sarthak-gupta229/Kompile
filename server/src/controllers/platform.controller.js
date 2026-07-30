@@ -215,7 +215,6 @@ export const getSpecificPlatformData = asyncHandler(async (req, res) => {
     );
   }
 
-  
   let user;
   if (username) {
     user = await User.findOne({ username });
@@ -227,17 +226,12 @@ export const getSpecificPlatformData = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User not found");
   }
 
-  
   const platformUsername = getPlatformUsername(user, platform);
 
   if (!platformUsername) {
-    throw new ApiError(
-      404,
-      `No ${platform} username connected for this user.`,
-    );
+    throw new ApiError(404, `No ${platform} username connected for this user.`);
   }
 
-  
   let profile = await PlatformProfile.findOne({
     userId: user._id,
     platform,

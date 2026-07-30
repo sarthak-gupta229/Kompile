@@ -27,7 +27,14 @@ const generateAccessAndRefreshTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, username, password, confirmPassword, leetcodeUsername, githubUsername } = req.body;
+  const {
+    email,
+    username,
+    password,
+    confirmPassword,
+    leetcodeUsername,
+    githubUsername,
+  } = req.body;
 
   if (password !== confirmPassword) {
     throw new ApiError(400, "Passwords do not match");
@@ -41,7 +48,10 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const connectedPlatforms = [];
   if (leetcodeUsername) {
-    connectedPlatforms.push({ platform: "leetcode", username: leetcodeUsername });
+    connectedPlatforms.push({
+      platform: "leetcode",
+      username: leetcodeUsername,
+    });
   }
   if (githubUsername) {
     connectedPlatforms.push({ platform: "github", username: githubUsername });

@@ -33,8 +33,8 @@ router
   .route("/forgot-password")
   .post(userForgotPasswordValidator(), validate, forgotPasswordRequest);
 router
- .route("/reset-password/:resetToken")
- .post(userResetForgotPasswordValidator(),validate,resetForgotPassword)
+  .route("/reset-password/:resetToken")
+  .post(userResetForgotPasswordValidator(), validate, resetForgotPassword);
 
 //secure routes
 router.route("/logout").post(verifyJWT, logoutUser);
@@ -50,7 +50,5 @@ router
 router
   .route("/resend-email-verification")
   .post(verifyJWT, resendEmailVerification);
-
-
 
 export default router;
