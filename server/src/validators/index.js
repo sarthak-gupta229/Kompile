@@ -82,8 +82,9 @@ const userUpdateBasicInfoValidator = () => {
 const sheetIdParamValidator = () => [
   param("slug").notEmpty().withMessage("Sheet slug is required"),
 ];
+
 const questionProgressValidator = () => [
-  param("slug").notEmpty().withMessage("Sheet slug is required"),
+  param("sheetId").isMongoId().withMessage("Invalid sheet ID"),
   param("questionId").isMongoId().withMessage("Invalid question ID"),
 ];
 

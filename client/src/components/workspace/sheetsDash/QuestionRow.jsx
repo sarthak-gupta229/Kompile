@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import { Star, FileText } from "lucide-react";
+import {
+  toggleSheetQuestion,
+  toggleBookmarkQuestion,
+} from "../../../api/sheets.api";
 
-// Platform icon components
 const GFGIcon = () => (
   <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
-    <text x="50%" y="58%" dominantBaseline="middle" textAnchor="middle"
-      fontSize="18" fontWeight="bold" fill="#2f8d46" fontFamily="Arial">
+    <text
+      x="50%"
+      y="58%"
+      dominantBaseline="middle"
+      textAnchor="middle"
+      fontSize="18"
+      fontWeight="bold"
+      fill="#2f8d46"
+      fontFamily="Arial"
+    >
       G8
     </text>
   </svg>
@@ -28,37 +39,51 @@ const DIFFICULTY_STYLES = {
   Hard: "text-red-400",
 };
 
-export default function QuestionRow({
-  title,
-  link,
-  platform = "gfg",       
-  difficulty = "Easy",   
-  completed: initCompleted = false,
-  bookmarked: initBookmarked = false,
-}) {
-  const [completed, setCompleted] = useState(initCompleted);
-  const [bookmarked, setBookmarked] = useState(initBookmarked);
+export default function QuestionRow({ data }) {
+  const [completed, setCompleted] = useState(data.completed);
+  const [bookmarked, setBookmarked] = useState(data.bookmarked);
 
-  const handleRowClick = () => {
-    if (link) window.open(link, "_blank", "noopener,noreferrer");
+  const diffClass = DIFFICULTY_STYLES[data.difficulty] ?? "text-green-400";
+
+  const sheetId = data.sheetId;
+  const questionId = data._id;
+
+  const handleToggleProgress = async (e) => {
+    e.preventDefault();
+    const prev = completed;
+    setCompleted((v) => !v);
+    try {
+      const res = await toggleSheetQuestion(sheetId, questionId);
+
+      setCompleted(res?.data?.completed ?? !prev);
+    } catch (err) {
+      console.error("Failed to toggle progress:", err);
+      setCompleted(prev);
+    }
   };
 
-  const stop = (fn) => (e) => {
-    e.stopPropagation();
-    fn();
+  const handleToggleBookmark = async (e) => {
+    e.preventDefault();
+    const prev = bookmarked;
+    setBookmarked((v) => !v);
+    try {
+      const res = await toggleBookmarkQuestion(sheetId, questionId);
+      setBookmarked(res?.data?.bookmarked ?? !prev);
+    } catch (err) {
+      console.error("Failed to toggle bookmark:", err);
+      setBookmarked(prev);
+    }
   };
-
-  const platformInfo = PLATFORM_ICONS[platform] ?? PLATFORM_ICONS.gfg;
-  const diffClass = DIFFICULTY_STYLES[difficulty] ?? "text-green-400";
 
   return (
-    <div
-      onClick={handleRowClick}
-      className="group flex items-center gap-4 bg-[#111111] border border-gray-800 hover:border-orange-500/60 rounded-xl px-4 py-3 cursor-pointer transition-all duration-200 hover:bg-[#161616]"
+    <a
+      href={data.links.primary}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-center gap-4 bg-[#111111] border border-gray-800 hover:border-orange-500/60 rounded-xl px-4 py-3 cursor-pointer transition-all duration-200 hover:bg-[#161616] no-underline"
     >
-      
       <button
-        onClick={stop(() => setCompleted((v) => !v))}
+        onClick={handleToggleProgress}
         className="shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200"
         style={{
           borderColor: completed ? "#22c55e" : "#4b5563",
@@ -68,51 +93,60 @@ export default function QuestionRow({
       >
         {completed && (
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <path d="M2 5l2.5 2.5L8 3" stroke="#22c55e" strokeWidth="1.8"
-              strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M2 5l2.5 2.5L8 3"
+              stroke="#22c55e"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         )}
       </button>
 
-     
       <span
         className={`flex-1 text-sm font-medium transition-colors duration-200 ${
           completed ? "text-gray-500 line-through" : "text-white"
         }`}
       >
-        {title}
+        {data.title}
       </span>
 
-   
-      <div className="shrink-0 flex items-center justify-center w-8" title={platformInfo.label}>
-        {platformInfo.icon}
+      <div
+        className="shrink-0 flex items-center justify-center w-24"
+        title={data.platform}
+      >
+        {data.platform === "GeeksforGeeks" ? <GFGIcon /> : <LeetCodeIcon />}
       </div>
 
-
-      <span className={`shrink-0 text-sm font-medium w-16 text-center ${diffClass}`}>
-        {difficulty}
+      <span
+        className={`shrink-0 text-sm font-medium w-24 text-center ${diffClass}`}
+      >
+        {data.difficulty}
       </span>
 
-      
       <button
-        onClick={stop(() => setBookmarked((v) => !v))}
+        onClick={handleToggleBookmark}
         className="shrink-0 transition-colors duration-200"
         title={bookmarked ? "Remove bookmark" : "Bookmark"}
       >
         <Star
           size={18}
-          className={bookmarked ? "text-yellow-400 fill-yellow-400" : "text-gray-500 hover:text-yellow-400"}
+          className={
+            bookmarked
+              ? "text-yellow-400 fill-yellow-400"
+              : "text-gray-500 hover:text-yellow-400"
+          }
         />
       </button>
 
-      
       <button
-        onClick={stop(() => {})}
+        onClick={(e) => e.preventDefault()}
         className="shrink-0 text-gray-500 hover:text-gray-300 transition-colors duration-200"
         title="Add note"
       >
         <FileText size={18} />
       </button>
-    </div>
+    </a>
   );
 }

@@ -2,12 +2,21 @@ import React, { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function LoveBabbarTopicCard({ topic, totalQuestions, route }) {
+export default function LoveBabbarTopicCard({
+  topic,
+  totalQuestions,
+  route,
+  completedQuestions,
+  questions,
+}) {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
 
   const handleClick = () => {
-    if (route) navigate(`/workspace/sheets/love-babbar/${route}`);
+    if (route)
+      navigate(`/workspace/sheets/love-babbar/${route}`, {
+        state: { questions },
+      });
   };
 
   return (
@@ -22,7 +31,12 @@ export default function LoveBabbarTopicCard({ topic, totalQuestions, route }) {
         </p>
       </div>
 
-      <ChevronRight className="text-gray-400 shrink-0" size={20} />
+      <div className="flex flex-row gap-3 items-center">
+        <p className="text-gray-400 text-sm mt-1">
+          Pending Q: {totalQuestions - completedQuestions}
+        </p>
+        <ChevronRight className="text-gray-400 shrink-0" size={20} />
+      </div>
     </div>
   );
 }

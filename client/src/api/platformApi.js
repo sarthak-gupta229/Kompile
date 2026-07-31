@@ -45,3 +45,5 @@ export const syncAll = async () => {
   const { data } = await axiosInstance.post("/platforms/sync/all");
   return data;
 };
+
+

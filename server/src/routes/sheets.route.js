@@ -23,11 +23,11 @@ router
   .get(sheetIdParamValidator(), validate, getSheetDetail);
 
 router
-  .route("/:slug/questions/:questionId/toggle")
+  .route("/:sheetId/questions/:questionId/toggle")
   .patch(questionProgressValidator(), validate, toggleQuestionProgress);
 
 router
-  .route("/:slug/questions/:questionId/bookmark")
+  .route("/:sheetId/questions/:questionId/bookmark")
   .patch(questionProgressValidator(), validate, toggleBookmark);
 
 export default router;

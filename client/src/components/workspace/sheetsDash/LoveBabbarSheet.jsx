@@ -1,7 +1,39 @@
 import React from "react";
 import LoveBabbarTopicCard from "./loveBabbartopicCard.jsx";
-
+import { useEffect, useState } from "react";
+import { getSheetBySlug } from "../../../api/sheets.api.js";
+import { toast, Toaster } from "react-hot-toast";
 export default function LoveBabbarSheet() {
+  const [sheets, setSheets] = useState([]);
+
+  const fetchSheets = async () => {
+    try {
+      const res = await getSheetBySlug("love-babbar-450");
+      setSheets(res.data);
+      // Inspect the shape of topics to find the correct field names
+      console.log("Full response data:", res.data);
+      console.log("First topic object:", res.data?.topics?.[0]);
+      toast.success(res.message);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchSheets();
+  }, []);
+
+  const slugify = (str) =>
+    str
+      ? str
+          .toLowerCase()
+          .trim()
+          .replace(/&/g, "and")
+          .replace(/[^\w\s-]/g, "")
+          .replace(/\s+/g, "-")
+      : "";
+
   const dsaTopics = [
     { topic: "Array", totalQuestions: 36, route: "array" },
     { topic: "Matrix", totalQuestions: 10, route: "matrix" },
@@ -39,9 +71,11 @@ export default function LoveBabbarSheet() {
       route: "bit-manipulation",
     },
   ];
+
   return (
     <>
       <section>
+        <Toaster position="top-center" />
         <div
           className={`relative bg-[#111111] border border-gray-800  hover:border-t-orange-500 rounded-xl p-4 cursor-pointer group transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden  w-full`}
         >
@@ -60,12 +94,14 @@ export default function LoveBabbarSheet() {
         </div>
       </section>
       <section className="flex flex-col gap-2 mt-4">
-        {dsaTopics.map((e, index) => (
+        {sheets?.topics?.map((obj, index) => (
           <LoveBabbarTopicCard
             key={index}
-            topic={e.topic}
-            totalQuestions={e.totalQuestions}
-            route={e.route}
+            topic={obj.name}
+            totalQuestions={obj.totalCount}
+            completedQuestions={obj.solvedCount}
+            route={slugify(obj.name)}
+            questions={obj.questions}
           />
         ))}
       </section>
