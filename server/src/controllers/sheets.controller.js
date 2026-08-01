@@ -74,7 +74,6 @@ export const getSheetDetail = asyncHandler(async (req, res) => {
 export const toggleQuestionProgress = asyncHandler(async (req, res) => {
   const { sheetId, questionId } = req.params;
 
- 
   const question = await SheetQuestion.findOne({ _id: questionId, sheetId });
   if (!question) throw new ApiError(404, "Question not found in this sheet");
 
@@ -85,7 +84,6 @@ export const toggleQuestionProgress = asyncHandler(async (req, res) => {
   });
 
   if (existing) {
-  
     await existing.deleteOne();
     return res
       .status(200)
@@ -107,7 +105,6 @@ export const toggleQuestionProgress = asyncHandler(async (req, res) => {
 export const toggleBookmark = asyncHandler(async (req, res) => {
   const { sheetId, questionId } = req.params;
 
-
   const question = await SheetQuestion.findOne({ _id: questionId, sheetId });
   if (!question) throw new ApiError(404, "Question not found in this sheet");
 
@@ -120,16 +117,17 @@ export const toggleBookmark = asyncHandler(async (req, res) => {
   if (existing) {
     existing.bookmarked = !existing.bookmarked;
     await existing.save();
-    return res.status(200).json(
-      new ApiResponse(
-        200,
-        { bookmarked: existing.bookmarked },
-        existing.bookmarked ? "Bookmarked" : "Bookmark removed",
-      ),
-    );
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { bookmarked: existing.bookmarked },
+          existing.bookmarked ? "Bookmarked" : "Bookmark removed",
+        ),
+      );
   }
 
-  
   await UserSheetProgress.create({
     userId: req.user._id,
     sheetId,

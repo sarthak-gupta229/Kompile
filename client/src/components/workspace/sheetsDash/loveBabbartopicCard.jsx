@@ -33,7 +33,7 @@ export default function LoveBabbarTopicCard({
 
       <div className="flex flex-row gap-3 items-center">
         <p className="text-gray-400 text-sm mt-1">
-          Pending Q: {totalQuestions - completedQuestions}
+          {completedQuestions}/{totalQuestions}
         </p>
         <ChevronRight className="text-gray-400 shrink-0" size={20} />
       </div>

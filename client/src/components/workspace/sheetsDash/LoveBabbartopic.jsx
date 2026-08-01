@@ -26,13 +26,12 @@ export default function LoveBabbartopic() {
 
       <div className="flex items-center gap-4 px-4 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
         <span className="shrink-0 w-5" />
-      
+
         <span className="flex-1">Problem</span>
         <span className="shrink-0 w-24 text-center">Platform</span>
         <span className="shrink-0 w-[18px]" />
-        
+
         <span className="shrink-0 w-[18px]" />
-     
       </div>
 
       {questions.length > 0 ? (

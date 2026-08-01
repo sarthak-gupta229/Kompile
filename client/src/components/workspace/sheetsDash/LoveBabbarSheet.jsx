@@ -10,7 +10,6 @@ export default function LoveBabbarSheet() {
     try {
       const res = await getSheetBySlug("love-babbar-450");
       setSheets(res.data);
-      // Inspect the shape of topics to find the correct field names
       console.log("Full response data:", res.data);
       console.log("First topic object:", res.data?.topics?.[0]);
       toast.success(res.message);

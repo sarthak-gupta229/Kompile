@@ -36,6 +36,23 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+const PublicRoute = ({ children }) => {
+  const { user, isAuthLoading } = useContext(UserContext);
+
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-500" />
+      </div>
+    );
+  }
+
+  if (user && user.email) {
+    return <Navigate to="/workspace" replace />;
+  }
+  return children;
+};
+
 function App() {
   return (
     <>
@@ -45,8 +62,22 @@ function App() {
         <Route path="/dashboard" element={<Home />} />
         <Route path="/company" element={<CompanyWiseKit />} />
         <Route path="/company/:companySlug" element={<CompanyDashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
         <Route path="/events" element={<Contest />} />
         <Route
           path="/profile"
