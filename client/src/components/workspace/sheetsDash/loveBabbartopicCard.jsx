@@ -14,7 +14,7 @@ export default function LoveBabbarTopicCard({
 
   const handleClick = () => {
     if (route)
-      navigate(`/workspace/sheets/love-babbar/${route}`, {
+      navigate(`/workspace/sheets/love-babbar-450/${route}`, {
         state: { questions },
       });
   };

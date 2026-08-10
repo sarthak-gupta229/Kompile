@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.3",
     "mailgen": "^2.0.34",
     "mongoose": "^9.7.1",
+    "nanoid": "^6.0.1",
     "nodemailer": "^9.0.1"
   },
   "devDependencies": {

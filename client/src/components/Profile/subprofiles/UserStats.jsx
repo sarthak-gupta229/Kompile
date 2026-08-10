@@ -170,7 +170,7 @@ function UserStats({ allStats, techStack }) {
           </div>
           <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col">
             <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-4">
-              DSA Problems Solved
+              Problems Solved
             </h2>
             <div className="flex items-center gap-6 flex-1">
               <DonutChart

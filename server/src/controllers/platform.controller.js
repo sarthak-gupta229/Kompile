@@ -160,6 +160,19 @@ export const syncAllProfiles = asyncHandler(async (req, res) => {
     );
   }
 
+  const githubUsername = getPlatformUsername(user, "github");
+  if (githubUsername) {
+    promises.push(
+      syncPlatform({
+        userId: user._id,
+        platform: "github",
+        username: githubUsername,
+        fetchRaw: fetchGithubRawData,
+        transform: transformGithubResponse,
+      }),
+    );
+  }
+
   if (promises.length === 0) {
     throw new ApiError(400, "No platforms connected for this user");
   }

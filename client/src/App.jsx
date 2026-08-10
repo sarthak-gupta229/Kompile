@@ -18,6 +18,8 @@ import Mysheets from "./components/workspace/mysheets/Mysheets.jsx";
 import LoveBabbarSheet from "./components/workspace/sheetsDash/LoveBabbarSheet.jsx";
 import StriversA2ZSheet from "./components/workspace/sheetsDash/StriversA2ZSheet.jsx";
 import LoveBabbartopic from "./components/workspace/sheetsDash/LoveBabbartopic.jsx";
+import Community from "./components/workspace/community/Community.jsx";
+import Room from "./components/workspace/room/Room.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { user, isAuthLoading } = useContext(UserContext);
@@ -106,19 +108,15 @@ function App() {
         >
           <Route index element={<WorkspaceHome />} />
           <Route path="sheets" element={<Mysheets />} />
-          <Route path="sheets/love-babbar" element={<LoveBabbarSheet />} />
+          <Route path="sheets/love-babbar-450" element={<LoveBabbarSheet />} />
           <Route
-            path="sheets/love-babbar/:topicSlug"
+            path="sheets/love-babbar-450/:topicSlug"
             element={<LoveBabbartopic />}
           />
           <Route path="sheets/strivers-a2z" element={<StriversA2ZSheet />} />
           <Route path="profile/:username" element={<Profile />} />
-          <Route
-            path="community"
-            element={
-              <div className="text-white text-2xl font-bold">Community</div>
-            }
-          />
+          <Route path="community" element={<Community />} />
+          <Route path="room" element={<Room />} />
           <Route path="company-kit" element={<CompanySheets show={true} />} />
           <Route
             path="bookmarks"

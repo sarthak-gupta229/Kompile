@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 import { param } from "express-validator";
 
 const userRegisterValidator = () => {
@@ -88,6 +88,56 @@ const questionProgressValidator = () => [
   param("questionId").isMongoId().withMessage("Invalid question ID"),
 ];
 
+const createRoomValidator = () => {
+  return [
+    body("name").notEmpty().withMessage("Room name is required"),
+    body("maxMembers")
+      .optional()
+      .isInt({ min: 2, max: 10 })
+      .withMessage("maxMembers must be between 2 and 10"),
+  ];
+};
+
+const joinRoomValidator = () => {
+  return [
+    body("inviteCode").trim().notEmpty().withMessage("Invite code is required"),
+  ];
+};
+
+const roomIdValidator = () => {
+  return [param("roomId").isMongoId().withMessage("Invalid room ID")];
+};
+
+const leaderboardQueryValidator = () => {
+  return [
+    query("metric")
+      .optional()
+      .isIn(["totalQuestions", "leetcodeRating", "codeforcesRating"])
+      .withMessage(
+        "metric must be one of: totalQuestions, leetcodeRating, codeforcesRating",
+      ),
+    query("page")
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage("page must be a positive integer"),
+    query("limit")
+      .optional()
+      .isInt({ min: 1, max: 100 })
+      .withMessage("limit must be between 1 and 100"),
+  ];
+};
+const roomLeaderboardValidator = () => {
+  return [
+    param("roomId").isMongoId().withMessage("Invalid room ID"),
+    query("metric")
+      .optional()
+      .isIn(["totalQuestions", "leetcodeRating", "codeforcesRating"])
+      .withMessage(
+        "metric must be one of: totalQuestions, leetcodeRating, codeforcesRating",
+      ),
+  ];
+};
+
 export {
   userRegisterValidator,
   userLoginValidator,
@@ -97,4 +147,9 @@ export {
   userUpdateBasicInfoValidator,
   sheetIdParamValidator,
   questionProgressValidator,
+  createRoomValidator,
+  joinRoomValidator,
+  roomIdValidator,
+  leaderboardQueryValidator,
+  roomLeaderboardValidator,
 };

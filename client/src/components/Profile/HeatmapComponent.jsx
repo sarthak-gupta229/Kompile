@@ -20,7 +20,7 @@ function HeatmapComponent({ values, startDate, endDate }) {
         }}
         titleForValue={(value) => {
           if (!value || !value.date) return "No submissions";
-          return `${value.count} submissions on ${value.date}`;
+          return `${value.count} submissions on ${value.date.toLocaleString()}`;
         }}
         showWeekdayLabels={true}
       />

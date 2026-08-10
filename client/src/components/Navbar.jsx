@@ -24,11 +24,11 @@ function Navbar() {
   const handleLogout = async () => {
     setDropdownOpen(false);
     try {
-      await logoutUser(); // clears the httpOnly cookie on the server
+      await logoutUser();
     } catch (err) {
       console.error("Logout API error:", err);
     } finally {
-      logout(); // clear local user state regardless
+      logout();
       navigate("/login");
     }
   };

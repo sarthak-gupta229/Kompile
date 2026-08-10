@@ -7,6 +7,8 @@ import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import platformRouter from "./routes/platform.routes.js";
 import sheetsRouter from "./routes/sheets.route.js";
+import roomRoutes from "./routes/room.routes.js";
+import leaderboardRoutes from "./routes/leaderboard.routes.js";
 
 dotenv.config({
   path: "./.env",
@@ -25,6 +27,8 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/platforms", platformRouter);
 app.use("/api/v1/sheets", sheetsRouter);
+app.use("/api/v1/rooms", roomRoutes);
+app.use("/api/v1/leaderboard", leaderboardRoutes);
 
 app.get("/", (req, res) => {
   res.send("welcome to Kompile");

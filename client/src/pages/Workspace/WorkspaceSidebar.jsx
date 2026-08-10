@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Layers,
   BarChart2,
+  DoorOpen,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -35,6 +36,7 @@ export default function WorkspaceSidebar({ collapsed, setCollapsed }) {
     },
     { icon: FileText, label: "My Sheets", to: "/workspace/sheets" },
     { icon: Users, label: "Community", to: "/workspace/community" },
+    { icon: DoorOpen, label: "Rooms", to: "/workspace/room" },
     {
       icon: Briefcase,
       label: "Company-Wise Kit",
