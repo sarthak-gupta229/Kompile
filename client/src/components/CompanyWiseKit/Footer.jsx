@@ -1,9 +1,6 @@
 import React from "react";
 import {
   IconBrandGithub,
-  IconBrandLinkedin,
-  IconBrandTwitter,
-  IconMail,
   IconArrowUpRight,
 } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
@@ -34,18 +31,15 @@ export function Footer() {
               success with powerful analytics and insights.
             </p>
             <div className="flex gap-3 pt-2">
-              <div className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50">
+              <a
+                href="https://github.com/sarthak-gupta229/Kompile"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GitHub"
+                className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:border-neutral-700 bg-[#0f0f12]/50 transition-colors"
+              >
                 <IconBrandGithub className="w-5 h-5" />
-              </div>
-              <div className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50">
-                <IconBrandLinkedin className="w-5 h-5" />
-              </div>
-              <div className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50">
-                <IconBrandTwitter className="w-5 h-5" />
-              </div>
-              <div className="w-10 h-10 border border-neutral-800 rounded-lg flex items-center justify-center text-gray-400 bg-[#0f0f12]/50">
-                <IconMail className="w-5 h-5" />
-              </div>
+              </a>
             </div>
           </div>
 
