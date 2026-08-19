@@ -224,12 +224,9 @@ function Login() {
                     <label htmlFor="password" className="text-gray-300 text-sm">
                       Password
                     </label>
-                    <Link
-                      to="/forgot-password"
-                      className="text-orange-500 text-sm no-underline hover:text-orange-400 transition-colors"
-                    >
+                    <span className="text-orange-500 text-sm">
                       Forgot password?
-                    </Link>
+                    </span>
                   </div>
                   <div className="relative">
                     <input
@@ -275,13 +272,13 @@ function Login() {
             <div className="mt-6 text-center">
               <p className="text-gray-500 text-xs leading-relaxed mb-1.5">
                 By signing in or creating an account, you are agreeing to our{" "}
-                <Link to="/terms" className="text-blue-500 no-underline">
+                <span className="text-blue-500">
                   Terms &amp; Conditions
-                </Link>{" "}
+                </span>{" "}
                 and our{" "}
-                <Link to="/privacy" className="text-blue-500 no-underline">
+                <span className="text-blue-500">
                   Privacy Policy
-                </Link>
+                </span>
                 .
               </p>
               <p className="text-gray-500 text-xs">
