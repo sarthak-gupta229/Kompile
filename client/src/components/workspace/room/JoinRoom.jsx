@@ -4,7 +4,7 @@ import { joinRoom } from "../../../api/rooms.api.js";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-function JoinRoom({ open, setOpen }) {
+function JoinRoom({ open, setOpen, onSuccess }) {
   const [inviteCode, setInviteCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -22,7 +22,8 @@ function JoinRoom({ open, setOpen }) {
       const { room } = await joinRoom({ inviteCode: inviteCode.trim() });
       toast.success("Joined room!");
       setOpen(false);
-      navigate(`/workspace/room/${room._id}`);
+      if (onSuccess) onSuccess();
+      window.location.href = `/workspace/room/${room._id}`;
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||

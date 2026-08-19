@@ -63,8 +63,8 @@ function Room() {
         </span>
       </div>
 
-      <CreateRoom open={createOpen} setOpen={setCreateOpen} />
-      <JoinRoom open={joinOpen} setOpen={setJoinOpen} />
+      <CreateRoom open={createOpen} setOpen={setCreateOpen} onSuccess={fetchRooms} />
+      <JoinRoom open={joinOpen} setOpen={setJoinOpen} onSuccess={fetchRooms} />
 
       <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {loading
