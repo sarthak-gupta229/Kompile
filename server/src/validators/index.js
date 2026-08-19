@@ -138,6 +138,54 @@ const roomLeaderboardValidator = () => {
   ];
 };
 
+const createMissionValidator = () => {
+  return [
+    body("title").trim().notEmpty().withMessage("Title is required"),
+    body("priority")
+      .optional()
+      .isIn(["High Priority", "Medium", "Low"])
+      .withMessage("Priority must be High Priority, Medium, or Low"),
+    body("tags").optional().isArray().withMessage("Tags must be an array"),
+  ];
+};
+
+const missionIdValidator = () => {
+  return [param("missionId").isMongoId().withMessage("Invalid mission ID")];
+};
+
+export const companyIdValidator = () => {
+  return [param("companyId").isMongoId().withMessage("Invalid company ID")];
+};
+
+export const getCompanyQuestionsValidator = () => {
+  return [
+    param("companyId").isMongoId().withMessage("Invalid company ID"),
+    query("difficulty")
+      .optional()
+      .isIn(["Easy", "Medium", "Hard"])
+      .withMessage("difficulty must be Easy, Medium, or Hard"),
+    query("sortBy")
+      .optional()
+      .isIn(["frequency", "acceptanceRate"])
+      .withMessage("sortBy must be frequency or acceptanceRate"),
+    query("page")
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage("page must be a positive integer"),
+    query("limit")
+      .optional()
+      .isInt({ min: 1, max: 200 })
+      .withMessage("limit must be between 1 and 200"),
+  ];
+};
+
+export const toggleCompanyQuestionValidator = () => {
+  return [
+    param("companyId").isMongoId().withMessage("Invalid company ID"),
+    param("questionId").isMongoId().withMessage("Invalid question ID"),
+  ];
+};
+
 export {
   userRegisterValidator,
   userLoginValidator,
@@ -152,4 +200,6 @@ export {
   roomIdValidator,
   leaderboardQueryValidator,
   roomLeaderboardValidator,
+  createMissionValidator,
+  missionIdValidator,
 };

@@ -132,6 +132,16 @@ function Register() {
       setError("Passwords do not match");
       return;
     }
+    if (!form.leetcode.trim()) {
+      setError("LeetCode username is required");
+      toast.error("LeetCode username is required");
+      return;
+    }
+    if (!form.github.trim()) {
+      setError("GitHub username is required");
+      toast.error("GitHub username is required");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -233,13 +243,15 @@ function Register() {
 
               <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="name" className="text-gray-300 text-sm">
+                  <label htmlFor="name" className="text-gray-300 text-sm flex items-center gap-1">
                     Username
+                    <span className="text-orange-500 text-xs font-bold">*</span>
                   </label>
                   <input
                     id="name"
                     name="username"
                     type="text"
+                    required
                     autoComplete="username"
                     placeholder="Enter your username"
                     value={form.username}
@@ -249,13 +261,15 @@ function Register() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="reg-email" className="text-gray-300 text-sm">
+                  <label htmlFor="reg-email" className="text-gray-300 text-sm flex items-center gap-1">
                     Email address
+                    <span className="text-orange-500 text-xs font-bold">*</span>
                   </label>
                   <input
                     id="reg-email"
                     name="email"
                     type="email"
+                    required
                     autoComplete="email"
                     placeholder="Enter email address"
                     value={form.email}
@@ -267,15 +281,17 @@ function Register() {
                 <div className="flex flex-col gap-1.5">
                   <label
                     htmlFor="reg-password"
-                    className="text-gray-300 text-sm"
+                    className="text-gray-300 text-sm flex items-center gap-1"
                   >
                     Password
+                    <span className="text-orange-500 text-xs font-bold">*</span>
                   </label>
                   <div className="relative">
                     <input
                       id="reg-password"
                       name="password"
                       type={showPassword ? "text" : "password"}
+                      required
                       autoComplete="new-password"
                       placeholder="Create a password"
                       value={form.password}
@@ -295,15 +311,17 @@ function Register() {
                 <div className="flex flex-col gap-1.5">
                   <label
                     htmlFor="reg-confirm"
-                    className="text-gray-300 text-sm"
+                    className="text-gray-300 text-sm flex items-center gap-1"
                   >
                     Confirm password
+                    <span className="text-orange-500 text-xs font-bold">*</span>
                   </label>
                   <div className="relative">
                     <input
                       id="reg-confirm"
                       name="confirm"
                       type={showConfirm ? "text" : "password"}
+                      required
                       autoComplete="new-password"
                       placeholder="Re-enter your password"
                       value={form.confirm}
@@ -323,14 +341,16 @@ function Register() {
                 <div className="flex flex-col gap-1.5">
                   <label
                     htmlFor="reg-leetcode"
-                    className="text-gray-300 text-sm"
+                    className="text-gray-300 text-sm flex items-center gap-1"
                   >
                     LeetCode Username
+                    <span className="text-orange-500 text-xs font-bold">*</span>
                   </label>
                   <input
                     id="reg-leetcode"
                     name="leetcode"
                     type="text"
+                    required
                     placeholder="Enter LeetCode username"
                     value={form.leetcode}
                     onChange={handleChange}
@@ -339,13 +359,15 @@ function Register() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="reg-github" className="text-gray-300 text-sm">
+                  <label htmlFor="reg-github" className="text-gray-300 text-sm flex items-center gap-1">
                     GitHub Username
+                    <span className="text-orange-500 text-xs font-bold">*</span>
                   </label>
                   <input
                     id="reg-github"
                     name="github"
                     type="text"
+                    required
                     placeholder="Enter GitHub username"
                     value={form.github}
                     onChange={handleChange}

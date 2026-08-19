@@ -26,7 +26,7 @@ import { IconCaretDownFilled } from "@tabler/icons-react";
 
 
 export const MacbookScroll = ({
-  src,
+  src = "/assets/landingPage/WorkSpace.png",
   showGradient,
   title,
   badge
@@ -144,9 +144,9 @@ export const Lid = ({
         className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2">
         <div className="absolute inset-0 rounded-lg bg-[#272729]" />
         <img
-          src={src}
-          alt="aceternity logo"
-          className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top" />
+          src={src || "/assets/landingPage/WorkSpace.png"}
+          alt="workspace preview"
+          className="absolute inset-0 h-full w-full rounded-lg object-fill" />
       </motion.div>
     </div>
   );

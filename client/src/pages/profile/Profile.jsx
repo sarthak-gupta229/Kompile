@@ -223,21 +223,24 @@ function Profile() {
   }, [targetUsername]);
 
   return (
-    <div className="w-full pb-6 px-4 md:px-6 max-w-[1600px] mx-auto">
+    <div className="w-full pb-6 max-w-[1600px] mx-auto">
       <Toaster position="top-right" containerStyle={{ top: 80 }} />
-      <section className="flex justify-between items-start gap-6 min-h-[calc(100vh-120px)]">
+      <section className="flex flex-col lg:flex-row justify-between items-start gap-6 min-h-[calc(100vh-120px)]">
         {/* left */}
         <ProfileSidebar
           userData={userData}
           kompileCardActive={kompileCardActive}
           setKompileCardActive={setKompileCardActive}
+          isOwner={isOwner}
         />
 
         {/* right */}
         {kompileCardActive ? (
-          <KompileCard allStats={allStats} userData={userData} />
+          <div className="flex-1 min-w-0 w-full">
+            <KompileCard allStats={allStats} userData={userData} />
+          </div>
         ) : (
-          <div className="w-2/3 bg-[#141414] rounded-xl h-full border border-[#2e2e2e] p-6 text-white flex flex-col">
+          <div className="flex-1 min-w-0 w-full bg-[#141414] rounded-2xl h-full border border-white/[0.08] p-6 text-white flex flex-col shadow-xl">
             <div className="flex justify-between items-center mb-4">
               <div>
                 <p className="text-2xl">Profile</p>

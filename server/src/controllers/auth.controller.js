@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { ApiError } from "../utils/api-error.js";
 import { User } from "../models/user.models.js";
+import { UserLoginLog } from "../models/userLoginLog.models.js";
 import {
   emailVerificationMailgenContent,
   forgotPasswordMailgenContent,
@@ -113,12 +114,25 @@ const login = asyncHandler(async (req, res) => {
     user._id,
   );
 
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+
+  try {
+    await UserLoginLog.create({ userId: user._id, date: today });
+  } catch (err) {
+    // duplicate key (code 11000) means they already logged in today — ignore it
+    if (err.code !== 11000) {
+      console.error("Failed to record login:", err);
+    }
+  }
+
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
   );
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   };
 
   return res
@@ -147,12 +161,13 @@ const logoutUser = asyncHandler(async (req, res) => {
       },
     },
     {
-      new: true,
+      returnDocument: "after",
     },
   );
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   };
 
   return res
@@ -248,7 +263,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
     let options = {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     };
     const { accessToken, refreshToken: newRefreshToken } =
       await generateAccessAndRefreshTokens(user._id);
@@ -340,6 +356,21 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, {}, "Password changed successfully"));
+});
+
+export const getLoginHistory = asyncHandler(async (req, res) => {
+  const logs = await UserLoginLog.find({ userId: req.user._id })
+    .sort({ date: 1 })
+    .select("date")
+    .lean();
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      logs.map((l) => l.date),
+      "Login history fetched",
+    ),
+  );
 });
 
 export {

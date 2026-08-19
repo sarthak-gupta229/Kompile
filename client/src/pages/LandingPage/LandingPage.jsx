@@ -23,11 +23,16 @@ import githubStatsHubImg from "../../../Assets/landingPage/feature1 (7).png";
 import visibilityImg from "../../../Assets/landingPage/visibility.png";
 import { CompanySheets } from "../../components/CompanyWiseKit/CompanySheets";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext.jsx";
 import ScrollVelocity from "../../components/ScrollVelocity/ScrollVelocity.jsx";
 import PoweredByChip from "../../components/chipanimation/PoweredByChip.jsx";
+import LandingUserStats from "../../components/LandingPage/LandingUserStats.jsx";
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
+  const profileRoute = `/workspace/profile/${user?.username || ""}`;
   const companies = [
     {
       name: "Google",
@@ -74,8 +79,8 @@ export default function LandingPage() {
 
             <div className="flex gap-4 flex-wrap">
               <button
-                className="border border-gray-500 px-7 py-3 rounded-md hover:bg-gray-800 transition text-white font-medium text-base"
-                onClick={() => navigate("/profile")}
+                className="border border-gray-500 px-7 py-3 rounded-md hover:bg-gray-800 transition text-white font-medium text-base cursor-pointer"
+                onClick={() => navigate(profileRoute)}
               >
                 Profile Tracker
               </button>
@@ -224,7 +229,7 @@ export default function LandingPage() {
         <div className="w-full overflow-hidden pt-48 bg-black">
           <MacbookScroll
             title={<span></span>}
-            src={workspaceGridImg}
+            src="/assets/landingPage/WorkSpace.png"
             showGradient={false}
           />
         </div>
@@ -236,21 +241,15 @@ export default function LandingPage() {
                 Portfolio
               </h2>
 
-              <a
-                href="#"
-                className="text-blue-500 hover:underline font-semibold flex items-center gap-1"
+              <button
+                onClick={() => navigate(profileRoute)}
+                className="text-blue-500 hover:underline font-semibold flex items-center gap-1 cursor-pointer bg-transparent border-none p-0 text-base"
               >
                 Try Profile Tracker →
-              </a>
+              </button>
             </div>
 
-            <div className="w-4/5 mx-auto rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-              <img
-                src="/assets/landingPage/dashboard.png"
-                alt="Dashboard Preview"
-                className="w-full h-auto object-cover"
-              />
-            </div>
+            <LandingUserStats />
           </div>
         </section>
         <section className=" text-white px-6 py-24 w-full bg-black">

@@ -11,14 +11,6 @@ export function CompanyHero({ company }) {
       ></div>
 
       <div className="relative z-10 flex flex-col md:flex-row items-center gap-5">
-        <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white flex items-center justify-center p-3 shadow-2xl shadow-orange-500/10 shrink-0">
-          <img
-            src={company.logo}
-            alt={`${company.name} Logo`}
-            className="w-full h-auto"
-          />
-        </div>
-
         <div className="flex-1 text-center md:text-left space-y-2">
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
             <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">

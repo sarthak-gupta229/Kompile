@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "./context/UserContext.jsx";
 import Home from "./pages/app/Home.jsx";
@@ -11,6 +11,7 @@ import CompanyDashboard from "./pages/CompanyWiseKit/CompanyDashboard.jsx";
 import Contest from "./pages/event/Contest.jsx";
 import Workspace from "./pages/Workspace/Workspace.jsx";
 import WorkspaceHome from "./pages/Workspace/WorkspaceHome.jsx";
+import WorkspaceCompanyKit from "./pages/Workspace/WorkspaceCompanyKit.jsx";
 import { CompanySheets } from "./components/CompanyWiseKit/CompanySheets.jsx";
 import UserData from "./components/Profile/UserData.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
@@ -20,6 +21,8 @@ import StriversA2ZSheet from "./components/workspace/sheetsDash/StriversA2ZSheet
 import LoveBabbartopic from "./components/workspace/sheetsDash/LoveBabbartopic.jsx";
 import Community from "./components/workspace/community/Community.jsx";
 import Room from "./components/workspace/room/Room.jsx";
+import RoomSpace from "./components/workspace/room/RoomSpace.jsx";
+import Bookmarks from "./components/workspace/Bookmarks.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { user, isAuthLoading } = useContext(UserContext);
@@ -55,6 +58,11 @@ const PublicRoute = ({ children }) => {
   return children;
 };
 
+const RedirectToWorkspaceCompanyKit = () => {
+  const { companySlug } = useParams();
+  return <Navigate to={`/workspace/company-kit/${companySlug}`} replace />;
+};
+
 function App() {
   return (
     <>
@@ -63,7 +71,14 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<Home />} />
         <Route path="/company" element={<CompanyWiseKit />} />
-        <Route path="/company/:companySlug" element={<CompanyDashboard />} />
+        <Route
+          path="/company/:companySlug"
+          element={
+            <ProtectedRoute>
+              <RedirectToWorkspaceCompanyKit />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/login"
           element={
@@ -114,14 +129,17 @@ function App() {
             element={<LoveBabbartopic />}
           />
           <Route path="sheets/strivers-a2z" element={<StriversA2ZSheet />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="profile/:username" element={<Profile />} />
           <Route path="community" element={<Community />} />
           <Route path="room" element={<Room />} />
-          <Route path="company-kit" element={<CompanySheets show={true} />} />
+          <Route path="room/:roomId" element={<RoomSpace />} />
+          <Route path="company-kit" element={<WorkspaceCompanyKit />} />
           <Route
-            path="bookmarks"
-            element={<div className="text-white text-2xl font-bold"></div>}
+            path="company-kit/:companySlug"
+            element={<CompanyDashboard />}
           />
+          <Route path="bookmarks" element={<Bookmarks />} />
         </Route>
       </Routes>
     </>

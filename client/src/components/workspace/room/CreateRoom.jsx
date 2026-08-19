@@ -19,10 +19,11 @@ function CreateRoom({ open, setOpen }) {
     }
     setIsLoading(true);
     try {
-      const { room } = await createRoom({
+      const result = await createRoom({
         name: formData.name.trim(),
         maxMembers: Number(formData.maxMembers),
       });
+      const room = result?.data?.room;
       toast.success("Room created!");
       setOpen(false);
       navigate(`/workspace/room/${room._id}`);

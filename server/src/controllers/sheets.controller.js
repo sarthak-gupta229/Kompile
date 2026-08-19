@@ -1,6 +1,7 @@
 import { ApiResponse } from "../utils/api-response.js";
 import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
+import mongoose from "mongoose";
 import { Sheet } from "../models/sheet.models.js";
 import { SheetTopic } from "../models/sheetTopic.models.js";
 import { SheetQuestion } from "../models/sheetQuestion.models.js";
@@ -161,4 +162,100 @@ export const getAllSheets = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, withProgress, "Sheets fetched"));
+});
+
+export const getBookmarks = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  const bookmarks = await UserSheetProgress.aggregate([
+    {
+      $match: { userId: new mongoose.Types.ObjectId(userId), bookmarked: true },
+    },
+
+    {
+      $lookup: {
+        from: "sheetquestions",
+        localField: "questionId",
+        foreignField: "_id",
+        as: "question",
+      },
+    },
+    { $unwind: "$question" },
+
+    // 3. Join topic name
+    {
+      $lookup: {
+        from: "sheettopics",
+        localField: "question.topicId",
+        foreignField: "_id",
+        as: "topic",
+      },
+    },
+    { $unwind: { path: "$topic", preserveNullAndEmptyArrays: true } },
+
+    // 4. Join sheet info
+    {
+      $lookup: {
+        from: "sheets",
+        localField: "question.sheetId",
+        foreignField: "_id",
+        as: "sheet",
+      },
+    },
+    { $unwind: "$sheet" },
+
+    // 5. Shape the output
+    {
+      $project: {
+        _id: 0,
+        questionId: "$question._id",
+        sheetId: "$sheet._id",
+        sheetName: "$sheet.name",
+        sheetSlug: "$sheet.slug",
+        title: "$question.title",
+        difficulty: "$question.difficulty",
+        platform: "$question.platform",
+        links: "$question.links",
+        topicName: "$topic.name",
+        bookmarkedAt: "$updatedAt",
+      },
+    },
+
+    // 6. Group by sheet
+    {
+      $group: {
+        _id: "$sheetId",
+        sheetName: { $first: "$sheetName" },
+        sheetSlug: { $first: "$sheetSlug" },
+        questions: {
+          $push: {
+            questionId: "$questionId",
+            title: "$title",
+            difficulty: "$difficulty",
+            platform: "$platform",
+            links: "$links",
+            topicName: "$topicName",
+            bookmarkedAt: "$bookmarkedAt",
+          },
+        },
+      },
+    },
+
+    // 7. Clean up
+    {
+      $project: {
+        _id: 0,
+        sheetId: "$_id",
+        sheetName: 1,
+        sheetSlug: 1,
+        questions: 1,
+      },
+    },
+
+    { $sort: { sheetName: 1 } },
+  ]);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, bookmarks, "Bookmarks fetched"));
 });
