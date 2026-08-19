@@ -19,7 +19,7 @@ function RoomSpace() {
       const result = await getRoom(roomId);
       setRoom(result.data?.room);
       toast.success("Room fetched successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch room");
     }
   };

@@ -1,31 +1,16 @@
 import Navbar from "../../components/Navbar";
 import GridComponent from "../../components/GridComponent";
 import { Footer } from "../../components/CompanyWiseKit/Footer";
-import { Link } from "react-router-dom";
 import { MacbookScroll } from "@/components/ui/macbook-scroll";
-import dashboardImg from "../../../Assets/landingPage/Kompile (5) 1.png";
-import codolioCardImg from "../../../Assets/landingPage/codolio card.png";
 import codolioPlatformsImg from "../../../Assets/landingPage/codolio-platforms.png";
 import workspaceIcon from "../../../Assets/landingPage/workspace-svgrepo-com.svg";
 import trackerIcon from "../../../Assets/landingPage/tracker.svg";
-import notesIcon from "../../../Assets/landingPage/notes.svg";
-import workspaceGridImg from "../../../Assets/landingPage/grid.png";
-import cumulativeQuestionsImg from "../../../Assets/landingPage/feature.png";
-import activeDaysImg from "../../../Assets/landingPage/feature1 (2).png";
-import heatmapImg from "../../../Assets/landingPage/heatmap.png";
-import dsaAnalysisImg from "../../../Assets/landingPage/feature1.png";
-import classificationImg from "../../../Assets/landingPage/feature1 (1).png";
-import contestStatsImg from "../../../Assets/landingPage/feature1 (4).png";
-import contestGraphImg from "../../../Assets/landingPage/Contest Graph.png";
-import awardsImg from "../../../Assets/landingPage/feature1 (5).png";
-import rankingsImg from "../../../Assets/landingPage/feature1 (6).png";
 import githubStatsHubImg from "../../../Assets/landingPage/feature1 (7).png";
 import visibilityImg from "../../../Assets/landingPage/visibility.png";
 import { CompanySheets } from "../../components/CompanyWiseKit/CompanySheets";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext.jsx";
-import ScrollVelocity from "../../components/ScrollVelocity/ScrollVelocity.jsx";
 import PoweredByChip from "../../components/chipanimation/PoweredByChip.jsx";
 import LandingUserStats from "../../components/LandingPage/LandingUserStats.jsx";
 
@@ -33,33 +18,6 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const profileRoute = `/workspace/profile/${user?.username || ""}`;
-  const companies = [
-    {
-      name: "Google",
-      desc: "Get interview-ready with Google's top DSA problems",
-      icon: "G",
-    },
-    {
-      name: "Amazon",
-      desc: "Focused Amazon DSA questions and interview patterns",
-      icon: "A",
-    },
-    {
-      name: "Meta",
-      desc: "Handpicked Meta problems for engineering roles",
-      icon: "M",
-    },
-    {
-      name: "Microsoft",
-      desc: "Master the Microsoft technical interview cycle",
-      icon: "M",
-    },
-    {
-      name: "Apple",
-      desc: "Top Apple interview questions and system design",
-      icon: "A",
-    },
-  ];
 
   return (
     <div className="bg-black text-white min-h-screen overflow-x-hidden">

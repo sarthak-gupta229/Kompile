@@ -19,7 +19,7 @@ function Room() {
       setRooms(result.data?.rooms ?? []);
       console.log("Rooms Data:", result.data?.rooms);
       toast.success("Rooms fetched successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch rooms");
     }
 

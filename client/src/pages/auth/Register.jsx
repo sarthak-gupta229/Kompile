@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { flushSync } from "react-dom";
-import { UserContext } from "../../context/UserContext";
 import GridComponent from "../../components/GridComponent";
 import { registerUser } from "../../api/auth.api";
 import toast, { Toaster } from "react-hot-toast";
@@ -119,7 +116,6 @@ function Register() {
     github: "",
   });
   const navigate = useNavigate();
-  const { login } = useContext(UserContext);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });

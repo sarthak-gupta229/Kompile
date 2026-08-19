@@ -12,7 +12,6 @@ function generateDummyHeatmap() {
     const dateStr = d.toISOString().split("T")[0];
 
     // Create clusters of high activity matching the screenshot pattern
-    const dayOfWeek = d.getDay();
     const daysAgo = i;
 
     let count = 0;

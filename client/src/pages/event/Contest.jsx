@@ -1,10 +1,8 @@
-import GridComponent from "../../components/GridComponent";
 import Navbar from "../../components/Navbar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Calendar from "../../components/Calendar";
 import ContestCard from "../../components/ContestCard";
-import { Footer } from "../../components/CompanyWiseKit/Footer";
 
 export default function Contest() {
   const [contests, setContests] = useState([]);

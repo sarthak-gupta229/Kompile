@@ -30,44 +30,6 @@ export default function LoveBabbarSheet() {
           .replace(/\s+/g, "-")
       : "";
 
-  const dsaTopics = [
-    { topic: "Array", totalQuestions: 36, route: "array" },
-    { topic: "Matrix", totalQuestions: 10, route: "matrix" },
-    { topic: "String", totalQuestions: 41, route: "string" },
-    {
-      topic: "Searching & Sorting",
-      totalQuestions: 35,
-      route: "searching-and-sorting",
-    },
-    { topic: "LinkedList", totalQuestions: 34, route: "linkedlist" },
-    { topic: "Binary Trees", totalQuestions: 35, route: "binary-trees" },
-    {
-      topic: "Binary Search Trees",
-      totalQuestions: 22,
-      route: "binary-search-trees",
-    },
-    { topic: "Greedy", totalQuestions: 36, route: "greedy" },
-    { topic: "BackTracking", totalQuestions: 19, route: "backtracking" },
-    {
-      topic: "Stacks & Queues",
-      totalQuestions: 38,
-      route: "stacks-and-queues",
-    },
-    { topic: "Heap", totalQuestions: 18, route: "heap" },
-    { topic: "Graph", totalQuestions: 44, route: "graph" },
-    { topic: "Trie", totalQuestions: 6, route: "trie" },
-    {
-      topic: "Dynamic Programming",
-      totalQuestions: 61,
-      route: "dynamic-programming",
-    },
-    {
-      topic: "Bit Manipulation",
-      totalQuestions: 10,
-      route: "bit-manipulation",
-    },
-  ];
-
   return (
     <>
       <section>

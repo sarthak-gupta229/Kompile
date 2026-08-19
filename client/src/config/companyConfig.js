@@ -2,7 +2,7 @@ export const companies = [
   {
     slug: 'google',
     name: 'Google',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_\"G\"_logo.svg',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg',
     description: 'Get interview-ready for Google with this dedicated sheet of DSA problems.',
     color: '#4285F4',
     accent: 'bg-blue-500',

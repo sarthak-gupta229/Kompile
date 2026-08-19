@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "../../components/Navbar";
 import GridComponent from "../../components/GridComponent";
 
@@ -7,7 +6,6 @@ import { Hero } from "../../components/CompanyWiseKit/Hero";
 import { FeatureTable } from "../../components/CompanyWiseKit/FeatureTable";
 import { CompanyLogos } from "../../components/CompanyWiseKit/CompanyLogos";
 import { CompanySheets } from "../../components/CompanyWiseKit/CompanySheets";
-import { Pricing } from "../../components/CompanyWiseKit/Pricing";
 import { FAQ } from "../../components/CompanyWiseKit/FAQ";
 import { Footer } from "../../components/CompanyWiseKit/Footer";
 

@@ -10,7 +10,6 @@ import ProfileSidebar from "./ProfileSidebar";
 import { getBasicInfo } from "../../api/auth.api.js";
 import KompileCard from "../../components/Profile/subprofiles/KompileCard.jsx";
 import { toast, Toaster } from "react-hot-toast";
-import confetti from "canvas-confetti";
 import {
   getAllUserStats,
   getUserLeetCodeStats,
@@ -18,49 +17,6 @@ import {
   getUserCodeForcesStats,
   syncAll,
 } from "../../api/platformApi.js";
-
-export function fireConfetti() {
-  const count = 400;
-
-  const defaults = {
-    origin: { y: 0.7 },
-  };
-
-  function fire(particleRatio, opts) {
-    confetti({
-      ...defaults,
-      ...opts,
-      particleCount: Math.floor(count * particleRatio),
-    });
-  }
-
-  fire(0.25, {
-    spread: 26,
-    startVelocity: 55,
-  });
-
-  fire(0.2, {
-    spread: 60,
-  });
-
-  fire(0.35, {
-    spread: 100,
-    decay: 0.91,
-    scalar: 0.8,
-  });
-
-  fire(0.1, {
-    spread: 120,
-    startVelocity: 25,
-    decay: 0.92,
-    scalar: 1.2,
-  });
-
-  fire(0.1, {
-    spread: 120,
-    startVelocity: 45,
-  });
-}
 
 function Profile() {
   const { username } = useParams();
