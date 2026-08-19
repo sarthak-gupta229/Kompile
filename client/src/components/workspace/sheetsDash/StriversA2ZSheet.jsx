@@ -27,9 +27,6 @@ function StriversA2ZSheet() {
     try {
       const res = await getSheetBySlug("strivers-a2z");
       setRawSheetData(res.data);
-      // console.log("Full response data:", res.data);
-      // console.log("First topic object:", res.data?.topics?.[0]);
-      toast.success(res.message);
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -47,7 +44,7 @@ function StriversA2ZSheet() {
   return (
     <>
       <section className="mb-3">
-        <Toaster position="top-center" />
+        <Toaster position="top-right" />
         <div
           className={`relative bg-[#111111] border border-gray-800  hover:border-t-orange-500 rounded-xl p-4 cursor-pointer group transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden  w-full`}
         >

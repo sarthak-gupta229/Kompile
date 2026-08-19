@@ -1,60 +1,28 @@
-import React, { useState, useMemo } from "react";
+import React from "react";
 import {
   Search,
-  ChevronDown,
-  Star,
-  ExternalLink,
-  Filter,
   Flame,
-  Clock,
   ArrowUpRight,
   CheckCircle2,
-  MoreVertical,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
-const TOPICS = [
-  "Array",
-  "String",
-  "DP",
-  "Greedy",
-  "Tree",
-  "Graph",
-  "Linked List",
-  "Math",
-  "Stack",
-];
-
-export function QuestionsTable({ data = [] }) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [difficultyFilter, setDifficultyFilter] = useState("All");
-  const [activeTab, setActiveTab] = useState("All Time Favourite");
-  const [completedIds, setCompletedIds] = useState(new Set());
-
-  const toggleCompleted = (id) => {
-    setCompletedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
-  const filteredData = useMemo(() => {
-    return data
-      .filter((q) => {
-        const matchesSearch = q.title
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
-        const matchesDifficulty =
-          difficultyFilter === "All" || q.difficulty === difficultyFilter;
-        return matchesSearch && matchesDifficulty;
-      })
-      .slice(0, 50);
-  }, [data, searchTerm, difficultyFilter]);
-
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
+export function QuestionsTable({
+  data = [],
+  onToggle,
+  difficulty,
+  onDifficultyChange,
+  search,
+  onSearchChange,
+  sortBy,
+  onSortChange,
+  pagination,
+  onPageChange,
+}) {
+  const getDifficultyColor = (d) => {
+    switch (d) {
       case "Easy":
         return "bg-green-500/10 text-green-500 border-green-500/20";
       case "Medium":
@@ -73,16 +41,13 @@ export function QuestionsTable({ data = [] }) {
     if (f > 60)
       return { label: "HOT", color: "text-orange-500", bg: "bg-orange-500/10" };
     if (f > 40)
-      return {
-        label: "WARM",
-        color: "text-yellow-500",
-        bg: "bg-yellow-500/10",
-      };
+      return { label: "WARM", color: "text-yellow-500", bg: "bg-yellow-500/10" };
     return { label: "COLD", color: "text-blue-500", bg: "bg-blue-500/10" };
   };
 
   return (
     <div className="space-y-6">
+      {/* Filters bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 bg-[#0f0f0f] border border-gray-800 p-4 rounded-2xl">
         <div className="flex items-center gap-3">
           <div className="relative group">
@@ -90,41 +55,42 @@ export function QuestionsTable({ data = [] }) {
             <input
               type="text"
               placeholder="Search by title..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={search}
+              onChange={(e) => onSearchChange(e.target.value)}
               className="bg-[#1a1a1a] border border-gray-800 rounded-xl py-2 pl-10 pr-4 text-sm text-gray-300 outline-none focus:border-orange-500/50 transition-all duration-200 w-64"
             />
           </div>
 
           <select
-            value={difficultyFilter}
-            onChange={(e) => setDifficultyFilter(e.target.value)}
+            value={difficulty}
+            onChange={(e) => onDifficultyChange(e.target.value)}
             className="bg-[#1a1a1a] border border-gray-800 rounded-xl py-2 px-4 text-sm text-gray-300 outline-none focus:border-orange-500/50 transition-all duration-200 appearance-none cursor-pointer"
           >
-            <option value="All">All Difficulty</option>
+            <option value="">All Difficulty</option>
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
           </select>
 
-          <select className="bg-[#1a1a1a] border border-gray-800 rounded-xl py-2 px-4 text-sm text-gray-300 outline-none focus:border-orange-500/50 transition-all duration-200 appearance-none cursor-pointer">
-            <option>All Platforms</option>
-            <option>LeetCode</option>
-            <option>GeeksForGeeks</option>
-            <option>HackerRank</option>
+          <select
+            value={sortBy}
+            onChange={(e) => onSortChange(e.target.value)}
+            className="bg-[#1a1a1a] border border-gray-800 rounded-xl py-2 px-4 text-sm text-gray-300 outline-none focus:border-orange-500/50 transition-all duration-200 appearance-none cursor-pointer"
+          >
+            <option value="frequency">Sort: Frequency</option>
+            <option value="acceptanceRate">Sort: Acceptance Rate</option>
           </select>
         </div>
 
         <div className="flex items-center gap-2 text-gray-500 text-sm">
-          <span>Showing {filteredData.length} questions</span>
-          <div className="h-4 w-[1px] bg-gray-800 mx-2"></div>
-          <button className="flex items-center gap-2 hover:text-white transition-colors">
-            <Filter className="w-4 h-4" />
-            More Filters
-          </button>
+          <span>
+            Showing {data.length}
+            {pagination ? ` of ${pagination.totalMatched}` : ""} questions
+          </span>
         </div>
       </div>
 
+      {/* Table */}
       <div className="overflow-hidden bg-[#0f0f0f] border border-gray-800 rounded-3xl shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -134,59 +100,45 @@ export function QuestionsTable({ data = [] }) {
                   Question
                 </th>
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  Platform
-                </th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">
                   Difficulty
                 </th>
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">
                   Popularity
                 </th>
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  Tags
+                  Topics
                 </th>
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">
-                  Actions
+                  Done
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800/50">
-              {filteredData.map((q, idx) => {
+              {data.map((q) => {
                 const pop = getPopularityBadge(q.frequency);
                 return (
                   <tr
-                    key={q.id}
-                    className="group hover:bg-white/[0.02] transition-colors"
+                    key={q._id}
+                    className={cn(
+                      "group transition-colors",
+                      q.completed
+                        ? "bg-green-500/[0.03]"
+                        : "hover:bg-white/[0.02]",
+                    )}
                   >
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <button className="text-gray-600 hover:text-orange-500 transition-colors">
-                          <Star className="w-4 h-4" />
-                        </button>
-                        <a
-                          href={q.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-200 font-medium hover:text-orange-500 transition-colors flex items-center gap-1.5"
-                        >
-                          {q.title}
-                          <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </a>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 rounded-full bg-black border border-gray-800 flex items-center justify-center p-1">
-                          <img
-                            src="https://leetcode.com/static/images/LeetCode_logo_rvs.png"
-                            alt="LC"
-                            className="w-full h-auto"
-                          />
-                        </div>
-                        <span className="text-xs text-gray-400 font-medium">
-                          LeetCode
-                        </span>
-                      </div>
+                      <a
+                        href={q.link || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cn(
+                          "font-medium hover:text-orange-500 transition-colors flex items-center gap-1.5",
+                          q.completed ? "text-gray-500 line-through" : "text-gray-200",
+                        )}
+                      >
+                        {q.title}
+                        <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </a>
                     </td>
                     <td className="px-6 py-4">
                       <span
@@ -195,7 +147,7 @@ export function QuestionsTable({ data = [] }) {
                           getDifficultyColor(q.difficulty),
                         )}
                       >
-                        {q.difficulty.toUpperCase()}
+                        {q.difficulty?.toUpperCase()}
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -206,43 +158,36 @@ export function QuestionsTable({ data = [] }) {
                         )}
                       >
                         <Flame className={cn("w-3.5 h-3.5", pop.color)} />
-                        <span
-                          className={cn("text-[10px] font-bold", pop.color)}
-                        >
+                        <span className={cn("text-[10px] font-bold", pop.color)}>
                           {pop.label}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-wrap gap-1.5">
-                        <span className="px-2 py-0.5 rounded-md bg-white/5 border border-gray-800 text-[10px] text-gray-400 font-medium">
-                          {TOPICS[idx % TOPICS.length]}
-                        </span>
-                        {idx % 3 === 0 && (
-                          <span className="px-2 py-0.5 rounded-md bg-white/5 border border-gray-800 text-[10px] text-gray-400 font-medium">
-                            {TOPICS[(idx + 2) % TOPICS.length]}
+                        {(q.topics ?? []).slice(0, 3).map((t) => (
+                          <span
+                            key={t}
+                            className="px-2 py-0.5 rounded-md bg-white/5 border border-gray-800 text-[10px] text-gray-400 font-medium"
+                          >
+                            {t}
                           </span>
-                        )}
+                        ))}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => toggleCompleted(q.id)}
-                          className={`p-1.5 rounded-lg transition-all ${
-                            completedIds.has(q.id)
-                              ? "text-green-500 bg-green-500/10 hover:bg-green-500/20"
-                              : "text-gray-500 hover:text-green-400 hover:bg-green-500/10"
-                          }`}
-                          title={
-                            completedIds.has(q.id)
-                              ? "Mark as incomplete"
-                              : "Mark as complete"
-                          }
-                        >
-                          <CheckCircle2 className="w-4 h-4" />
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => onToggle?.(q._id)}
+                        className={cn(
+                          "p-1.5 rounded-lg transition-all",
+                          q.completed
+                            ? "text-green-500 bg-green-500/10 hover:bg-green-500/20"
+                            : "text-gray-500 hover:text-green-400 hover:bg-green-500/10",
+                        )}
+                        title={q.completed ? "Mark as incomplete" : "Mark as complete"}
+                      >
+                        <CheckCircle2 className="w-4 h-4" />
+                      </button>
                     </td>
                   </tr>
                 );
@@ -251,11 +196,28 @@ export function QuestionsTable({ data = [] }) {
           </table>
         </div>
 
-        <div className="p-6 border-t border-gray-800 flex items-center justify-center">
-          <button className="px-6 py-2 rounded-xl bg-white/5 border border-gray-800 text-gray-300 text-sm font-bold hover:bg-white/10 hover:border-gray-700 transition-all duration-200">
-            Load More Questions
-          </button>
-        </div>
+        {/* Pagination */}
+        {pagination && pagination.totalPages > 1 && (
+          <div className="p-6 border-t border-gray-800 flex items-center justify-center gap-4">
+            <button
+              disabled={pagination.page <= 1}
+              onClick={() => onPageChange((p) => p - 1)}
+              className="p-2 rounded-lg bg-white/5 border border-gray-800 text-gray-400 hover:text-white hover:border-gray-600 disabled:opacity-30 transition-all"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <span className="text-sm text-gray-400">
+              Page {pagination.page} / {pagination.totalPages}
+            </span>
+            <button
+              disabled={pagination.page >= pagination.totalPages}
+              onClick={() => onPageChange((p) => p + 1)}
+              className="p-2 rounded-lg bg-white/5 border border-gray-800 text-gray-400 hover:text-white hover:border-gray-600 disabled:opacity-30 transition-all"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

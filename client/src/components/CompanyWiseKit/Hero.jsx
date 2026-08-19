@@ -5,10 +5,6 @@ export function Hero() {
   return (
     <div className="flex flex-col items-center text-center space-y-8 relative -top-8">
       <div className="flex flex-col items-center space-y-4 max-w-4xl mx-auto">
-        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-sm font-semibold shadow-sm">
-          100K+ Engineers Trust Kompile
-        </div>
-
         <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
           10x your <span className="text-orange-500">selection</span> chances{" "}
           <br />

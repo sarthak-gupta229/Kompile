@@ -24,13 +24,14 @@ const tabs = [
   },
 ];
 
-function Community() {
+function Community({ roomId = null }) {
+  const scope = roomId ? "room" : "global";
   const [selectedTab, setSelectedTab] = useState("totalQuestions");
 
   const activeTab = tabs.find((t) => t.key === selectedTab);
 
   const { entries, page, loading, error, hasMore, nextPage, prevPage } =
-    useLeaderboard({ scope: "global", metric: selectedTab, limit: 20 });
+    useLeaderboard({ scope, roomId, metric: selectedTab, limit: 20 });
 
   return (
     <div className="p-6">

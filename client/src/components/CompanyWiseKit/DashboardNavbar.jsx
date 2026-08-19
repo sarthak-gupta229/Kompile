@@ -1,6 +1,4 @@
-import React from 'react';
-import { Search, Bell, User, LayoutGrid, Sparkles } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { Search, Sparkles } from 'lucide-react';
 
 export function DashboardNavbar() {
   return (

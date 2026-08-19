@@ -6,7 +6,6 @@ import {
   FileText,
   Users,
   Briefcase,
-  Star,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -42,7 +41,6 @@ export default function WorkspaceSidebar({ collapsed, setCollapsed }) {
       label: "Company-Wise Kit",
       to: "/workspace/company-kit",
     },
-    { icon: Star, label: "Bookmarks", to: "/workspace/bookmarks" },
   ];
   return (
     <aside
@@ -70,10 +68,14 @@ export default function WorkspaceSidebar({ collapsed, setCollapsed }) {
       </nav>
 
       <div className="border-t border-gray-800 p-2 space-y-0.5">
-        <button className="flex items-center gap-3.5 w-full px-3 py-2.5 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all duration-200 text-sm font-medium group">
+        <NavLink
+          to="/user_data"
+          className={linkCls}
+          title={collapsed ? "Settings" : undefined}
+        >
           <Settings className="w-[18px] h-[18px] shrink-0 group-hover:rotate-45 transition-transform duration-300" />
           {!collapsed && <span>Settings</span>}
-        </button>
+        </NavLink>
 
         {/* Collapse toggle */}
         <button

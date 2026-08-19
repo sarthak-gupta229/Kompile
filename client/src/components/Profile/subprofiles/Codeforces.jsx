@@ -1,8 +1,3 @@
-import React from "react";
-import { useState, useEffect, useContext } from "react";
-import { UserContext } from "../../../context/UserContext";
-import { Star, GitCommit, GitPullRequest, AlertCircle } from "lucide-react";
-import { getUserCodeForcesStats } from "../../../api/platformApi";
 import DonutChart from "./../DonutChart.jsx";
 import HeatmapComponent from "./../HeatmapComponent.jsx";
 import DSATopicChart from "./../DSATopicChart.jsx";
@@ -150,7 +145,7 @@ function Codeforces({ CodeforcesData, userName }) {
                     color: "text-red-500",
                     bg: "bg-red-500/10",
                   },
-                ].map(({ label, key, color, bg }) => (
+                ].map(({ label, color, bg }) => (
                   <div
                     key={label}
                     className={`flex items-center justify-between px-3 py-2 rounded-lg ${bg}`}

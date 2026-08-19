@@ -14,8 +14,28 @@ export default defineConfig([
       reactRefresh.configs.vite,
     ],
     languageOptions: {
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
       parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+    rules: {
+      'no-unused-vars': [
+        'warn',
+        {
+          varsIgnorePattern: '^[A-Z_]|^React$',
+          argsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/immutability': 'off',
+      'react-hooks/exhaustive-deps': 'warn',
     },
   },
 ])

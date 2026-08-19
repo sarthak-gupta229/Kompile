@@ -54,7 +54,11 @@ function Navbar() {
   }, []);
 
   const menuItems = [
-    { icon: User, label: "Profile", to: `/workspace/profile/${user?.username ?? ""}` },
+    {
+      icon: User,
+      label: "Profile",
+      to: `/workspace/profile/${user?.username ?? ""}`,
+    },
     { icon: Settings, label: "Settings", to: "/user_data" },
     { icon: LayoutDashboard, label: "Workspace", to: "/workspace" },
   ];

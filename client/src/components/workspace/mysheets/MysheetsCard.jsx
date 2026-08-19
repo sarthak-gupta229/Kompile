@@ -1,5 +1,4 @@
-import React from "react";
-import { Users, CircleCheck, ListChecks } from "lucide-react";
+import { CircleCheck, ListChecks } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function MysheetsCard({ sheet }) {

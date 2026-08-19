@@ -28,10 +28,6 @@ const LeetCodeIcon = () => (
   </svg>
 );
 
-const PLATFORM_ICONS = {
-  gfg: { icon: <GFGIcon />, label: "GFG" },
-  leetcode: { icon: <LeetCodeIcon />, label: "LeetCode" },
-};
 
 const DIFFICULTY_STYLES = {
   Easy: "text-green-400",

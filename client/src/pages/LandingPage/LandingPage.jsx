@@ -1,60 +1,23 @@
 import Navbar from "../../components/Navbar";
 import GridComponent from "../../components/GridComponent";
 import { Footer } from "../../components/CompanyWiseKit/Footer";
-import { Link } from "react-router-dom";
 import { MacbookScroll } from "@/components/ui/macbook-scroll";
-import dashboardImg from "../../../Assets/landingPage/Kompile (5) 1.png";
-import codolioCardImg from "../../../Assets/landingPage/codolio card.png";
 import codolioPlatformsImg from "../../../Assets/landingPage/codolio-platforms.png";
 import workspaceIcon from "../../../Assets/landingPage/workspace-svgrepo-com.svg";
 import trackerIcon from "../../../Assets/landingPage/tracker.svg";
-import notesIcon from "../../../Assets/landingPage/notes.svg";
-import workspaceGridImg from "../../../Assets/landingPage/grid.png";
-import cumulativeQuestionsImg from "../../../Assets/landingPage/feature.png";
-import activeDaysImg from "../../../Assets/landingPage/feature1 (2).png";
-import heatmapImg from "../../../Assets/landingPage/heatmap.png";
-import dsaAnalysisImg from "../../../Assets/landingPage/feature1.png";
-import classificationImg from "../../../Assets/landingPage/feature1 (1).png";
-import contestStatsImg from "../../../Assets/landingPage/feature1 (4).png";
-import contestGraphImg from "../../../Assets/landingPage/Contest Graph.png";
-import awardsImg from "../../../Assets/landingPage/feature1 (5).png";
-import rankingsImg from "../../../Assets/landingPage/feature1 (6).png";
 import githubStatsHubImg from "../../../Assets/landingPage/feature1 (7).png";
 import visibilityImg from "../../../Assets/landingPage/visibility.png";
 import { CompanySheets } from "../../components/CompanyWiseKit/CompanySheets";
 import { useNavigate } from "react-router-dom";
-import ScrollVelocity from "../../components/ScrollVelocity/ScrollVelocity.jsx";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext.jsx";
 import PoweredByChip from "../../components/chipanimation/PoweredByChip.jsx";
+import LandingUserStats from "../../components/LandingPage/LandingUserStats.jsx";
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const companies = [
-    {
-      name: "Google",
-      desc: "Get interview-ready with Google's top DSA problems",
-      icon: "G",
-    },
-    {
-      name: "Amazon",
-      desc: "Focused Amazon DSA questions and interview patterns",
-      icon: "A",
-    },
-    {
-      name: "Meta",
-      desc: "Handpicked Meta problems for engineering roles",
-      icon: "M",
-    },
-    {
-      name: "Microsoft",
-      desc: "Master the Microsoft technical interview cycle",
-      icon: "M",
-    },
-    {
-      name: "Apple",
-      desc: "Top Apple interview questions and system design",
-      icon: "A",
-    },
-  ];
+  const { user } = useContext(UserContext);
+  const profileRoute = `/workspace/profile/${user?.username || ""}`;
 
   return (
     <div className="bg-black text-white min-h-screen overflow-x-hidden">
@@ -74,8 +37,8 @@ export default function LandingPage() {
 
             <div className="flex gap-4 flex-wrap">
               <button
-                className="border border-gray-500 px-7 py-3 rounded-md hover:bg-gray-800 transition text-white font-medium text-base"
-                onClick={() => navigate("/profile")}
+                className="border border-gray-500 px-7 py-3 rounded-md hover:bg-gray-800 transition text-white font-medium text-base cursor-pointer"
+                onClick={() => navigate(profileRoute)}
               >
                 Profile Tracker
               </button>
@@ -224,7 +187,7 @@ export default function LandingPage() {
         <div className="w-full overflow-hidden pt-48 bg-black">
           <MacbookScroll
             title={<span></span>}
-            src={workspaceGridImg}
+            src="/assets/landingPage/WorkSpace.png"
             showGradient={false}
           />
         </div>
@@ -236,21 +199,15 @@ export default function LandingPage() {
                 Portfolio
               </h2>
 
-              <a
-                href="#"
-                className="text-blue-500 hover:underline font-semibold flex items-center gap-1"
+              <button
+                onClick={() => navigate(profileRoute)}
+                className="text-blue-500 hover:underline font-semibold flex items-center gap-1 cursor-pointer bg-transparent border-none p-0 text-base"
               >
                 Try Profile Tracker →
-              </a>
+              </button>
             </div>
 
-            <div className="w-4/5 mx-auto rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-              <img
-                src="/assets/landingPage/dashboard.png"
-                alt="Dashboard Preview"
-                className="w-full h-auto object-cover"
-              />
-            </div>
+            <LandingUserStats />
           </div>
         </section>
         <section className=" text-white px-6 py-24 w-full bg-black">

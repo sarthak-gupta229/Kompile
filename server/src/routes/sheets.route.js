@@ -4,6 +4,7 @@ import {
   getAllSheets,
   toggleQuestionProgress,
   toggleBookmark,
+  getBookmarks,
 } from "../controllers/sheets.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validator.middleware.js";
@@ -18,6 +19,8 @@ router.use(verifyJWT);
 
 router.route("/").get(getAllSheets);
 
+router.route("/bookmarks").get(getBookmarks);
+
 router
   .route("/:slug")
   .get(sheetIdParamValidator(), validate, getSheetDetail);
@@ -31,3 +34,4 @@ router
   .patch(questionProgressValidator(), validate, toggleBookmark);
 
 export default router;
+

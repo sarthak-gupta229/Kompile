@@ -10,6 +10,7 @@ import {
   resendEmailVerification,
   resetForgotPassword,
   verifyEmail,
+  getLoginHistory,
 } from "../controllers/auth.controller.js";
 import { validate } from "../middlewares/validator.middleware.js";
 import {
@@ -50,5 +51,7 @@ router
 router
   .route("/resend-email-verification")
   .post(verifyJWT, resendEmailVerification);
+
+router.route("/me/login-history").get(verifyJWT, getLoginHistory);
 
 export default router;

@@ -25,3 +25,7 @@ export const toggleBookmarkQuestion = async (sheetId, questionId) => {
   return data;
 };
 
+export const getBookmarks = async () => {
+  const { data } = await axiosInstance.get(`sheets/bookmarks`);
+  return data;
+};

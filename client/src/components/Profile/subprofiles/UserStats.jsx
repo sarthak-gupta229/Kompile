@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
-import { UserContext } from "../../../context/UserContext.jsx";
 import DonutChart from "./../DonutChart.jsx";
 import HeatmapComponent from "./../HeatmapComponent.jsx";
 import DSATopicChart from "./../DSATopicChart.jsx";
 
-function UserStats({ allStats, techStack }) {
+function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -199,7 +197,7 @@ function UserStats({ allStats, techStack }) {
                     color: "text-red-500",
                     bg: "bg-red-500/10",
                   },
-                ].map(({ label, key, color, bg }) => (
+                ].map(({ label, color, bg }) => (
                   <div
                     key={label}
                     className={`flex items-center justify-between px-3 py-2 rounded-lg ${bg}`}
@@ -215,7 +213,9 @@ function UserStats({ allStats, techStack }) {
           </div>
         </div>
 
-        <DSATopicChart allTopicData={allStats?.topicAnalysis || []} />
+        {showTopicAnalysis && (
+          <DSATopicChart allTopicData={allStats?.topicAnalysis || []} />
+        )}
       </div>
     </>
   );

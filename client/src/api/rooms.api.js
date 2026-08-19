@@ -1,12 +1,12 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "./axiosInstance.js";
 
 export const createRoom = async (data) => {
   const response = await axiosInstance.post("/rooms", data);
   return response.data;
 };
 
-export const joinRoom = async (roomId) => {
-  const response = await axiosInstance.post(`/rooms/${roomId}/join`);
+export const joinRoom = async (data) => {
+  const response = await axiosInstance.post(`/rooms/join-room`, data);
   return response.data;
 };
 
@@ -21,7 +21,7 @@ export const getRoom = async (roomId) => {
 };
 
 export const getRooms = async () => {
-  const response = await axiosInstance.get("/rooms");
+  const response = await axiosInstance.get("/rooms/mine");
   return response.data;
 };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { Download } from "lucide-react";
-import { fireConfetti } from "@/pages/profile/Profile.jsx";
+import { fireConfetti } from "../../../utils/confetti.js";
 
 const PLATFORM_MAP = {
   leetcode: {
