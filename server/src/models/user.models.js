@@ -2,8 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { platform, type } from "os";
-import { Languages } from "lucide-react";
+
 const userSchema = new Schema(
   {
     avatar: {
