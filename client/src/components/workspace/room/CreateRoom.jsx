@@ -4,7 +4,7 @@ import { createRoom } from "../../../api/rooms.api.js";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-function CreateRoom({ open, setOpen }) {
+function CreateRoom({ open, setOpen, onSuccess }) {
   const [formData, setFormData] = useState({ name: "", maxMembers: "5" });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -26,7 +26,8 @@ function CreateRoom({ open, setOpen }) {
       const room = result?.data?.room;
       toast.success("Room created!");
       setOpen(false);
-      navigate(`/workspace/room/${room._id}`);
+      if (onSuccess) onSuccess();
+      window.location.href = `/workspace/room/${room._id}`;
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||
