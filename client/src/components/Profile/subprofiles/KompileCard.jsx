@@ -61,20 +61,7 @@ const KompileCard = React.forwardRef(function KompileCard(
   const totalActiveDays =
     effectiveAllStats?.totalActiveDays ?? effectiveAllStats?.activeDays ?? 0;
 
-  const defaultSkills = [
-    "JAVA",
-    "C++",
-    "DSA",
-    "CP",
-    "PYTHON",
-    "TS",
-    "SQL",
-    "HTML",
-    "CSS",
-  ];
-  const userSkills = effectiveUserData?.skills?.length
-    ? effectiveUserData.skills
-    : defaultSkills;
+  const userSkills = effectiveUserData?.skills || [];
 
   const skillsToShow = userSkills.slice(0, 9);
 
@@ -147,16 +134,6 @@ const KompileCard = React.forwardRef(function KompileCard(
       });
     }
 
-    if (list.length === 0) {
-      return [
-        { key: "leetcode", ...PLATFORM_MAP.leetcode },
-        { key: "gfg", ...PLATFORM_MAP.geeksforgeeks },
-        { key: "github", ...PLATFORM_MAP.github },
-        { key: "hackerrank", ...PLATFORM_MAP.hackerrank },
-        { key: "codeforces", ...PLATFORM_MAP.codeforces },
-      ];
-    }
-
     return list;
   };
 
@@ -170,16 +147,6 @@ const KompileCard = React.forwardRef(function KompileCard(
       return (
         <img
           src={effectiveUserData.profileImage}
-          alt={name}
-          className="w-full h-full object-cover rounded-full bg-[#111]"
-        />
-      );
-    }
-
-    if (name === "Siddharth Singh") {
-      return (
-        <img
-          src="/assets/kompileCard/face-removebg-preview 1.png"
           alt={name}
           className="w-full h-full object-cover rounded-full bg-[#111]"
         />
