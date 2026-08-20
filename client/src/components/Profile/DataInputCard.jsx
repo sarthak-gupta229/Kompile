@@ -30,7 +30,7 @@ function DataInputCard({ logo, name, placeholder, link, value, onChange, onSubmi
 
         <button
           type="submit"
-          className="bg-[#1f1f1f] hover:bg-[#2a2a2a] border border-gray-700 px-4 py-2 rounded-lg transition"
+          className="bg-[#1f1f1f] hover:bg-[#2a2a2a] border border-gray-700 px-4 py-2 rounded-lg transition self-end"
         >
           {buttonText}
         </button>
