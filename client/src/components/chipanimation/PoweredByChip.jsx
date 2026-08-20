@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const STATIC_RAILS = [
   "M388 96L388 68C388 65.7909 386.209 64 384 64L310 64",
@@ -81,6 +82,7 @@ const TRACES = [
 ];
 
 export default function PoweredByChip() {
+  const navigate = useNavigate();
   const railRefs = useRef({});
   const gradientRefs = useRef({});
 
@@ -342,11 +344,22 @@ export default function PoweredByChip() {
 
       <div className="chip-cards-grid">
         <div
+          onClick={() => navigate("/workspace/profile/sarthakgupta")}
           style={{
             background: "#111",
             border: "1px solid rgba(192,192,192,0.5)",
             borderRadius: 16,
             padding: "32px 28px 36px",
+            cursor: "pointer",
+            transition: "border-color 0.2s, transform 0.2s",
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = "rgba(46,185,223,0.7)";
+            e.currentTarget.style.transform = "translateY(-2px)";
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = "rgba(192,192,192,0.5)";
+            e.currentTarget.style.transform = "translateY(0)";
           }}
         >
           <div style={{ marginBottom: 20 }}>
@@ -423,11 +436,22 @@ export default function PoweredByChip() {
         </div>
 
         <div
+          onClick={() => navigate("/company")}
           style={{
             background: "#111",
             border: "1px solid rgba(192,192,192,0.5)",
             borderRadius: 16,
             padding: "32px 28px 36px",
+            cursor: "pointer",
+            transition: "border-color 0.2s, transform 0.2s",
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = "rgba(255,74,129,0.7)";
+            e.currentTarget.style.transform = "translateY(-2px)";
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = "rgba(192,192,192,0.5)";
+            e.currentTarget.style.transform = "translateY(0)";
           }}
         >
           <div style={{ marginBottom: 20 }}>
@@ -506,11 +530,22 @@ export default function PoweredByChip() {
         </div>
 
         <div
+          onClick={() => window.open("https://kompile-eight.vercel.app/workspace/profile/", "_blank")}
           style={{
             background: "#111",
             border: "1px solid rgba(192,192,192,0.5)",
             borderRadius: 16,
             padding: "32px 28px 36px",
+            cursor: "pointer",
+            transition: "border-color 0.2s, transform 0.2s",
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = "rgba(247,204,75,0.7)";
+            e.currentTarget.style.transform = "translateY(-2px)";
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = "rgba(192,192,192,0.5)";
+            e.currentTarget.style.transform = "translateY(0)";
           }}
         >
           <div style={{ marginBottom: 20 }}>
