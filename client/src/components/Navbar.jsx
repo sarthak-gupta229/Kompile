@@ -8,6 +8,8 @@ import {
   LayoutDashboard,
   LogOut,
   ChevronDown,
+  Menu,
+  X,
 } from "lucide-react";
 
 const navLinkCls = ({ isActive }) =>
@@ -19,10 +21,13 @@ function Navbar() {
   const { user, logout } = useContext(UserContext);
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   const handleLogout = async () => {
     setDropdownOpen(false);
+    setMobileOpen(false);
     try {
       await logoutUser();
     } catch (err) {
@@ -48,6 +53,9 @@ function Navbar() {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target)) {
+        setMobileOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -63,6 +71,13 @@ function Navbar() {
     { icon: LayoutDashboard, label: "Workspace", to: "/workspace" },
   ];
 
+  const navLinks = [
+    { label: "Home", to: "/", end: true },
+    { label: "Event Tracker", to: "/events" },
+    { label: "Company Wise Kit", to: "/company" },
+    { label: "Workspace", to: "/workspace" },
+  ];
+
   return (
     <nav className="fixed top-0 left-0 w-full bg-[#0f0f0f] border-b border-gray-800 px-6 py-3 flex items-center justify-between h-18 z-50">
       <Link to="/" className="flex items-center gap-2 box-border">
@@ -76,19 +91,13 @@ function Navbar() {
         </h2>
       </Link>
 
+      {/* Desktop nav */}
       <div className="hidden md:flex items-center gap-8 text-sm">
-        <NavLink to="/" end className={navLinkCls}>
-          Home
-        </NavLink>
-        <NavLink to="/events" className={navLinkCls}>
-          Event Tracker
-        </NavLink>
-        <NavLink to="/company" className={navLinkCls}>
-          Company Wise Kit
-        </NavLink>
-        <NavLink to="/workspace" className={navLinkCls}>
-          Workspace
-        </NavLink>
+        {navLinks.map(({ label, to, end }) => (
+          <NavLink key={to} to={to} end={end} className={navLinkCls}>
+            {label}
+          </NavLink>
+        ))}
 
         {isLoggedIn ? (
           <div className="relative" ref={dropdownRef}>
@@ -154,6 +163,99 @@ function Navbar() {
           </Link>
         )}
       </div>
+
+      {/* Hamburger button — mobile only */}
+      <button
+        className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg border border-gray-700 bg-[#1a1a1a] text-gray-300 hover:text-white hover:border-orange-500/60 transition-all"
+        onClick={() => setMobileOpen((prev) => !prev)}
+        aria-label="Toggle menu"
+      >
+        {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+      </button>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div
+          ref={mobileMenuRef}
+          className="md:hidden absolute top-full left-0 w-full bg-[#0f0f0f] border-b border-gray-800 shadow-2xl shadow-black/60 flex flex-col px-6 py-4 gap-1 z-40"
+          style={{ animation: "slideDownMobile 0.2s ease" }}
+        >
+          <style>{`
+            @keyframes slideDownMobile {
+              from { opacity: 0; transform: translateY(-8px); }
+              to   { opacity: 1; transform: translateY(0); }
+            }
+          `}</style>
+
+          {navLinks.map(({ label, to, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              onClick={() => setMobileOpen(false)}
+              className={({ isActive }) =>
+                `px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                  isActive
+                    ? "text-orange-500 bg-orange-500/8"
+                    : "text-gray-300 hover:text-white hover:bg-white/5"
+                }`
+              }
+            >
+              {label}
+            </NavLink>
+          ))}
+
+          <div className="my-2 border-t border-gray-800" />
+
+          {isLoggedIn ? (
+            <>
+              <div className="flex items-center gap-3 px-3 py-2">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold shadow-md shrink-0">
+                  {initials}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-white text-sm font-semibold truncate">
+                    {user.firstName
+                      ? `${user.firstName} ${user.lastName}`
+                      : user.name || "User"}
+                  </p>
+                  <p className="text-gray-500 text-xs truncate">{user.email}</p>
+                </div>
+              </div>
+
+              {menuItems.map(({ icon: Icon, label, to }) => (
+                <button
+                  key={to}
+                  onClick={() => {
+                    setMobileOpen(false);
+                    navigate(to);
+                  }}
+                  className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all group"
+                >
+                  <Icon className="w-4 h-4 text-gray-500 group-hover:text-orange-400 transition-colors" />
+                  {label}
+                </button>
+              ))}
+
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all mt-1 group"
+              >
+                <LogOut className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                Log Out
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setMobileOpen(false)}
+              className="mt-1 w-full text-center px-5 py-2.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold transition-all shadow-md"
+            >
+              Login
+            </Link>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

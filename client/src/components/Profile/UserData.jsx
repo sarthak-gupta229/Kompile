@@ -7,6 +7,7 @@ import { ArrowBigLeft, User, LayoutGrid } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import BasicInfoForm from "./BasicInfoForm.jsx";
 import { getBasicInfo, updateBasicInfo } from "../../api/auth.api.js";
+import { syncAll } from "../../api/platformApi.js";
 import { toast, Toaster } from "react-hot-toast";
 
 const getPlatformKey = (platformName) => {
@@ -149,6 +150,17 @@ function UserData() {
           ? `${platform.name} updated successfully`
           : "Basic info updated successfully",
       );
+
+      const syncToast = toast.loading("Syncing profiles...");
+      try {
+        await syncAll();
+        toast.success("Profiles synced!", { id: syncToast });
+      } catch (syncError) {
+        toast.error("Sync failed — try again from your profile", {
+          id: syncToast,
+        });
+        console.log("Sync error after save:", syncError);
+      }
     } catch (error) {
       console.log("Error while updating basic info:", error);
       toast.error(error.response?.data?.message || "Failed to update");

@@ -136,6 +136,9 @@ export default function PoweredByChip() {
         justifyContent: "center",
         paddingBottom: 24,
         paddingTop: 24,
+        paddingLeft: 16,
+        paddingRight: 16,
+        boxSizing: "border-box",
       }}
     >
       <style>{`
@@ -150,6 +153,7 @@ export default function PoweredByChip() {
         @media (max-width: 767px) {
           .chip-cards-grid {
             grid-template-columns: 1fr;
+            gap: 16px;
           }
         }
         @media (min-width: 768px) and (max-width: 1024px) {

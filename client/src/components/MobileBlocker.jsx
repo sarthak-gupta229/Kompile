@@ -1,8 +1,17 @@
+import { useLocation, useNavigate } from "react-router-dom";
+
 export default function MobileBlocker() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  // Only block mobile on workspace routes
+  const isWorkspace = pathname.startsWith("/workspace");
+
+  if (!isWorkspace) return null;
+
   return (
     <>
       <style>{`
-        /* Hidden on desktop (≥1280px) */
         .mobile-blocker-overlay {
           display: none;
           position: fixed;
@@ -13,47 +22,73 @@ export default function MobileBlocker() {
           background: rgba(0, 0, 0, 0.6);
           backdrop-filter: blur(20px) saturate(0.5);
           -webkit-backdrop-filter: blur(20px) saturate(0.5);
-          animation: fadeInBlocker 0.35s ease;
+          animation: mbFadeIn 0.3s ease;
         }
 
-        /* Show on any screen narrower than 1280px */
         @media (max-width: 1279px) {
           .mobile-blocker-overlay {
             display: flex;
           }
         }
 
-        @keyframes fadeInBlocker {
+        @keyframes mbFadeIn {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
 
-        @keyframes slideUpBlocker {
-          from { opacity: 0; transform: translateY(28px) scale(0.95); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .mobile-blocker-glow {
-          position: absolute;
-          width: 340px;
-          height: 340px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(255,100,0,0.25) 0%, transparent 70%);
-          filter: blur(40px);
-          pointer-events: none;
+        @keyframes mbSlideUp {
+          from { opacity: 0; margin-top: 28px; }
+          to   { opacity: 1; margin-top: 0px;  }
         }
 
         .mobile-blocker-card {
           position: relative;
-          background: linear-gradient(135deg, rgba(24,24,24,0.95) 0%, rgba(10,10,10,0.98) 100%);
+          background: linear-gradient(135deg, rgba(24,24,24,0.97) 0%, rgba(10,10,10,0.99) 100%);
           border: 1px solid rgba(255,255,255,0.08);
           border-radius: 24px;
-          padding: 48px 40px;
+          padding: 48px 32px 48px;
           max-width: 360px;
-          width: 88%;
+          width: calc(100vw - 48px);
           text-align: center;
           box-shadow: 0 0 0 1px rgba(255,100,0,0.15), 0 32px 80px rgba(0,0,0,0.8);
-          animation: slideUpBlocker 0.4s cubic-bezier(0.34,1.56,0.64,1);
+          animation: mbSlideUp 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+
+        .mobile-blocker-back {
+          position: absolute;
+          top: 16px;
+          left: 16px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 10px;
+          padding: 6px 12px 6px 8px;
+          color: rgba(255,255,255,0.6);
+          font-size: 13px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .mobile-blocker-back:hover {
+          background: rgba(255,100,0,0.12);
+          border-color: rgba(255,100,0,0.3);
+          color: #ff6400;
+        }
+
+        .mobile-blocker-glow {
+          position: absolute;
+          top: -80px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 280px;
+          height: 280px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(255,100,0,0.22) 0%, transparent 70%);
+          filter: blur(40px);
+          pointer-events: none;
         }
 
         .mobile-blocker-icon-wrap {
@@ -103,10 +138,23 @@ export default function MobileBlocker() {
         }
       `}</style>
 
+      {/* Overlay is the flex centering container — card is just a child */}
       <div className="mobile-blocker-overlay">
-        <div className="mobile-blocker-glow" />
-
         <div className="mobile-blocker-card">
+          <div className="mobile-blocker-glow" />
+
+          {/* Back arrow */}
+          <button
+            className="mobile-blocker-back"
+            onClick={() => navigate("/")}
+            aria-label="Go back to home"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Back
+          </button>
+
           <div className="mobile-blocker-icon-wrap">
             <svg
               width="32"
