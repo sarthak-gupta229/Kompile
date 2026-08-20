@@ -107,6 +107,7 @@ const TrophyIcon = () => (
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const { login } = useContext(UserContext);
@@ -116,6 +117,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await loginUser({
         email: form.email,
@@ -133,6 +135,8 @@ function Login() {
         "Login failed. Please try again.";
       toast.error(message);
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -252,9 +256,28 @@ function Login() {
                 <button
                   id="login-submit"
                   type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 active:scale-[0.98] text-white font-semibold text-base rounded-xl py-2.5 mt-1 cursor-pointer border-none transition-all duration-200 shadow-lg shadow-orange-500/20"
+                  disabled={isLoading}
+                  className="w-full bg-orange-500 hover:bg-orange-600 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed text-white font-semibold text-base rounded-xl py-2.5 mt-1 cursor-pointer border-none transition-all duration-200 shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
                 >
-                  Sign in
+                  {isLoading ? (
+                    <>
+                      <svg
+                        className="animate-spin"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                      >
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                      </svg>
+                      Signing in...
+                    </>
+                  ) : (
+                    "Sign in"
+                  )}
                 </button>
 
                 <p className="text-center text-gray-400 text-sm mt-1">
