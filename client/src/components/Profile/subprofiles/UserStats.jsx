@@ -21,9 +21,10 @@ function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
           </div>
         </div>
 
-        <div className="flex gap-3 justify-between w-full items-stretch">
-          {/* Total Questions + Total Active Days stacked vertically in one card */}
-          <div className="w-1/3 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center gap-4">
+        {/* Stats / Skills / Languages — stack on mobile, 3 cols on md+ */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
+          {/* Total Questions + Total Active Days */}
+          <div className="bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col items-center justify-center gap-4">
             <div className="flex flex-col items-center">
               <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide text-center">
                 Total Questions
@@ -32,9 +33,7 @@ function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
                 {allStats?.totalQuestions ?? "-"}
               </h1>
             </div>
-
             <div className="w-full h-px bg-[#2e2e2e]" />
-
             <div className="flex flex-col items-center">
               <h1 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide text-center">
                 Total Active Days
@@ -45,8 +44,7 @@ function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
             </div>
           </div>
 
-          {/* Empty placeholder */}
-          <div className="w-1/3 bg-black rounded-xl border border-[#2e2e2e] p-3 text-white flex flex-col">
+          <div className="bg-black rounded-xl border border-[#2e2e2e] p-3 text-white flex flex-col">
             <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-3 shrink-0">
               My Skills
             </h2>
@@ -73,7 +71,7 @@ function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
             </div>
           </div>
 
-          <div className="w-1/3 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col min-h-0">
+          <div className="bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col min-h-0">
             <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-3 shrink-0">
               Languages
             </h2>
@@ -102,9 +100,9 @@ function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
           </div>
         </div>
 
-        <div className="flex gap-3 justify-between w-full">
-          <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex gap-5 items-center">
-            <div className="flex flex-col items-center justify-center shrink-0 pr-5 border-r border-[#2e2e2e]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+          <div className="bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col sm:flex-row gap-5 items-center">
+            <div className="flex flex-col items-center justify-center shrink-0 sm:pr-5 sm:border-r border-[#2e2e2e] pb-3 sm:pb-0 border-b sm:border-b-0 w-full sm:w-auto">
               <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide text-center whitespace-nowrap">
                 Total Contests
               </h2>
@@ -112,8 +110,7 @@ function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
                 {allStats?.contests?.totalAttended ?? "-"}
               </span>
             </div>
-
-            <div className="flex flex-col gap-2 flex-1">
+            <div className="flex flex-col gap-2 flex-1 w-full">
               {(allStats?.contests?.byPlatform ?? []).map((item) => {
                 const platformKey = item.platform?.toLowerCase();
                 const logoMap = {
@@ -132,7 +129,6 @@ function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
                         : platformKey === "geeksforgeeks"
                           ? "GeeksForGeeks"
                           : item.platform;
-
                 return (
                   <div
                     key={item._id || item.platform}
@@ -166,7 +162,8 @@ function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
               )}
             </div>
           </div>
-          <div className="w-1/2 bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col">
+
+          <div className="bg-black rounded-xl border border-[#2e2e2e] p-5 text-white flex flex-col">
             <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-4">
               Problems Solved
             </h2>
@@ -176,27 +173,19 @@ function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
                 medium={allStats?.difficulty?.medium ?? 0}
                 hard={allStats?.difficulty?.hard ?? 0}
               />
-
               <div className="flex flex-col gap-3 flex-1">
                 {[
                   {
                     label: "Easy",
-                    key: 1,
                     color: "text-green-500",
                     bg: "bg-green-500/10",
                   },
                   {
                     label: "Medium",
-                    key: 2,
                     color: "text-[#f89f1b]",
                     bg: "bg-[#f89f1b]/10",
                   },
-                  {
-                    label: "Hard",
-                    key: 3,
-                    color: "text-red-500",
-                    bg: "bg-red-500/10",
-                  },
+                  { label: "Hard", color: "text-red-500", bg: "bg-red-500/10" },
                 ].map(({ label, color, bg }) => (
                   <div
                     key={label}

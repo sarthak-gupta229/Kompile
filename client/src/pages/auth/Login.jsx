@@ -191,8 +191,8 @@ function Login() {
         </nav>
 
         <div className="flex flex-1">
-          <div className="flex flex-col justify-start md:justify-center w-full md:w-[48%] px-6 sm:px-10 md:px-16 lg:px-20 py-6 md:py-8">
-            <div>
+          <div className="flex flex-col justify-center items-center w-full md:w-[48%] px-6 sm:px-10 md:px-16 lg:px-20 py-6 md:py-8">
+            <div className="w-full max-w-sm md:max-w-none">
               <h1 className="text-white text-3xl md:text-[38px] font-extrabold mb-1.5 tracking-tight">
                 Sign in
               </h1>
