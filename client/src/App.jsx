@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import { useContext } from "react";
+import MobileBlocker from "./components/MobileBlocker.jsx";
 import { UserContext } from "./context/UserContext.jsx";
 import Home from "./pages/app/Home.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
@@ -66,6 +67,7 @@ const RedirectToWorkspaceCompanyKit = () => {
 function App() {
   return (
     <>
+      <MobileBlocker />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
