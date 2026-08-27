@@ -102,7 +102,6 @@ const RefreshIcon = () => (
   </svg>
 );
 
-// ── Status constants ──────────────────────────────────────────────────────────
 const STATUS = {
   IDLE: "idle",
   VERIFYING: "verifying",
@@ -110,7 +109,6 @@ const STATUS = {
   ERROR: "error",
 };
 
-// ── ResendButton ──────────────────────────────────────────────────────────────
 function ResendButton({ resending, cooldown, onResend }) {
   const disabled = resending || cooldown > 0;
   return (
@@ -215,8 +213,7 @@ export default function EmailVerification() {
       icon: <CheckCircleIcon />,
       iconBg: "rgba(34,197,94,0.08)",
       title: "Email verified!",
-      subtitle:
-        "Your account is now active. You can now log in to Kompile.",
+      subtitle: "Your account is now active. You can now log in to Kompile.",
       body: (
         <button
           id="ev-go-login"
@@ -278,7 +275,6 @@ export default function EmailVerification() {
       <Toaster position="top-right" reverseOrder={false} />
 
       <div className="min-h-screen flex flex-col font-sans relative">
-        {/* Digital Rain background */}
         <DigitalRain
           style={{
             position: "absolute",
