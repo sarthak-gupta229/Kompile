@@ -6,7 +6,7 @@ import Home from "./pages/app/Home.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 import Login from "./pages/auth/Login.jsx";
 import Register from "./pages/auth/Register.jsx";
-import EmailVerification from "./pages/auth/emailVerification.jsx";
+import EmailVerification from "./pages/auth/EmailVerification.jsx";
 import Forgotpassword from "./pages/auth/Forgotpassword.jsx";
 import OAuthSuccess from "./pages/auth/OAuthSuccess.jsx";
 import Profile from "./pages/profile/Profile.jsx";
