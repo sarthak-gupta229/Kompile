@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { UserContext } from "../../context/UserContext";
 import { UserCog, RefreshCw } from "lucide-react";
 import { NavLink, useParams } from "react-router-dom";
@@ -23,6 +23,7 @@ function Profile() {
   const [activeTab, setActiveTab] = useState("userStats");
   const { user } = useContext(UserContext);
   const [isSyncing, setIsSyncing] = useState(false);
+  const hasShownSyncToast = useRef(false);
   const [kompileCardActive, setKompileCardActive] = useState(false);
   const [leetcodeData, setLeetCodeData] = useState();
   const [codeforcesData, setCodeforcesData] = useState();
@@ -121,8 +122,9 @@ function Profile() {
           ?.username || "";
 
       const codeforcesUsername =
-        userObj.connectedPlatforms?.find((item) => item.platform === "codeforces")
-          ?.username || "";
+        userObj.connectedPlatforms?.find(
+          (item) => item.platform === "codeforces",
+        )?.username || "";
 
       const githubUsername =
         userObj.connectedPlatforms?.find((item) => item.platform === "github")
@@ -175,8 +177,22 @@ function Profile() {
     if (targetUsername) {
       fetchBasicInfo(targetUsername);
       fetchAllStats(targetUsername);
+
+      if (isOwner && !hasShownSyncToast.current) {
+        hasShownSyncToast.current = true;
+        toast("Please resync your data once today", {
+          icon: "🔄",
+          duration: 4000,
+          style: {
+            borderRadius: "12px",
+            background: "#1c1c1c",
+            color: "#fff",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+          },
+        });
+      }
     }
-  }, [targetUsername]);
+  }, [targetUsername, isOwner]);
 
   return (
     <div className="w-full pb-6 max-w-[1600px] mx-auto">
