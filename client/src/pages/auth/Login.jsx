@@ -117,10 +117,14 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.email.trim() || !form.password) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await loginUser({
-        email: form.email,
+        email: form.email.trim(),
         password: form.password,
       });
       if (response.statusCode === 200) {
@@ -228,6 +232,7 @@ function Login() {
                     id="email"
                     name="email"
                     type="email"
+                    required
                     autoComplete="email"
                     placeholder="Enter email address"
                     value={form.email}
@@ -253,6 +258,7 @@ function Login() {
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
+                      required
                       autoComplete="current-password"
                       placeholder="Enter password"
                       value={form.password}
