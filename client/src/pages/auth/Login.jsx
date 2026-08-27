@@ -4,9 +4,9 @@ import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import GridComponent from "../../components/GridComponent";
 import { loginUser } from "../../api/auth.api";
+import DigitalRain from "../../components/DigitalRain";
 import { Toaster, toast } from "react-hot-toast";
 
-// icons
 const ArrowLeft = () => (
   <svg
     width="20"
@@ -124,9 +124,10 @@ function Login() {
         password: form.password,
       });
       if (response.statusCode === 200) {
+        const loggedInUser = response.data.user;
+        login(loggedInUser);
         toast.success(response.message || "Logged in successfully!");
-        login(response.data.user);
-        navigate(`/workspace/profile/${response.data.user.username}`);
+        navigate(`/workspace/profile/${loggedInUser.username}`);
       }
     } catch (error) {
       const message =
@@ -160,9 +161,21 @@ function Login() {
 
   return (
     <GridComponent>
-      <div className="min-h-screen flex flex-col font-sans">
+      <div className="min-h-screen flex flex-col font-sans relative">
+        {/* Digital Rain background */}
+        <DigitalRain
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            opacity: 0.2,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
         <Toaster position="top-right" reverseOrder={false} />
-        <nav className="flex items-center justify-between px-6 md:px-8 py-4 border-b border-white/[0.07]">
+        <nav className="relative z-50 flex items-center justify-between px-6 md:px-8 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => navigate("/")}
@@ -190,7 +203,7 @@ function Login() {
           </div>
         </nav>
 
-        <div className="flex flex-1">
+        <div className="relative z-50 flex flex-1">
           <div className="flex flex-col justify-center items-center w-full md:w-[48%] px-6 sm:px-10 md:px-16 lg:px-20 py-6 md:py-8">
             <div className="w-full max-w-sm md:max-w-none">
               <h1 className="text-white text-3xl md:text-[38px] font-extrabold mb-1.5 tracking-tight">
@@ -228,9 +241,12 @@ function Login() {
                     <label htmlFor="password" className="text-gray-300 text-sm">
                       Password
                     </label>
-                    <span className="text-orange-500 text-sm">
+                    <Link
+                      to="/forgot-password"
+                      className="text-orange-500 hover:text-orange-400 text-sm no-underline transition-colors"
+                    >
                       Forgot password?
-                    </span>
+                    </Link>
                   </div>
                   <div className="relative">
                     <input
@@ -280,6 +296,38 @@ function Login() {
                   )}
                 </button>
 
+                <div className="flex items-center gap-3 my-1">
+                  <div className="flex-1 h-px bg-[#2e2e2e]" />
+                  <span className="text-zinc-500 text-xs">or</span>
+                  <div className="flex-1 h-px bg-[#2e2e2e]" />
+                </div>
+
+                <a
+                  id="google-login"
+                  href={`${import.meta.env.VITE_API_BASE_URL?.replace("/api/v1", "") ?? "http://localhost:8000"}/api/v1/auth/google`}
+                  className="w-full flex items-center justify-center gap-3 bg-[#1c1c1c] hover:bg-[#252525] border border-[#2e2e2e] hover:border-[#444] text-white font-medium text-sm rounded-xl py-2.5 transition-all duration-200 cursor-pointer no-underline"
+                >
+                  <svg width="18" height="18" viewBox="0 0 48 48">
+                    <path
+                      fill="#EA4335"
+                      d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+                    />
+                    <path
+                      fill="#4285F4"
+                      d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+                    />
+                  </svg>
+                  Continue with Google
+                </a>
+
                 <p className="text-center text-gray-400 text-sm mt-1">
                   Don't have an account?{" "}
                   <Link
@@ -295,14 +343,8 @@ function Login() {
             <div className="mt-6 text-center">
               <p className="text-gray-500 text-xs leading-relaxed mb-1.5">
                 By signing in or creating an account, you are agreeing to our{" "}
-                <span className="text-blue-500">
-                  Terms &amp; Conditions
-                </span>{" "}
-                and our{" "}
-                <span className="text-blue-500">
-                  Privacy Policy
-                </span>
-                .
+                <span className="text-blue-500">Terms &amp; Conditions</span>{" "}
+                and our <span className="text-blue-500">Privacy Policy</span>.
               </p>
               <p className="text-gray-500 text-xs">
                 © 2024 Kompile.&nbsp;&nbsp;&nbsp;

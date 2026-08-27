@@ -277,6 +277,11 @@ function Profile() {
                     <UserStats
                       allStats={allStats}
                       techStack={userData.skills}
+                      noPlatformsLinked={
+                        !userData.leetcodeUsername &&
+                        !userData.codeforcesUsername &&
+                        !userData.githubUsername
+                      }
                     />
                   )}
                   {activeTab === "leetcode" && (

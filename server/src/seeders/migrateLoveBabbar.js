@@ -3,7 +3,7 @@ import { Sheet } from "../models/sheet.models.js";
 import { SheetTopic } from "../models/sheetTopic.models.js";
 import { SheetQuestion } from "../models/sheetQuestion.models.js";
 
-// raw collection already sitting in Atlas: love_babbar_sheet (1 document)
+
 const RAW_COLLECTION = "love_babbar_sheet";
 
 export const migrateLoveBabbar = async () => {

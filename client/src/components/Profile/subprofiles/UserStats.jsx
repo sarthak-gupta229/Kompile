@@ -1,11 +1,35 @@
+import { Link } from "react-router-dom";
+import { AlertTriangle, Settings } from "lucide-react";
 import DonutChart from "./../DonutChart.jsx";
 import HeatmapComponent from "./../HeatmapComponent.jsx";
 import DSATopicChart from "./../DSATopicChart.jsx";
 
-function UserStats({ allStats, techStack, showTopicAnalysis = true }) {
+function UserStats({ allStats, techStack, showTopicAnalysis = true, noPlatformsLinked = false }) {
   return (
     <>
       <div className="flex flex-col gap-3">
+       
+        {noPlatformsLinked && (
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-[#f89f1b]/40 bg-[#f89f1b]/8 px-5 py-4">
+            <div className="flex items-start gap-3">
+              <AlertTriangle size={20} className="text-[#f89f1b] mt-0.5 shrink-0" />
+              <div>
+                <p className="text-sm font-semibold text-white mb-0.5">No platforms connected</p>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  No LeetCode, Codeforces, or GitHub username set. Add your usernames to track your progress.
+                </p>
+              </div>
+            </div>
+            <Link
+              to="/user_data?tab=platforms"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#f89f1b] hover:bg-[#e08e10] text-black text-sm font-semibold transition-colors shrink-0"
+            >
+              <Settings size={14} />
+              Add in Settings
+            </Link>
+          </div>
+        )}
+
         <div className="w-full bg-black rounded-xl border border-[#2e2e2e] p-3 flex flex-col">
           <h2 className="text-sm font-semibold text-[#3ad353] uppercase tracking-wide mb-2">
             My Consistency

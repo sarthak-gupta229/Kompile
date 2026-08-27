@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import GridComponent from "../../components/GridComponent";
 import { registerUser } from "../../api/auth.api";
 import toast, { Toaster } from "react-hot-toast";
+import DigitalRain from "../../components/DigitalRain";
 
-// icons
+
 const ArrowLeft = () => (
   <svg
     width="20"
@@ -112,8 +113,6 @@ function Register() {
     email: "",
     password: "",
     confirm: "",
-    leetcode: "",
-    github: "",
   });
   const navigate = useNavigate();
 
@@ -128,34 +127,19 @@ function Register() {
       setError("Passwords do not match");
       return;
     }
-    if (!form.leetcode.trim()) {
-      setError("LeetCode username is required");
-      toast.error("LeetCode username is required");
-      return;
-    }
-    if (!form.github.trim()) {
-      setError("GitHub username is required");
-      toast.error("GitHub username is required");
-      return;
-    }
 
     try {
       setLoading(true);
-      const data = await registerUser({
+      await registerUser({
         username: form.username,
         email: form.email,
         password: form.password,
         confirmPassword: form.confirm,
-        leetcodeUsername: form.leetcode,
-        githubUsername: form.github,
       });
-      const registeredUser = data?.data?.user;
-      if (!registeredUser) {
-        throw new Error("Registration succeeded, but no user was returned.");
-      }
-      toast.success("Registration successful");
-  
-      navigate("/login");
+
+      sessionStorage.setItem("pendingVerificationEmail", form.email);
+      toast.success("Account created! Please check your email to verify your account.");
+      navigate("/verify-email");
     } catch (err) {
       const message =
         err?.response?.data?.message ||
@@ -191,8 +175,20 @@ function Register() {
 
   return (
     <GridComponent>
-      <div className="min-h-screen flex flex-col font-sans">
-        <nav className="flex items-center justify-between px-6 md:px-8 py-4 border-b border-white/[0.07]">
+      <div className="min-h-screen flex flex-col font-sans relative">
+        {/* Digital Rain background */}
+        <DigitalRain
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            opacity: 0.2,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+        <nav className="relative z-50 flex items-center justify-between px-6 md:px-8 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => navigate("/")}
@@ -221,7 +217,7 @@ function Register() {
         </nav>
         <Toaster position="top-right" reverseOrder={false} />
 
-        <div className="flex flex-1">
+        <div className="relative z-50 flex flex-1">
           <div className="flex flex-col justify-center items-center w-full md:w-[48%] px-6 sm:px-10 md:px-16 lg:px-20 py-6 md:py-8">
             <div className="w-full max-w-sm md:max-w-none">
               <h1 className="text-white text-3xl md:text-[38px] font-extrabold mb-1.5 tracking-tight">
@@ -334,43 +330,6 @@ function Register() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label
-                    htmlFor="reg-leetcode"
-                    className="text-gray-300 text-sm flex items-center gap-1"
-                  >
-                    LeetCode Username
-                    <span className="text-orange-500 text-xs font-bold">*</span>
-                  </label>
-                  <input
-                    id="reg-leetcode"
-                    name="leetcode"
-                    type="text"
-                    required
-                    placeholder="Enter LeetCode username"
-                    value={form.leetcode}
-                    onChange={handleChange}
-                    className={inputCls}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="reg-github" className="text-gray-300 text-sm flex items-center gap-1">
-                    GitHub Username
-                    <span className="text-orange-500 text-xs font-bold">*</span>
-                  </label>
-                  <input
-                    id="reg-github"
-                    name="github"
-                    type="text"
-                    required
-                    placeholder="Enter GitHub username"
-                    value={form.github}
-                    onChange={handleChange}
-                    className={inputCls}
-                  />
-                </div>
-
                 {error && (
                   <p className="text-red-500 text-sm text-center">{error}</p>
                 )}
@@ -382,6 +341,28 @@ function Register() {
                 >
                   {loading ? "Creating account..." : "Create account"}
                 </button>
+
+               
+                <div className="flex items-center gap-3 my-1">
+                  <div className="flex-1 h-px bg-[#2e2e2e]" />
+                  <span className="text-zinc-500 text-xs">or</span>
+                  <div className="flex-1 h-px bg-[#2e2e2e]" />
+                </div>
+
+              
+                <a
+                  id="google-signup"
+                  href={`${import.meta.env.VITE_API_BASE_URL?.replace("/api/v1", "") ?? "http://localhost:8000"}/api/v1/auth/google`}
+                  className="w-full flex items-center justify-center gap-3 bg-[#1c1c1c] hover:bg-[#252525] border border-[#2e2e2e] hover:border-[#444] text-white font-medium text-sm rounded-xl py-2.5 transition-all duration-200 cursor-pointer no-underline"
+                >
+                  <svg width="18" height="18" viewBox="0 0 48 48">
+                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                  </svg>
+                  Sign up with Google
+                </a>
               </form>
             </div>
 

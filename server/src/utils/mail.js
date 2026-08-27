@@ -1,39 +1,39 @@
 import Mailgen from "mailgen";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 const sendEmail = async (options) => {
   const mailGenerator = new Mailgen({
     theme: "default",
     product: {
       name: "Kompile",
-      link: "https://Kompilee.com",
+      link: process.env.CORS_ORIGIN || "https://kompile.dev",
     },
   });
+
   const emailBody = mailGenerator.generatePlaintext(options.mailgenContent);
   const emailHtml = mailGenerator.generate(options.mailgenContent);
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.MAILTRAP_SMTP_HOST,
-    port: process.env.MAILTRAP_SMTP_PORT,
-    auth: {
-      user: process.env.MAILTRAP_SMTP_USER,
-      pass: process.env.MAILTRAP_SMTP_PASS,
-    },
-  });
-  const mail = {
-    from: "mail.kompile@example.com",
-    to: options.email,
-    subject: options.subject,
-    text: emailBody,
-    html: emailHtml,
-  };
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
   try {
-    await transporter.sendMail(mail);
+    const { data, error } = await resend.emails.send({
+      from: "Auth <onboarding@sarthak229.me>",
+      to: options.email,
+      subject: options.subject,
+      html: emailHtml,
+      text: emailBody,
+    });
+
+    if (error) {
+      console.error("Resend email error:", error);
+      throw new Error(error.message || "Failed to send email via Resend");
+    }
+
+    console.log(`Email sent to ${options.email} via Resend [Id: ${data?.id}]`);
+    return data;
   } catch (error) {
-    console.error(
-      "Email service failed siliently. Make sure that you have provided your MAILTRAP credentials in the .env file",
-    );
-    console.error("Error: ", error);
+    console.error("Email service failed:", error.message);
+    throw error;
   }
 };
 

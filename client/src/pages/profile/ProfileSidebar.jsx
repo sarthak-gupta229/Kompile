@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Edit, MapPin, GraduationCap, Lock, Unlock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
+const getInitials = (nameOrUsername) => {
+  const str = (nameOrUsername || "?").trim();
+  const parts = str.split(/\s+/).filter(Boolean);
+  if (parts.length === 1) {
+    return str.slice(0, 2).toUpperCase();
+  }
+  return parts
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join("");
+};
 
 function ProfileSidebar({
   userData,
@@ -9,6 +21,14 @@ function ProfileSidebar({
   isOwner,
 }) {
   const navigate = useNavigate();
+  const [imgError, setImgError] = useState(false);
+
+  const showInitials =
+    !userData.profileImage ||
+    userData.profileImage.includes("placehold") ||
+    imgError;
+
+  const initials = getInitials(userData.name || userData.username);
 
   return (
     <div className="w-full lg:w-[380px] shrink-0 sticky top-[84px] min-h-[calc(100vh-120px)] bg-[#141414] rounded-2xl flex flex-col border border-white/[0.08] text-white shadow-2xl">
@@ -24,29 +44,27 @@ function ProfileSidebar({
           </button>
         )}
         <div className="w-48 h-48 rounded-full overflow-hidden mb-4 flex-shrink-0 border-2 border-orange-500/30 shadow-xl">
-          {userData.profileImage &&
-          !userData.profileImage.includes("placehold") ? (
-            <img
-              src={userData.profileImage}
-              alt={userData.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
+          {showInitials ? (
             <div
               className="w-full h-full flex items-center justify-center text-white font-extrabold text-5xl select-none"
               style={{
                 background: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
               }}
             >
-              {(userData.name || userData.username || "?")
-                .split(" ")
-                .slice(0, 2)
-                .map((w) => w[0]?.toUpperCase())
-                .join("")}
+              {initials}
             </div>
+          ) : (
+            <img
+              src={userData.profileImage}
+              alt={userData.name}
+              className="w-full h-full object-cover"
+              onError={() => setImgError(true)}
+            />
           )}
         </div>
-        <h1 className="text-3xl font-bold mb-3 text-center tracking-tight">{userData.name}</h1>
+        <h1 className="text-3xl font-bold mb-3 text-center tracking-tight">
+          {userData.name}
+        </h1>
 
         <button
           onClick={() => setKompileCardActive((prev) => !prev)}
@@ -142,8 +160,12 @@ function ProfileSidebar({
       {/* About */}
       {userData.bio && (
         <div className="w-full p-5 flex-1">
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-2.5 text-zinc-400">About</h2>
-          <p className="text-sm text-zinc-300 leading-relaxed">{userData.bio}</p>
+          <h2 className="text-sm font-semibold uppercase tracking-wider mb-2.5 text-zinc-400">
+            About
+          </h2>
+          <p className="text-sm text-zinc-300 leading-relaxed">
+            {userData.bio}
+          </p>
         </div>
       )}
     </div>

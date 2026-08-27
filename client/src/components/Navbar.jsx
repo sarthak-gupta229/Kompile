@@ -79,7 +79,7 @@ function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-[#0f0f0f] border-b border-gray-800 px-6 py-3 flex items-center justify-between h-18 z-50">
+    <nav className="fixed top-0 left-0 w-full bg-black/50 backdrop-blur-md border-b border-gray-800/60 px-6 py-3 flex items-center justify-between h-18 z-50">
       <Link to="/" className="flex items-center gap-2 box-border">
         <img
           src="/assets/face-removebg-preview 1.png"
@@ -177,7 +177,7 @@ function Navbar() {
       {mobileOpen && (
         <div
           ref={mobileMenuRef}
-          className="md:hidden absolute top-full left-0 w-full bg-[#0f0f0f] border-b border-gray-800 shadow-2xl shadow-black/60 flex flex-col px-6 py-4 gap-1 z-40"
+          className="md:hidden absolute top-full left-0 w-full bg-black/70 backdrop-blur-md border-b border-gray-800/60 shadow-2xl shadow-black/60 flex flex-col px-6 py-4 gap-1 z-40"
           style={{ animation: "slideDownMobile 0.2s ease" }}
         >
           <style>{`

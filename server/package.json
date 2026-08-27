@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
+    "dev": "nodemon --exec 'node --env-file=.env' src/index.js",
+    "start": "node --env-file=.env src/index.js",
     "seed:companies": "node -e \"import('./src/seeders/runCompanyImport.js')\""
   },
   "keywords": [],
@@ -26,7 +26,10 @@
     "mailgen": "^2.0.34",
     "mongoose": "^9.7.1",
     "nanoid": "^6.0.1",
-    "nodemailer": "^9.0.1"
+    "nodemailer": "^9.0.5",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "resend": "^6.24.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
