@@ -6,6 +6,9 @@ import Home from "./pages/app/Home.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 import Login from "./pages/auth/Login.jsx";
 import Register from "./pages/auth/Register.jsx";
+import EmailVerification from "./pages/auth/emailVerification.jsx";
+import Forgotpassword from "./pages/auth/Forgotpassword.jsx";
+import OAuthSuccess from "./pages/auth/OAuthSuccess.jsx";
 import Profile from "./pages/profile/Profile.jsx";
 import CompanyWiseKit from "./pages/CompanyWiseKit/CompanyWiseKit.jsx";
 import CompanyDashboard from "./pages/CompanyWiseKit/CompanyDashboard.jsx";
@@ -36,9 +39,17 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
+  // Not logged in at all — send to login
   if (!user || !user.email) {
     return <Navigate to="/login" replace />;
   }
+
+  // Logged in but email not verified — send to verification page
+  // Google OAuth users are always verified; skip this check for them
+  if (!user.isEmailVerified && user.authProvider !== "google") {
+    return <Navigate to="/verify-email" replace />;
+  }
+
   return children;
 };
 
@@ -98,6 +109,34 @@ function App() {
           }
         />
         <Route path="/events" element={<Contest />} />
+        <Route path="/verify-email" element={<EmailVerification />} />
+        <Route path="/verify-email/:token" element={<EmailVerification />} />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute>
+              <Forgotpassword />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/forgot-password/:token"
+          element={
+            <PublicRoute>
+              <Forgotpassword />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            <PublicRoute>
+              <Forgotpassword />
+            </PublicRoute>
+          }
+        />
+
+        <Route path="/oauth-success" element={<OAuthSuccess />} />
         <Route
           path="/profile"
           element={

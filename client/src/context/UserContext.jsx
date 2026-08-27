@@ -57,6 +57,7 @@ export const UserProvider = ({ children }) => {
         name: data.username || data.name || prev.name,
         email: data.email || prev.email,
         isEmailVerified: data.isEmailVerified ?? prev.isEmailVerified,
+        authProvider: data.authProvider || prev.authProvider || "local",
         avatar: data.avatar?.url || data.avatar || prev.avatar,
         platform_data: normalizePlatformData(data, prev.platform_data),
       };

@@ -1,8 +1,10 @@
 import { Router } from "express";
+import passport from "passport";
 import {
   changeCurrentPassword,
   forgotPasswordRequest,
   getCurrentUser,
+  googleAuthCallback,
   login,
   logoutUser,
   refreshAccessToken,
@@ -30,6 +32,22 @@ router.route("/login").post(userLoginValidator(), validate, login);
 
 router.route("/verify-email/:verificationToken").get(verifyEmail);
 router.route("/refresh-token").post(refreshAccessToken);
+router.route("/resend-email-verification").post(resendEmailVerification);
+
+// Google OAuth — session:false because the app uses stateless JWT cookies
+router.route("/google").get(
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    session: false,
+  }),
+);
+router.route("/google/callback").get(
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: `${process.env.CLIENT_URL}/login?error=google_auth_failed`,
+  }),
+  googleAuthCallback,
+);
 router
   .route("/forgot-password")
   .post(userForgotPasswordValidator(), validate, forgotPasswordRequest);
@@ -48,9 +66,6 @@ router
     validate,
     changeCurrentPassword,
   );
-router
-  .route("/resend-email-verification")
-  .post(verifyJWT, resendEmailVerification);
 
 router.route("/me/login-history").get(verifyJWT, getLoginHistory);
 

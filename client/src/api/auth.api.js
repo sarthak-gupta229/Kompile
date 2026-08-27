@@ -44,8 +44,8 @@ export const verifyEmail = async (verificationToken) => {
   return data;
 };
 
-export const resendEmailVerification = async () => {
-  const { data } = await axiosInstance.post("/auth/resend-email-verification");
+export const resendEmailVerification = async (email) => {
+  const { data } = await axiosInstance.post("/auth/resend-email-verification", { email });
   return data;
 };
 

@@ -82,16 +82,15 @@ const registerUser = asyncHandler(async (req, res) => {
       `${process.env.CORS_ORIGIN}/verify-email/${unHashedToken}`,
     ),
   });
-  const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
-  );
+
+  
   return res
     .status(201)
     .json(
       new ApiResponse(
-        200,
-        { user: createdUser },
-        "User registered successfully",
+        201,
+        { email: user.email, username: user.username },
+        "Registration successful! Please check your email to verify your account.",
       ),
     );
 });
@@ -110,6 +109,13 @@ const login = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Invalid credentials");
   }
 
+  if (!user.isEmailVerified) {
+    throw new ApiError(
+      403,
+      "Please verify your email before logging in. Check your inbox for a verification link.",
+    );
+  }
+
   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
     user._id,
   );
@@ -120,7 +126,7 @@ const login = asyncHandler(async (req, res) => {
   try {
     await UserLoginLog.create({ userId: user._id, date: today });
   } catch (err) {
-    // duplicate key (code 11000) means they already logged in today — ignore it
+    
     if (err.code !== 11000) {
       console.error("Failed to record login:", err);
     }
@@ -193,16 +199,22 @@ const verifyEmail = asyncHandler(async (req, res) => {
     .createHash("sha256")
     .update(verificationToken)
     .digest("hex");
+
   const user = await User.findOne({
     emailVerificationToken: hashedToken,
     emailVerificationExpiry: { $gt: Date.now() },
   });
+
   if (!user) {
+    const alreadyVerified = await User.findOne({
+      isEmailVerified: true,
+      emailVerificationToken: undefined,
+    });
     throw new ApiError(400, "Token is invalid or expired");
   }
+
   user.emailVerificationToken = undefined;
   user.emailVerificationExpiry = undefined;
-
   user.isEmailVerified = true;
 
   await user.save({ validateBeforeSave: false });
@@ -213,14 +225,23 @@ const verifyEmail = asyncHandler(async (req, res) => {
 });
 
 const resendEmailVerification = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user?._id);
+ 
+  const { email } = req.body;
+  if (!email) {
+    throw new ApiError(400, "Email is required");
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
   if (!user) {
-    throw new ApiError(404, "User does not exist");
+  
+    return res
+      .status(200)
+      .json(new ApiResponse(200, {}, "If that email exists, a verification link has been sent."));
   }
   if (user.isEmailVerified) {
     throw new ApiError(409, "Email is already verified");
   }
-  //copy send email part form register
+
   const { unHashedToken, hashedToken, tokenExpiry } =
     await user.generateTemporaryToken();
 
@@ -240,7 +261,7 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, {}, "Mail has been sent to your email ID"));
+    .json(new ApiResponse(200, {}, "Verification email sent! Check your inbox."));
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
@@ -298,14 +319,17 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
     await user.generateTemporaryToken();
   user.forgotPasswordToken = hashedToken;
   user.forgotPasswordExpiry = tokenExpiry;
+  await user.save({ validateBeforeSave: false });
+
+  const redirectBase =
+    process.env.FORGOT_PASSWORD_REDIRECT_URL ||
+    `${process.env.CLIENT_URL || "http://localhost:5173"}/forgot-password`;
+  const resetUrl = `${redirectBase.replace(/\/$/, "")}/${unHashedToken}`;
 
   await sendEmail({
     email: user?.email,
     subject: "Password reset request",
-    mailgenContent: forgotPasswordMailgenContent(
-      user.username,
-      `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unHashedToken}`,
-    ),
+    mailgenContent: forgotPasswordMailgenContent(user.username, resetUrl),
   });
   return res
     .status(200)
@@ -331,9 +355,11 @@ const resetForgotPassword = asyncHandler(async (req, res) => {
     forgotPasswordExpiry: { $gt: Date.now() },
   });
   if (!user) {
-    throw new ApiError(489, "Token is invalid or expired");
+    throw new ApiError(400, "Token is invalid or expired");
   }
   user.password = newPassword;
+  user.forgotPasswordToken = undefined;
+  user.forgotPasswordExpiry = undefined;
   await user.save({ validateBeforeSave: false });
   return res
     .status(200)
@@ -371,6 +397,35 @@ export const getLoginHistory = asyncHandler(async (req, res) => {
       "Login history fetched",
     ),
   );
+});
+
+export const googleAuthCallback = asyncHandler(async (req, res) => {
+  const user = req.user; 
+  if (!user) throw new ApiError(401, "Google authentication failed");
+
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+    user._id,
+  );
+
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  try {
+    await UserLoginLog.create({ userId: user._id, date: today });
+  } catch (err) {
+    if (err.code !== 11000) console.error("Failed to record login:", err);
+  }
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .redirect(`${process.env.CLIENT_URL}/oauth-success`);
 });
 
 export {

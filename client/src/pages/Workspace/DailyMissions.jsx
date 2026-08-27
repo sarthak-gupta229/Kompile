@@ -15,6 +15,24 @@ const PRIORITY_STYLES = {
 
 const PRIORITIES = ["High Priority", "Medium", "Low"];
 
+const PRIORITY_ORDER = {
+  "High Priority": 1,
+  High: 1,
+  Medium: 2,
+  Low: 3,
+};
+
+const sortByPriority = (list) => {
+  return [...list].sort((a, b) => {
+    const orderA = PRIORITY_ORDER[a.priority] ?? 2;
+    const orderB = PRIORITY_ORDER[b.priority] ?? 2;
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+    return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+  });
+};
+
 function AddMissionForm({ onAdd, onClose }) {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Medium");
@@ -71,7 +89,6 @@ function AddMissionForm({ onAdd, onClose }) {
           </button>
         ))}
       </div>
-
 
       {/* Actions */}
       <div className="flex justify-end gap-2 pt-1">
@@ -174,7 +191,6 @@ function MissionItem({ mission, onToggle, onDelete }) {
         )}
       </div>
 
-      {/* Delete */}
       <button
         onClick={handleDelete}
         disabled={deleting}
@@ -217,7 +233,9 @@ export default function DailyMissions() {
       setMissions((prev) =>
         prev
           .map((m) => (m._id === id ? res.data : m))
-          .sort((a, b) => (a.status === "completed") - (b.status === "completed")),
+          .sort(
+            (a, b) => (a.status === "completed") - (b.status === "completed"),
+          ),
       );
     }
   };
@@ -227,12 +245,15 @@ export default function DailyMissions() {
     setMissions((prev) => prev.filter((m) => m._id !== id));
   };
 
-  const pending = missions.filter((m) => m.status === "pending");
-  const completed = missions.filter((m) => m.status === "completed");
+  const pending = sortByPriority(
+    missions.filter((m) => m.status === "pending"),
+  );
+  const completed = sortByPriority(
+    missions.filter((m) => m.status === "completed"),
+  );
 
   return (
     <div className="bg-[#111111] border border-white/8 rounded-2xl p-5 flex flex-col gap-4 shadow-xl">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CheckSquare className="w-5 h-5 text-orange-400" />
@@ -252,7 +273,6 @@ export default function DailyMissions() {
         </button>
       </div>
 
-      {/* Progress bar */}
       {missions.length > 0 && (
         <div className="h-1 bg-white/5 rounded-full overflow-hidden">
           <div
@@ -264,12 +284,10 @@ export default function DailyMissions() {
         </div>
       )}
 
-      {/* Add form */}
       {showForm && (
         <AddMissionForm onAdd={handleAdd} onClose={() => setShowForm(false)} />
       )}
 
-      {/* List */}
       <div className="flex flex-col gap-2 max-h-[420px] overflow-y-auto pr-0.5 custom-scrollbar">
         {loading ? (
           <div className="flex justify-center py-8">

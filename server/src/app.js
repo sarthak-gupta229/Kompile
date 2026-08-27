@@ -1,7 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config({
+  path: "./.env",
+});
+
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import dotenv from "dotenv";
+import passport from "./config/passport.js";
 import healthCheckRouter from "./routes/healthcheck.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
@@ -11,10 +16,6 @@ import roomRoutes from "./routes/room.routes.js";
 import leaderboardRoutes from "./routes/leaderboard.routes.js";
 import dailyMissionRoutes from "./routes/dailyMission.routes.js";
 import companyRouter from "./routes/company.routes.js";
-
-dotenv.config({
-  path: "./.env",
-});
 
 let app = express();
 
@@ -41,6 +42,7 @@ app.use(
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
+app.use(passport.initialize());
 
 // Routes
 app.use("/api/v1/healthcheck", healthCheckRouter);

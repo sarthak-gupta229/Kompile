@@ -4,7 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import DataInputCard from "./DataInputCard.jsx";
 import { UserContext } from "../../context/UserContext.jsx";
 import { ArrowBigLeft, User, LayoutGrid } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import BasicInfoForm from "./BasicInfoForm.jsx";
 import { getBasicInfo, updateBasicInfo } from "../../api/auth.api.js";
 import { syncAll } from "../../api/platformApi.js";
@@ -23,6 +23,7 @@ const getPlatformKey = (platformName) => {
 
 function UserData() {
   const { user, setUser } = useContext(UserContext);
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("basicInfo");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -35,6 +36,14 @@ function UserData() {
     branch: "",
     graduationYear: "",
   });
+
+  // Auto-switch to platforms tab when ?tab=platforms is in the URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("tab") === "platforms") {
+      setActiveTab("platforms");
+    }
+  }, [location.search]);
 
   useEffect(() => {
     fetchBasicInfo();
