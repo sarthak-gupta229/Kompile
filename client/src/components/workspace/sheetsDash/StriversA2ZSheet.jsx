@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { getSheetBySlug } from "../../../api/sheets.api.js";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import StriversA2Ztopics from "./StriversA2Ztopics";
 
 function StriversA2ZSheet() {
@@ -44,7 +44,6 @@ function StriversA2ZSheet() {
   return (
     <>
       <section className="mb-3">
-        <Toaster position="top-right" />
         <div
           className={`relative bg-[#111111] border border-gray-800  hover:border-t-orange-500 rounded-xl p-4 cursor-pointer group transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden  w-full`}
         >

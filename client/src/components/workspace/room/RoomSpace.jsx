@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getRoom, leaveRoom } from "../../../api/rooms.api.js";
 import { toast } from "react-hot-toast";
@@ -14,7 +14,7 @@ function RoomSpace() {
   const [copied, setCopied] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
-  const fetchRoom = async () => {
+  const fetchRoom = useCallback(async () => {
     try {
       const result = await getRoom(roomId);
       setRoom(result.data?.room);
@@ -22,11 +22,11 @@ function RoomSpace() {
     } catch {
       toast.error("Failed to fetch room");
     }
-  };
+  }, [roomId]);
 
   useEffect(() => {
     fetchRoom();
-  }, []);
+  }, [fetchRoom]);
   const tabs = [
     { key: "leaderboard", label: "Leaderboard" },
     { key: "Contest", label: "Contest" },

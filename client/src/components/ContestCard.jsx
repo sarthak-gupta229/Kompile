@@ -1,6 +1,18 @@
 import React from "react";
 
-function ContestCard({ start, end, duration, host, event, href }) {
+const blinkStyle = (
+  <style>{`
+    @keyframes blink-on-off {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .dot-blink {
+      animation: blink-on-off 1.5s step-start infinite;
+    }
+  `}</style>
+);
+
+function ContestCard({ start, end, host, event, href }) {
   const ensureUTC = (iso) => (iso && !iso.endsWith("Z") ? iso + "Z" : iso);
   const dateObj = new Date(ensureUTC(start));
 
@@ -60,7 +72,16 @@ function ContestCard({ start, end, duration, host, event, href }) {
     >
       <div className="flex flex-wrap items-center text-[#a0a0a0] text-sm font-medium gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#f97316] flex-shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.6)]"></div>
+          {isToday(dateObj) ? (
+            <>
+              {blinkStyle}
+              <span
+                className="dot-blink w-2.5 h-2.5 rounded-full bg-green-500 flex-shrink-0 shadow-[0_0_8px_rgba(34,197,94,0.8)]"
+              />
+            </>
+          ) : (
+            <div className="w-2.5 h-2.5 rounded-full bg-[#f97316] flex-shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.6)]"></div>
+          )}
           {isToday(dateObj) ? (
             <span className="text-[#10b981] font-bold tracking-wide">
               Today

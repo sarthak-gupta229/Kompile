@@ -85,7 +85,7 @@ const ShinyText = ({
     directionRef.current = direction === "left" ? 1 : -1;
     elapsedRef.current = 0;
     progress.set(0);
-  }, [direction]);
+  }, [direction, progress]);
 
   // Transform: p=0 -> 150% (shine off right), p=100 -> -50% (shine off left)
   const backgroundPosition = useTransform(

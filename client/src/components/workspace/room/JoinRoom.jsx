@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
 import { joinRoom } from "../../../api/rooms.api.js";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function JoinRoom({ open, setOpen, onSuccess }) {
   const [inviteCode, setInviteCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   if (!open) return null;
 

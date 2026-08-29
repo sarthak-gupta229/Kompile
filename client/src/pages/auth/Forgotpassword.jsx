@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import GridComponent from "../../components/GridComponent";
 import { forgotPassword, resetPassword } from "../../api/auth.api";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import DigitalRain from "../../components/DigitalRain";
 
 const ArrowLeft = () => (
@@ -489,7 +489,6 @@ export default function Forgotpassword() {
         }
         .fp-card { animation: fp-fadeUp 0.45s cubic-bezier(.22,1,.36,1) both; }
       `}</style>
-      <Toaster position="top-right" reverseOrder={false} />
 
       <div className="min-h-screen flex flex-col font-sans relative">
         {/* Digital Rain background */}

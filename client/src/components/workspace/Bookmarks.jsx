@@ -6,7 +6,7 @@ export default function Bookmarks() {
 
   useEffect(() => {
     console.log(bookmarks);
-  }, []);
+  }, [bookmarks]);
 
   if (loading) return <div>Loading...</div>;
 

@@ -13,6 +13,7 @@ import roomRoutes from "./routes/room.routes.js";
 import leaderboardRoutes from "./routes/leaderboard.routes.js";
 import dailyMissionRoutes from "./routes/dailyMission.routes.js";
 import companyRouter from "./routes/company.routes.js";
+import contestEventRouter from "./routes/contestEvent.routes.js";
 
 let app = express();
 
@@ -51,6 +52,7 @@ app.use("/api/v1/rooms", roomRoutes);
 app.use("/api/v1/leaderboard", leaderboardRoutes);
 app.use("/api/v1/missions", dailyMissionRoutes);
 app.use("/api/v1/companies", companyRouter);
+app.use("/api/v1/events", contestEventRouter);
 
 app.get("/", (req, res) => {
   res.send("welcome to Kompile");

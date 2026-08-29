@@ -22,7 +22,7 @@ function OAuthSuccess() {
       .catch(() => {
         navigate("/login?error=oauth_failed", { replace: true });
       });
-  }, []);
+  }, [login, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black gap-4">
