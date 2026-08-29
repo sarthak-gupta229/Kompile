@@ -12,7 +12,7 @@ const blinkStyle = (
   `}</style>
 );
 
-function ContestCard({ start, end, duration, host, event, href }) {
+function ContestCard({ start, end, host, event, href }) {
   const ensureUTC = (iso) => (iso && !iso.endsWith("Z") ? iso + "Z" : iso);
   const dateObj = new Date(ensureUTC(start));
 

@@ -40,7 +40,7 @@ export const useLeaderboard = ({
   useEffect(() => {
     setPage(1);
     load(1);
-  }, [metric, scope, roomId]);
+  }, [metric, scope, roomId, load]);
 
   const nextPage = () => {
     const next = page + 1;

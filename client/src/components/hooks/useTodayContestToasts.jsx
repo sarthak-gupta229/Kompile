@@ -11,7 +11,7 @@ export const useTodayContestToasts = () => {
     hasRunRef.current = true;
 
     const showAllTodayContests = async () => {
-      let contests = [];
+      let contests;
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_API_BASE_URL}/events/contests/today`,
@@ -21,6 +21,7 @@ export const useTodayContestToasts = () => {
         console.error("Failed to fetch today's contests:", err);
         return;
       }
+      if (!contests?.length) return;
 
       contests.forEach((contest, index) => {
         setTimeout(() => {

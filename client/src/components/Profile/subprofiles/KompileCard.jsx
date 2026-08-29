@@ -77,7 +77,7 @@ const KompileCard = React.forwardRef(function KompileCard(
           year: "numeric",
         })
         .replace(/\//g, "-");
-    } catch (e) {
+    } catch (_e) {
       return "-";
     }
   };

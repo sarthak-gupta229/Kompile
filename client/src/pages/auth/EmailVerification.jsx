@@ -163,7 +163,7 @@ export default function EmailVerification() {
         // Clear the stored email — verification is done.
         sessionStorage.removeItem("pendingVerificationEmail");
         setStatus(STATUS.SUCCESS);
-      } catch (err) {
+      } catch (_err) {
         setStatus(STATUS.ERROR);
       }
     };

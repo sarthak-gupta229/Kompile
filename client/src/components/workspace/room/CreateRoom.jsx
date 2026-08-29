@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
 import { createRoom } from "../../../api/rooms.api.js";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function CreateRoom({ open, setOpen, onSuccess }) {
   const [formData, setFormData] = useState({ name: "", maxMembers: "5" });
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   if (!open) return null;
 
