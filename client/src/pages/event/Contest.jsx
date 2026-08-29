@@ -9,12 +9,6 @@ export default function Contest() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const USERNAME =
-    import.meta.env.VITE_CONTEST_TRACKER_USERNAME || "sarthak229";
-  const API_KEY =
-    import.meta.env.VITE_CONTEST_TRACKER_APIKEY ||
-    "483402f59d43e9959111398b705aff9c3e419063";
-
   useEffect(() => {
     async function fetchContests() {
       try {
@@ -29,36 +23,18 @@ export default function Contest() {
           59,
           59,
         );
-        const startStr = monthStart.toISOString().slice(0, 19);
-        const endStr = monthEnd.toISOString().slice(0, 19);
 
-        const ALLOWED_PLATFORMS = [
-          "codeforces.com",
-          "leetcode.com",
-          "codechef.com",
-          "atcoder.jp",
-          "hackerrank.com",
-          "geeksforgeeks.org",
-        ];
-
-        const res = await axios.get("https://clist.by/api/v4/contest/", {
-          params: {
-            username: USERNAME,
-            api_key: API_KEY,
-            start__gte: startStr,
-            start__lte: endStr,
-            order_by: "start",
-            limit: 500,
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/events/contests`,
+          {
+            params: {
+              start: monthStart.toISOString(),
+              end: monthEnd.toISOString(),
+            },
           },
-        });
-
-        const filteredContests = res.data.objects.filter(
-          (c) =>
-            ALLOWED_PLATFORMS.includes(c.resource?.name) ||
-            ALLOWED_PLATFORMS.includes(c.host),
         );
-        console.log(filteredContests);
-        setContests(filteredContests);
+
+        setContests(res.data.data); 
       } catch (err) {
         setError(err.message);
       } finally {
@@ -67,7 +43,8 @@ export default function Contest() {
     }
 
     fetchContests();
-  }, [USERNAME, API_KEY]);
+  }, []);
+
 
   return (
     <div className="bg-[#0a0a0a] min-h-screen text-white flex flex-col font-sans">

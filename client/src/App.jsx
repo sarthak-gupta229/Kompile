@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import { useContext } from "react";
+import { Toaster } from "react-hot-toast";
+import { useTodayContestToasts } from "./components/hooks/useTodayContestToasts.jsx";
 import MobileBlocker from "./components/MobileBlocker.jsx";
 import { UserContext } from "./context/UserContext.jsx";
 import Home from "./pages/app/Home.jsx";
@@ -76,8 +78,28 @@ const RedirectToWorkspaceCompanyKit = () => {
 };
 
 function App() {
+  useTodayContestToasts();
+
   return (
     <>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        containerStyle={{ top: 70, right: 16 }}
+        toastOptions={{
+          duration: 6000,
+          style: {
+            background: "#1a1a1a",
+            color: "#e5e7eb",
+            border: "1px solid #2d2d2d",
+            borderRadius: "8px",
+            padding: "8px 12px",
+            fontSize: "12px",
+            maxWidth: "240px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+          },
+        }}
+      />
       <MobileBlocker />
       <ScrollToTop />
       <Routes>
