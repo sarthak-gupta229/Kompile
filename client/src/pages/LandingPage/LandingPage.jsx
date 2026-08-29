@@ -3,8 +3,6 @@ import GridComponent from "../../components/GridComponent";
 import { Footer } from "../../components/CompanyWiseKit/Footer";
 import { MacbookScroll } from "@/components/ui/macbook-scroll";
 import codolioPlatformsImg from "../../../Assets/landingPage/codolio-platforms.png";
-import workspaceIcon from "../../../Assets/landingPage/workspace-svgrepo-com.svg";
-import trackerIcon from "../../../Assets/landingPage/tracker.svg";
 import githubStatsHubImg from "../../../Assets/landingPage/feature1 (7).png";
 import visibilityImg from "../../../Assets/landingPage/visibility.png";
 import { CompanySheets } from "../../components/CompanyWiseKit/CompanySheets";
@@ -13,6 +11,7 @@ import { useContext } from "react";
 import { UserContext } from "../../context/UserContext.jsx";
 import PoweredByChip from "../../components/chipanimation/PoweredByChip.jsx";
 import LandingUserStats from "../../components/LandingPage/LandingUserStats.jsx";
+import SimplifyPrepSection from "../../components/LandingPage/SimplifyPrepSection.jsx";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -131,59 +130,7 @@ export default function LandingPage() {
           <div className="absolute bottom-0 left-0 right-0 h-24 from-transparent to-black pointer-events-none" />
         </div>
 
-        <div className="py-24 px-6 max-w-7xl mx-auto w-full">
-          <div className="flex flex-col md:flex-row items-start gap-16 mb-16 max-w-7xl mx-auto px-6 ">
-            <div className="md:w-1/2">
-              <h3 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight leading-tight">
-                Simplify Your <span className="text-orange-500">Prep</span>
-              </h3>
-              <p className="text-gray-400 text-xl leading-relaxed mb-10 max-w-lg">
-                Say goodbye to last-minute stress. Track all your questions and
-                notes in one place for easy review and revision.
-              </p>
-              <a
-                href="#"
-                className="inline-flex items-center gap-2 text-blue-500 hover:text-blue-400 font-bold text-xl transition-colors"
-              >
-                Try Question Tracker <span>→</span>
-              </a>
-            </div>
-
-            <div className="md:w-1/2 flex flex-wrap justify-center md:justify-end gap-12 pt-2">
-              <div className="text-center w-[200px]">
-                <div className="w-16 h-16 bg-gray-900 border border-gray-700 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <img
-                    src={workspaceIcon}
-                    alt="icon"
-                    className="w-8 h-8 invert"
-                  />
-                </div>
-                <h4 className="text-white font-bold text-lg mb-2">
-                  My Workspace
-                </h4>
-                <p className="text-gray-400 text-base leading-snug">
-                  Tag & filter questions for easy organization
-                </p>
-              </div>
-
-              <div className="text-center w-[200px]">
-                <div className="w-16 h-16 bg-gray-900 border border-gray-700 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <img
-                    src={trackerIcon}
-                    alt="icon"
-                    className="w-8 h-8 invert"
-                  />
-                </div>
-                <h4 className="text-white font-bold text-lg mb-2">
-                  Sheet Tracker
-                </h4>
-                <p className="text-gray-400 text-base leading-snug">
-                  Track all coding sheets in one place
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <SimplifyPrepSection />
         <div className="w-full overflow-hidden pt-48 bg-black">
           <MacbookScroll
             title={<span></span>}
