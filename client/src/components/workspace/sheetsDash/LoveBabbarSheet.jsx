@@ -2,7 +2,7 @@ import React from "react";
 import LoveBabbarTopicCard from "./loveBabbartopicCard.jsx";
 import { useEffect, useState } from "react";
 import { getSheetBySlug } from "../../../api/sheets.api.js";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 export default function LoveBabbarSheet() {
   const [sheets, setSheets] = useState([]);
 
@@ -33,7 +33,6 @@ export default function LoveBabbarSheet() {
   return (
     <>
       <section>
-        <Toaster position="top-right" />
         <div
           className={`relative bg-[#111111] border border-gray-800  hover:border-t-orange-500 rounded-xl p-4 cursor-pointer group transition-all duration-300 shadow-lg hover:shadow-xl overflow-hidden  w-full`}
         >

@@ -9,7 +9,7 @@ import UserStats from "../../components/Profile/subprofiles/UserStats.jsx";
 import ProfileSidebar from "./ProfileSidebar";
 import { getBasicInfo } from "../../api/auth.api.js";
 import KompileCard from "../../components/Profile/subprofiles/KompileCard.jsx";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import {
   getAllUserStats,
   getUserLeetCodeStats,
@@ -196,7 +196,6 @@ function Profile() {
 
   return (
     <div className="w-full pb-6 max-w-[1600px] mx-auto">
-      <Toaster position="top-right" containerStyle={{ top: 80 }} />
       <section className="flex flex-col lg:flex-row justify-between items-start gap-6 min-h-[calc(100vh-120px)]">
         {/* left */}
         <ProfileSidebar

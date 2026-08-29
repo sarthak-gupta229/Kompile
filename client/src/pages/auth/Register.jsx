@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GridComponent from "../../components/GridComponent";
 import { registerUser } from "../../api/auth.api";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import DigitalRain from "../../components/DigitalRain";
 
 
@@ -215,7 +215,6 @@ function Register() {
             </Link>
           </div>
         </nav>
-        <Toaster position="top-right" reverseOrder={false} />
 
         <div className="relative z-50 flex flex-1">
           <div className="flex flex-col justify-center items-center w-full md:w-[48%] px-6 sm:px-10 md:px-16 lg:px-20 py-6 md:py-8">

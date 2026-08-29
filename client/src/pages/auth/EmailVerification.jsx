@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import GridComponent from "../../components/GridComponent";
 import { verifyEmail, resendEmailVerification } from "../../api/auth.api";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import DigitalRain from "../../components/DigitalRain";
 
 const ArrowLeft = () => (
@@ -272,7 +272,6 @@ export default function EmailVerification() {
         }
         .ev-card { animation: ev-fadeUp 0.45s cubic-bezier(.22,1,.36,1) both; }
       `}</style>
-      <Toaster position="top-right" reverseOrder={false} />
 
       <div className="min-h-screen flex flex-col font-sans relative">
         <DigitalRain

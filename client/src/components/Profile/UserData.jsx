@@ -8,7 +8,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import BasicInfoForm from "./BasicInfoForm.jsx";
 import { getBasicInfo, updateBasicInfo } from "../../api/auth.api.js";
 import { syncAll } from "../../api/platformApi.js";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 const getPlatformKey = (platformName) => {
   const map = {
@@ -184,7 +184,6 @@ function UserData() {
       <Navbar />
       <GridComponent>
         <div className="w-full min-h-screen pt-24 pb-10 px-4 md:px-8 max-w-[1400px] mx-auto text-white flex gap-10 items-start self-start">
-          <Toaster position="top-center" containerStyle={{ top: 80 }} />
           <div className="w-64 shrink-0 flex flex-col gap-2">
             <NavLink
               to={`/workspace/profile/${user?.username ?? ""}`}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DoorOpen, Search, Plus } from "lucide-react";
 import CreateRoom from "./CreateRoom";
 import JoinRoom from "./JoinRoom";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { getRooms } from "../../../api/rooms.api.js";
 import RoomsCard from "./RoomsCard.jsx";
 
@@ -32,7 +32,6 @@ function Room() {
 
   return (
     <>
-      <Toaster position="top-right" />
       <div>
         <h1 className="text-3xl font-bold text-white">Rooms</h1>
       </div>

@@ -5,7 +5,7 @@ import { UserContext } from "../../context/UserContext";
 import GridComponent from "../../components/GridComponent";
 import { loginUser } from "../../api/auth.api";
 import DigitalRain from "../../components/DigitalRain";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 const ArrowLeft = () => (
   <svg
@@ -178,7 +178,6 @@ function Login() {
             pointerEvents: "none",
           }}
         />
-        <Toaster position="top-right" reverseOrder={false} />
         <nav className="relative z-50 flex items-center justify-between px-6 md:px-8 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
             <button
