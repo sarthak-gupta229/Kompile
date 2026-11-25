@@ -33,6 +33,7 @@ Kompile brings competitive programming profiles, DSA practice, interview prepara
 
 ### Accounts and display
 
+- Kompile includes an admin panel.
 - Sign in with Google or email and password. Email accounts support verification, password changes, and password recovery.
 - Use the workspace on desktop, tablet, or phone. On smaller screens, workspace navigation collapses and room leaderboards and contest forms adapt to the viewport.
 
@@ -78,18 +79,6 @@ npm run dev
 
 Open [localhost:5173](http://localhost:5173). On a fresh database, run `npm run seed:master-dsa` and `npm run seed:companies` from `server` to import the bundled Master DSA, Advanced DSA, and company question data. The Love Babbar and Striver A2Z migrations read from existing MongoDB source collections.
 
-## Admin panel
-
-Platform Admins can review user profiles and practice progress, view aggregate activity, and publish DSA sheets from CSV. A Super Admin can also grant and revoke Admin access and review the role history.
-
-Admin role changes and sheet publishing use MongoDB transactions. Use MongoDB Atlas or a MongoDB replica set for these operations. After creating and verifying your Kompile account, run this command from the server directory with the email for that account.
-
-```bash
-npm run admin:bootstrap -- you@example.com
-```
-
-Open **Workspace → Admin panel** after signing in. In **Import Sheets**, download the CSV template for a new sheet or export an existing sheet before editing it. Keep existing question IDs to preserve completions and bookmarks. **Manage Sheets** lists published sheets and lets Super Admins delete them after typing the exact sheet name.
-
 ## Routes
 
 ### Browser pages
@@ -109,13 +98,10 @@ Open **Workspace → Admin panel** after signing in. In **Import Sheets**, downl
 | Signed in | `/workspace/company-kit`, `/workspace/company-kit/:companySlug` | Company kits and question lists. `/company/:companySlug` redirects to the workspace kit |
 | Signed in | `/workspace/community`, `/workspace/room` | Community leaderboard and room list |
 | Room member | `/workspace/room/:roomId` | Room leaderboards and contests |
-| Admin or Super Admin | `/workspace/admin`, `/workspace/admin/users`, `/workspace/admin/users/:userId` | Admin overview, user directory, and user reports |
-| Admin or Super Admin | `/workspace/admin/sheets`, `/workspace/admin/sheets/manage` | Import Sheets and Manage Sheets |
-| Super Admin | `/workspace/admin/role-changes` | Role-change history |
 
 ### Backend API
 
-Paths below are relative to `/api/v1`. Signed-in endpoints use the session cookie or a bearer access token. Room and admin endpoints also check the relevant membership or role.
+Paths below are relative to `/api/v1`. Signed-in endpoints use the session cookie or a bearer access token. Room endpoints also check room membership and permissions.
 
 | Area | Endpoints | Access |
 |---|---|---|
@@ -131,8 +117,5 @@ Paths below are relative to `/api/v1`. Signed-in endpoints use the session cooki
 | Leaderboards | `GET /leaderboard/leaderboard`, `GET /leaderboard/rooms/:roomId/leaderboard` | Signed in. Room leaderboard requires membership and supports `metric=contestPoints` |
 | Room contests | `GET /rooms/:roomId/contests`, `GET /rooms/:roomId/contests/:contestId/leaderboard`, `POST /rooms/:roomId/contests/:contestId/questions/:questionId/verify` | Room member |
 | Contest management | `POST /rooms/:roomId/contests`, `GET /rooms/:roomId/contests/catalog`, `POST /rooms/:roomId/contests/:contestId/end`, `PATCH /rooms/:roomId/members/:userId/contest-permission` | Room admins manage creator access. Admins and delegated creators can create contests and browse the catalog. Admins and the contest creator can end a live contest |
-| Admin reports | `GET /admin/overview`, `GET /admin/users`, `GET /admin/users/:userId`, `GET /admin/users/:userId/activity/:kind` | Admin or Super Admin. Activity kinds are `sheets`, `companies`, and `contests` |
-| Admin sheets | `GET /admin/sheets`, `GET /admin/sheets/template`, `GET /admin/sheets/:sheetId/csv`, `POST /admin/sheets/preview`, `POST /admin/sheets/publish` | Admin or Super Admin |
-| Super Admin | `PATCH /admin/users/:userId/role`, `GET /admin/role-changes`, `DELETE /admin/sheets/:sheetId` | Super Admin |
 
 See the [database reference](kompile-database-prd.md) for collections, indexes, and data flows.
