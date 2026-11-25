@@ -1,310 +1,49 @@
-# Kompile — Database PRD
+# Kompile database
 
-**Owner:** Sarthak Gupta
-**Database:** MongoDB
-**Status:** Draft v1
-**Last updated:** July 2026
+Kompile uses MongoDB with Mongoose. Model definitions live in [server/src/models](server/src/models). Collection names below are the MongoDB names.
 
----
+## Collections
 
-## 1. Purpose
+| Collection | Stored data | Key indexes |
+|---|---|---|
+| `users` | Account, profile, connected handles, cached aggregate stats, platform role, and daily auto-sync timestamp | Unique username and email. Partial unique index on `role` for `superAdmin` |
+| `platformprofiles` | Per-platform handle, profile metadata, ratings and stats, language and topic breakdowns, activity, recent accepted submissions, and sync status | Unique `{ userId, platform }` |
+| `userloginlogs` | Sign-in dates used by the workspace calendar | Unique `{ userId, date }` |
+| `sheets` | Practice sheet name, slug, description, source, question count, and optional `deletedAt` | Unique slug |
+| `sheettopics` | Ordered topics and subtopics with an optional `parentTopicId` | `{ sheetId, parentTopicId, order }` |
+| `sheetquestions` | Sheet question title, difficulty, platform, ordered position, and practice or resource links | `{ sheetId, topicId, order }` |
+| `usersheetprogresses` | Per-user completion, completion date, and bookmark state for a sheet question | Unique `{ userId, questionId }`; `{ userId, sheetId }` |
+| `companies` | Company kit metadata and question count | Unique slug |
+| `companyquestions` | Company questions, difficulty, frequency, acceptance rate, link, and topics | `{ companyId, frequency }`, `{ companyId, difficulty }` |
+| `usercompanyprogresses` | Per-user company question completion and completion date | Unique `{ userId, questionId }`; `{ userId, companyId }` |
+| `dailymissions` | User-owned missions with title, priority, tags, and status | `{ userId, status }` |
+| `rooms` | Room name, creator, invite code, and membership limit | Unique invite code |
+| `roommembers` | User membership, room role, join date, and delegated contest-creation permission | Unique `{ roomId, userId }`; `{ userId }` |
+| `roomcontests` | Room and creator IDs, contest timing, scoring matrix, and question snapshots | `{ roomId, startsAt }` |
+| `roomcontestsolves` | Verified question, member, LeetCode account and submission, submission time, and awarded points | Unique `{ contestId, userId, questionId }` and `{ contestId, leetcodeUsername, questionId }` |
+| `contestevents` | External contest listings and their start time, duration, resource, and original link | Unique external event ID; `{ start }`, `{ resource, start }` |
+| `adminrolechanges` | Actor, affected account, previous and new roles, and change time | `{ createdAt, _id }` descending |
 
-This document defines the MongoDB data model for Kompile — a developer profile aggregator with DSA sheet tracking, company-wise question kits, and community/rooms features. It covers all collections, their schemas, relationships, indexes, and the read/write flows that depend on them.
+## Accounts and sync
 
-## 2. Scope
+Platform roles are `user`, `admin`, and `superAdmin`. Kompile checks the account’s current database role for protected admin requests. Room roles and contest-creation delegation are stored separately in `roommembers`.
 
-Covers three product areas:
-1. **Platform Profiles** — aggregated stats from LeetCode, Codeforces, GitHub
-2. **Sheets & Company Kits** — shared question banks with per-user progress tracking
-3. **Community** — friends, rooms, leaderboards (total + weekly)
+The bootstrap script assigns the first Super Admin to a verified account and records the change with a null actor ID. Subsequent Admin grants and revocations write the user role and the audit record in one transaction. The admin directory and detail endpoints select reportable fields explicitly, excluding authentication secrets.
 
-## 3. Design principles
+Profile sync stores provider results in `platformprofiles` and recomputes aggregate stats on `users`. The automatic sync compares successful per-platform timestamps with the browser’s local date and uses `profileAutoSyncAttemptedAt` to claim the daily attempt. Only platforms with a configured username are eligible. Manual sync can be requested separately.
 
-- **Shared master data, sparse user data.** Questions (sheet questions, company questions) are stored once and referenced by ID. User-specific state (completed, starred) is stored in separate "progress" collections, and only a document is written when a user actually interacts with a question — never pre-populated for the full question list.
-- **Upsert over insert** for anything synced from external APIs (`platformProfiles`), keyed by a unique compound index so re-syncing never creates duplicates.
-- **Denormalized aggregate stats** on `platformProfiles` for fast profile-page reads — no on-the-fly recomputation from raw submission history.
-- **Snapshot table for time-series needs.** Running totals can't answer "how much this week" — `dailyActivitySnapshot` exists solely to make weekly leaderboards possible.
+## Practice and sheet publishing
 
----
+Sheet and company questions are shared. Progress records are stored per user and question as users interact with them. Admin reports read those records for completion totals, recent practice, and sheet and topic breakdowns. Saved provider stats are displayed separately from practice completions.
 
-## 4. Collections overview
+CSV import validates rows and previews additions and edits. Publishing revalidates the preview and writes sheet metadata, topics, and questions in a transaction. Existing question IDs are preserved during updates so progress and bookmarks stay attached. MongoDB Atlas or a replica set is required for transactional operations.
 
-| # | Collection | Purpose | Written by |
-|---|---|---|---|
-| 1 | `users` | Core account/auth/profile data | Auth flow, profile edits |
-| 2 | `platformProfiles` | Synced stats per user per platform | Sync jobs (LeetCode/Codeforces/GitHub) |
-| 3 | `sheets` | Metadata for DSA sheets (Striver A2Z, Love Babbar) | Admin/seed script |
-| 4 | `sheetQuestions` | Shared question list per sheet | Admin/seed script |
-| 5 | `userSheetProgress` | Per-user completion state on sheet questions | User checking off a question |
-| 6 | `companies` | Metadata for company kits (Google, Amazon, etc.) | Admin/seed script |
-| 7 | `companyQuestions` | Shared question list per company | Admin/seed script |
-| 8 | `userCompanyProgress` | Per-user completion/star state on company questions | User checking off / starring a question |
-| 9 | `friendRequests` | Friend connections between users | Search & connect flow |
-| 10 | `rooms` | Group/room metadata | Room creation |
-| 11 | `roomMembers` | Membership + role per room | Join/create room |
-| 12 | `dailyActivitySnapshot` | Daily delta of questions solved, per user | Nightly cron |
+Super Admin deletion sets `sheets.deletedAt`. Active sheet queries, user bookmarks, and the room contest question picker exclude deleted sheets. The underlying question records and progress history are retained, and a deleted sheet’s slug stays reserved.
 
----
+## Rooms and contest scoring
 
-## 5. Schema definitions
+A contest stores a snapshot of each selected question’s title, LeetCode slug, and difficulty, along with the point values. This keeps contest scoring stable when the original sheet changes.
 
-### 5.1 `users`
-Existing collection — auth boilerplate plus profile fields (name, bio, socials, about tags). Not redefined here; referenced by `userId` throughout.
+Verification matches a saved LeetCode handle’s recent accepted submission to a contest question and requires a submission timestamp within the contest window. The effective verification deadline is three minutes after the contest ends. Unique solve indexes prevent the same member or LeetCode account from scoring twice on a question.
 
----
-
-### 5.2 `platformProfiles`
-
-One document per user per platform.
-
-```js
-{
-  userId: ObjectId,          // ref users
-  platform: "leetcode" | "codeforces" | "github",
-  handle: String,
-  profileUrl: String,
-  avatarUrl: String,
-
-  stats: {
-    // leetcode / codeforces
-    totalQuestions: Number,
-    contestRating: Number,
-    contestsAttended: Number,
-    easySolved: Number,
-    mediumSolved: Number,
-    hardSolved: Number,
-    activeDays: Number,
-
-    // github-specific
-    totalContributions: Number,
-    maxStreak: Number,
-    currentStreak: Number,
-    stars: Number,
-    commits: Number,
-    prs: Number,
-    issues: Number,
-  },
-
-  languages: [{ name: String, percentage: Number }],   // github only
-  topicAnalysis: [{ topic: String, count: Number }],   // leetcode only
-  heatmap: [{ date: Date, count: Number }],
-
-  lastSyncedAt: Date,
-  syncStatus: "success" | "failed" | "pending",
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-**Indexes:** unique compound `{ userId: 1, platform: 1 }`
-
-**Write pattern:** `findOneAndUpdate({ userId, platform }, { $set: {...} }, { upsert: true })` — never insert directly, always upsert to prevent duplicate profile docs across syncs.
-
----
-
-### 5.3 `sheets`
-
-```js
-{
-  name: String,          // "Strivers A2Z DSA Sheet"
-  slug: String,
-  description: String,
-  totalQuestions: Number,
-  source: String
-}
-```
-
-### 5.4 `sheetQuestions`
-
-```js
-{
-  sheetId: ObjectId,     // ref sheets
-  title: String,
-  difficulty: String,
-  platform: String,
-  link: String,
-  topic: String,
-  order: Number
-}
-```
-
-**Indexes:** `{ sheetId: 1, order: 1 }`
-
-### 5.5 `userSheetProgress`
-
-Sparse — one doc only when a user marks a question, not pre-populated.
-
-```js
-{
-  userId: ObjectId,
-  sheetId: ObjectId,
-  questionId: ObjectId,   // ref sheetQuestions
-  completed: Boolean,
-  completedAt: Date
-}
-```
-
-**Indexes:** unique compound `{ userId: 1, questionId: 1 }`
-
-**Read pattern:** progress count = `countDocuments({ userId, sheetId, completed: true })`, not a scan of all 445 questions.
-
----
-
-### 5.6 `companies`
-
-```js
-{
-  name: String,          // "Google"
-  slug: String,
-  logo: String,
-  description: String,
-  totalQuestions: Number
-}
-```
-
-### 5.7 `companyQuestions`
-
-```js
-{
-  companyId: ObjectId,   // ref companies
-  title: String,
-  platform: String,
-  difficulty: String,
-  popularity: "very hot" | "hot" | "warm" | "cold",
-  tags: [String],
-  link: String
-}
-```
-
-**Indexes:** `{ companyId: 1 }`, `{ companyId: 1, difficulty: 1 }`
-
-### 5.8 `userCompanyProgress`
-
-```js
-{
-  userId: ObjectId,
-  companyId: ObjectId,
-  questionId: ObjectId,   // ref companyQuestions
-  completed: Boolean,
-  starred: Boolean,
-  completedAt: Date
-}
-```
-
-**Indexes:** unique compound `{ userId: 1, questionId: 1 }`
-
-**Note:** kept as a separate collection from `userSheetProgress` rather than unified, since the two features already diverge in fields (`starred`, popularity filtering vs. ordered steps) and reference disjoint question pools.
-
----
-
-### 5.9 `friendRequests`
-
-```js
-{
-  requester: ObjectId,    // ref users
-  recipient: ObjectId,    // ref users
-  status: "pending" | "accepted" | "rejected",
-  createdAt: Date
-}
-```
-
-**Indexes:** unique compound `{ requester: 1, recipient: 1 }`, `{ recipient: 1, status: 1 }`
-
-**Note:** no separate `friendships` collection — an accepted friendship is queried as `friendRequests.find({ status: "accepted", $or: [{requester: userId}, {recipient: userId}] })`.
-
-### 5.10 `rooms`
-
-```js
-{
-  name: String,
-  slug: String,
-  createdBy: ObjectId,    // ref users
-  avatar: String,
-  maxMembers: Number,     // e.g. 5
-  inviteCode: String,     // short unique code, e.g. nanoid
-  createdAt: Date
-}
-```
-
-### 5.11 `roomMembers`
-
-```js
-{
-  roomId: ObjectId,       // ref rooms
-  userId: ObjectId,       // ref users
-  role: "admin" | "member",
-  joinedAt: Date
-}
-```
-
-**Indexes:** unique compound `{ roomId: 1, userId: 1 }`, `{ userId: 1 }` (for "which rooms is this user in")
-
-### 5.12 `dailyActivitySnapshot`
-
-```js
-{
-  userId: ObjectId,
-  date: Date,                    // truncated to day
-  questionsSolvedToday: Number
-}
-```
-
-**Indexes:** unique compound `{ userId: 1, date: 1 }`
-
-**Write pattern:** nightly cron diffs today's summed `platformProfiles.stats.totalQuestions` against yesterday's stored total per user, writes the delta. This is the only collection weekly leaderboards read from.
-
----
-
-## 6. Key read flows
-
-### 6.1 Profile page (Image: Profile Tracker)
-```js
-PlatformProfile.find({ userId }).lean()
-```
-Single query, group by `platform` client-side for tabs.
-
-### 6.2 Sheet progress (Image: My Sheets)
-```js
-SheetQuestion.find({ sheetId })                          // full list
-UserSheetProgress.find({ userId, sheetId, completed: true }) // solved set
-```
-
-### 6.3 Room leaderboard — total questions
-```js
-RoomMember.find({ roomId }).populate("userId")
-PlatformProfile.aggregate([
-  { $match: { userId: { $in: userIds } } },
-  { $group: { _id: "$userId", totalQuestions: { $sum: "$stats.totalQuestions" } } },
-  { $sort: { totalQuestions: -1 } }
-])
-```
-
-### 6.4 Room leaderboard — weekly questions
-```js
-DailyActivitySnapshot.aggregate([
-  { $match: { userId: { $in: userIds }, date: { $gte: sevenDaysAgo } } },
-  { $group: { _id: "$userId", weeklyTotal: { $sum: "$questionsSolvedToday" } } },
-  { $sort: { weeklyTotal: -1 } }
-])
-```
-
-### 6.5 Global ranking (Codolio-style)
-Same as 6.3/6.4 without the `userId: { $in: userIds }` filter, paginated with `$skip`/`$limit`.
-
----
-
-## 7. Sync flow (platformProfiles)
-
-1. **Trigger** — manual refresh or nightly cron.
-2. **Fetch** — hit platform API (LeetCode GraphQL / Codeforces REST / GitHub REST+GraphQL) using stored `handle`.
-3. **Transform** — platform-specific function (`transformLeetcodeResponse`, `transformCodeforcesResponse`, `transformGithubResponse`) normalizes into the common `stats` / `languages` / `topicAnalysis` / `heatmap` shape.
-4. **Upsert** — write via `findOneAndUpdate` with `upsert: true` on `{ userId, platform }`.
-5. **Failure handling** — on error, set `syncStatus: "failed"` and update `lastSyncedAt` rather than leaving stale silent data.
-
----
-
-## 8. Open questions / future decisions
-
-- Should `userSheetProgress` and `userCompanyProgress` be unified into a generic `userProgress` collection if a third progress-tracked feature is added?
-- Overlapping questions between sheets and company kits (e.g. "Two Sum" appears in both) are currently tracked as independent progress — deliberate, not a bug, but worth revisiting if users request cross-feature sync.
-- Global ranking (`Codolio Score`) computation formula not yet defined — needs its own spec once the weighting between DSA/CP/dev activity is decided.
+The contest leaderboard sums verified solve points and orders tied scores by when each member reached that score. The room’s Contest Points leaderboard sums those points across all of the room’s contests for current members.
