@@ -9,7 +9,7 @@ import { UserSheetProgress } from "../models/userSheetProgress.models.js";
 
 export const getSheetDetail = asyncHandler(async (req, res) => {
   const { slug } = req.params;
-  const sheet = await Sheet.findOne({ slug }).lean();
+  const sheet = await Sheet.findOne({ slug, deletedAt: null }).lean();
 
   if (!sheet) {
     throw new ApiError(400, "Sheet not found");
@@ -75,6 +75,7 @@ export const getSheetDetail = asyncHandler(async (req, res) => {
 export const toggleQuestionProgress = asyncHandler(async (req, res) => {
   const { sheetId, questionId } = req.params;
 
+  if (!await Sheet.exists({ _id: sheetId, deletedAt: null })) throw new ApiError(404, "Sheet not found");
   const question = await SheetQuestion.findOne({ _id: questionId, sheetId });
   if (!question) throw new ApiError(404, "Question not found in this sheet");
 
@@ -106,6 +107,7 @@ export const toggleQuestionProgress = asyncHandler(async (req, res) => {
 export const toggleBookmark = asyncHandler(async (req, res) => {
   const { sheetId, questionId } = req.params;
 
+  if (!await Sheet.exists({ _id: sheetId, deletedAt: null })) throw new ApiError(404, "Sheet not found");
   const question = await SheetQuestion.findOne({ _id: questionId, sheetId });
   if (!question) throw new ApiError(404, "Question not found in this sheet");
 
@@ -141,7 +143,7 @@ export const toggleBookmark = asyncHandler(async (req, res) => {
 });
 
 export const getAllSheets = asyncHandler(async (req, res) => {
-  const sheets = await Sheet.find().lean();
+  const sheets = await Sheet.find({ deletedAt: null }).lean();
 
   const withProgress = await Promise.all(
     sheets.map(async (sheet) => {
@@ -204,6 +206,7 @@ export const getBookmarks = asyncHandler(async (req, res) => {
       },
     },
     { $unwind: "$sheet" },
+    { $match: { "sheet.deletedAt": null } },
 
     // 5. Shape the output
     {

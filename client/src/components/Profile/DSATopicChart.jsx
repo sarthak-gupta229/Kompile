@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -12,6 +12,17 @@ import {
 function DSATopicChart({ allTopicData = [] }) {
   const INITIAL_VISIBLE = 10;
   const [showAll, setShowAll] = useState(false);
+  const headingRef = useRef(null);
+  const restoreScroll = useRef(false);
+
+  useLayoutEffect(() => {
+    if (showAll || !restoreScroll.current) return;
+    restoreScroll.current = false;
+    const heading = headingRef.current;
+    if (heading && heading.getBoundingClientRect().top < 88) {
+      heading.scrollIntoView({ block: "start", behavior: "instant" });
+    }
+  }, [showAll]);
 
   if (!allTopicData || allTopicData.length === 0) {
     return (
@@ -32,7 +43,7 @@ function DSATopicChart({ allTopicData = [] }) {
 
   return (
     <div className="w-full bg-black rounded-xl border border-[#2e2e2e] p-5 text-white">
-      <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-5">
+      <h2 ref={headingRef} className="mb-5 scroll-mt-[88px] text-sm font-semibold uppercase tracking-wide text-zinc-400">
         DSA Topic Analysis
       </h2>
       <ResponsiveContainer width="100%" height={chartHeight}>
@@ -73,7 +84,12 @@ function DSATopicChart({ allTopicData = [] }) {
       </ResponsiveContainer>
       {allTopicData.length > INITIAL_VISIBLE && (
         <button
-          onClick={() => setShowAll((prev) => !prev)}
+          type="button"
+          aria-expanded={showAll}
+          onClick={() => {
+            restoreScroll.current = showAll;
+            setShowAll(!showAll);
+          }}
           className="mt-4 w-full text-center text-blue-400 hover:text-blue-300 text-sm font-semibold underline underline-offset-2 transition-colors"
         >
           {showAll

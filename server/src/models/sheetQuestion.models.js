@@ -18,7 +18,7 @@ const sheetQuestionSchema = new Schema(
     },
     difficulty: {
       type: String,
-      enum: ["easy", "medium", "hard"],
+      enum: ["", "easy", "medium", "hard"],
       default: "",
     },
     platform: {

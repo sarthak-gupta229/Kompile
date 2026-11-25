@@ -109,11 +109,11 @@ const getBasicInfo = asyncHandler(async (req, res) => {
   let user;
   if (username) {
     user = await User.findOne({ username }).select(
-      "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry",
+      "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry -role",
     );
   } else if (req.user?._id) {
     user = await User.findById(req.user._id).select(
-      "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry",
+      "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry -role",
     );
   }
   if (!user) {
@@ -127,7 +127,7 @@ const getBasicInfo = asyncHandler(async (req, res) => {
 const getUserData = asyncHandler(async (req, res) => {
   const { username } = req.params;
   const user = await User.findOne({ username }).select(
-    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry",
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry -role",
   );
   if (!user) {
     throw new ApiError(404, "User not found");

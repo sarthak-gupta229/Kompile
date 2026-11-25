@@ -13,6 +13,7 @@ import roomRoutes from "./routes/room.routes.js";
 import leaderboardRoutes from "./routes/leaderboard.routes.js";
 import dailyMissionRoutes from "./routes/dailyMission.routes.js";
 import companyRouter from "./routes/company.routes.js";
+import adminRouter from "./routes/admin.routes.js";
 import contestEventRouter from "./routes/contestEvent.routes.js";
 
 let app = express();
@@ -37,9 +38,11 @@ app.use(
   }),
 );
 
+app.use(cookieParser());
+app.use("/api/v1/admin", adminRouter);
+
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
-app.use(cookieParser());
 app.use(passport.initialize());
 
 // Routes

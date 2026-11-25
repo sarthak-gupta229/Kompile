@@ -19,6 +19,7 @@ const sheetSchema = new Schema(
       type: Number,
       default: 0,
     },
+    deletedAt: { type: Date, default: null, select: false },
     source: {
       type: String,
       default: "",

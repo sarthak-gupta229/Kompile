@@ -131,7 +131,7 @@ function Login() {
         const loggedInUser = response.data.user;
         login(loggedInUser);
         toast.success(response.message || "Logged in successfully!");
-        navigate(`/workspace/profile/${loggedInUser.username}`);
+        navigate("/workspace", { replace: true });
       }
     } catch (error) {
       const message =

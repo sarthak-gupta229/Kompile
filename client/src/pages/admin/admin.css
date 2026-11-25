@@ -1,0 +1,48 @@
+@reference "../../index.css";
+
+main:has(> .admin-panel) {
+  min-width: 0;
+}
+
+.admin-panel {
+  container-type: inline-size;
+}
+
+.admin-compact-cards {
+  display: none;
+}
+
+@container (width < 64rem) {
+  .admin-panel .admin-compact-cards {
+    display: block;
+  }
+
+  .admin-panel .admin-wide-table {
+    display: none;
+  }
+}
+
+.admin-panel .admin-button {
+  @apply inline-flex min-h-10 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm font-medium text-zinc-100 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.admin-panel .admin-button[aria-current="page"],
+.admin-panel .admin-primary {
+  @apply border-amber-400 bg-amber-400 text-zinc-950 hover:bg-amber-300;
+}
+
+.admin-panel .admin-field {
+  @apply mt-1 block w-full min-w-0 rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-zinc-100;
+}
+
+.admin-panel .admin-danger {
+  @apply border-red-900 text-red-200 hover:bg-red-950;
+}
+
+.admin-panel .admin-link {
+  @apply text-amber-300 underline underline-offset-4 hover:text-amber-200;
+}
+
+.admin-panel :is(a, button, input, select, textarea, summary):focus-visible {
+  @apply outline-2 outline-offset-2 outline-amber-300;
+}

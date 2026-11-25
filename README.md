@@ -51,29 +51,14 @@ git clone https://github.com/sarthak-gupta229/Kompile.git
 cd Kompile
 ```
 
-Create `server/.env` and replace the placeholders with your own configuration.
+Copy the environment templates from the repository root.
 
-```dotenv
-PORT=8000
-MONGO_URL=mongodb://localhost:27017/kompile
-CORS_ORIGIN=http://localhost:5173
-CLIENT_URL=http://localhost:5173
-ACCESS_TOKEN_SECRET=replace_with_a_long_random_secret
-ACCESS_TOKEN_EXPIRY=15m
-REFRESH_TOKEN_SECRET=replace_with_a_different_long_random_secret
-REFRESH_TOKEN_EXPIRY=7d
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_CALLBACK_URL=http://localhost:8000/api/v1/auth/google/callback
+```bash
+cp server/.env.example server/.env
+cp client/.env.example client/.env
 ```
 
-Register the same callback URL in your Google OAuth client. Set `RESEND_API_KEY` for email, `GITHUB_ACCESS_TOKEN` for GitHub stats, and `CLIST_USERNAME` and `CLIST_API_KEY` for the public contest calendar.
-
-Create `client/.env` with the backend base URL.
-
-```dotenv
-VITE_API_BASE_URL=http://localhost:8000/api/v1
-```
+Fill in the server credentials in `server/.env` and register the configured callback URL in your Google OAuth client. The client template points to the local API.
 
 Install dependencies and start the server and client in separate terminals from the repository root.
 
@@ -92,3 +77,15 @@ npm run dev
 ```
 
 Open [localhost:5173](http://localhost:5173). On a fresh database, run `npm run seed:master-dsa` and `npm run seed:companies` from `server` to import the bundled Master DSA, Advanced DSA, and company question data. The Love Babbar and Striver A2Z migrations read from existing MongoDB source collections.
+
+## Admin panel
+
+Platform Admins can review user profiles and practice progress, view aggregate activity, and publish DSA sheets from CSV. A Super Admin can also grant and revoke Admin access and review the role history.
+
+Admin role changes and sheet publishing use MongoDB transactions. Use MongoDB Atlas or a MongoDB replica set for these operations. After creating and verifying your Kompile account, run this command from the server directory with the email for that account.
+
+```bash
+npm run admin:bootstrap -- you@example.com
+```
+
+Open **Workspace → Admin panel** after signing in. In **Import Sheets**, download the CSV template for a new sheet or export an existing sheet before editing it. Keep existing question IDs to preserve completions and bookmarks. **Manage Sheets** lists published sheets and lets Super Admins delete them.

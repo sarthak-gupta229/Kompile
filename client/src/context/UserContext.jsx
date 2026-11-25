@@ -4,6 +4,7 @@ import { getCurrentUser } from "../api/auth.api";
 export const UserContext = createContext();
 
 const defaultUser = {
+  role: "user",
   name: "",
   email: "",
   password: "",
@@ -53,6 +54,7 @@ export const UserProvider = ({ children }) => {
       return {
         ...prev,
         id: data._id || data.id || prev.id,
+        role: data.role ?? "user",
         username: data.username || prev.username,
         name: data.username || data.name || prev.name,
         email: data.email || prev.email,

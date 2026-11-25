@@ -12,6 +12,7 @@ import {
   Layers,
   BarChart2,
   DoorOpen,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -43,6 +44,9 @@ export default function WorkspaceSidebar({ collapsed, setCollapsed }) {
       to: "/workspace/company-kit",
     },
   ];
+  if (["admin", "superAdmin"].includes(user?.role)) {
+    navItems.push({ icon: ShieldCheck, label: "Admin panel", to: "/workspace/admin" });
+  }
   return (
     <>
       <details key={pathname} className="mx-3 mt-3 rounded-xl border border-gray-800 bg-[#0f0f0f] text-white sm:mx-5 xl:hidden">

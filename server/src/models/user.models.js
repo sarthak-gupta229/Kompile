@@ -40,6 +40,7 @@ const userSchema = new Schema(
         return this.authProvider === "local";
       },
     },
+    role: { type: String, enum: ["user", "admin", "superAdmin"], default: "user" },
     authProvider: {
       type: String,
       enum: ["local", "google"],
@@ -154,6 +155,11 @@ const userSchema = new Schema(
     timestamps: true,
   },
 );
+
+userSchema.index({ role: 1 }, {
+  unique: true,
+  partialFilterExpression: { role: "superAdmin" },
+});
 
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;

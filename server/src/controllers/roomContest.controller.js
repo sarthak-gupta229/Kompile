@@ -42,7 +42,7 @@ async function getContest({ roomId, contestId }) {
 }
 
 async function getCatalog(questionIds) {
-  const sheets = await Sheet.find({ slug: { $in: sheetSlugs } }).select("name slug").lean();
+  const sheets = await Sheet.find({ slug: { $in: sheetSlugs }, deletedAt: null }).select("name slug").lean();
   const filter = { sheetId: { $in: sheets.map(({ _id }) => _id) } };
   if (questionIds) filter._id = { $in: questionIds };
   const rows = await SheetQuestion.find(filter)

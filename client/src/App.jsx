@@ -14,6 +14,12 @@ import Profile from "./pages/profile/Profile.jsx";
 import CompanyWiseKit from "./pages/CompanyWiseKit/CompanyWiseKit.jsx";
 import CompanyDashboard from "./pages/CompanyWiseKit/CompanyDashboard.jsx";
 import Contest from "./pages/event/Contest.jsx";
+import AdminPanel from "./pages/admin/AdminPanel.jsx";
+import AdminOverview from "./pages/admin/AdminOverview.jsx";
+import AdminUsers, { AdminRoleHistory } from "./pages/admin/AdminUsers.jsx";
+import AdminUserProfile from "./pages/admin/AdminUserProfile.jsx";
+import AdminManageSheets from "./pages/admin/AdminManageSheets.jsx";
+import AdminSheets from "./pages/admin/AdminSheets.jsx";
 import Workspace from "./pages/Workspace/Workspace.jsx";
 import WorkspaceHome from "./pages/Workspace/WorkspaceHome.jsx";
 import WorkspaceCompanyKit from "./pages/Workspace/WorkspaceCompanyKit.jsx";
@@ -102,7 +108,7 @@ function App() {
       />
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
         <Route path="/dashboard" element={<Home />} />
         <Route path="/company" element={<CompanyWiseKit />} />
         <Route
@@ -184,6 +190,14 @@ function App() {
           }
         >
           <Route index element={<WorkspaceHome />} />
+          <Route path="admin" element={<AdminPanel />}>
+            <Route index element={<AdminOverview />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="users/:userId" element={<AdminUserProfile />} />
+            <Route path="sheets" element={<AdminSheets />} />
+            <Route path="sheets/manage" element={<AdminManageSheets />} />
+            <Route path="role-changes" element={<AdminRoleHistory />} />
+          </Route>
           <Route path="sheets" element={<Mysheets />} />
           <Route path="sheets/love-babbar-450" element={<LoveBabbarSheet />} />
           <Route
